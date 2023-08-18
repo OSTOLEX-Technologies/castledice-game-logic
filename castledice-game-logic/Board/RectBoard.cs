@@ -1,6 +1,7 @@
 ﻿using castledice_game_logic.Exceptions;
+using castledice_game_logic.Math;
 
-namespace castledice_game_logic;
+namespace castledice_game_logic.Board;
 
 public class RectBoard : IBoard
 {
@@ -17,6 +18,11 @@ public class RectBoard : IBoard
                 _cells[i, j] = new Cell();
             }   
         }
+    }
+    
+    public Cell GetCell(Vector2Int coordinate)
+    {
+        return GetCell(coordinate.X, coordinate.Y);
     }
     
     public Cell GetCell(int x, int y)

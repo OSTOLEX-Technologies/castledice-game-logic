@@ -5,7 +5,10 @@
         <RootNamespace>castledice_game_logic</RootNamespace>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+
     </PropertyGroup>
+
+
 
 
 </Project>

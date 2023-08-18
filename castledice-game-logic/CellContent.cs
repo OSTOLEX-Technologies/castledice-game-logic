@@ -2,15 +2,13 @@
 
 public class CellContent
 {
-    private int _playerID;
-    private ContentType _type;
-    
-    public int PlayerID => _playerID;
-    public ContentType Type => _type;
+    public int PlayerId { get; }
+
+    public ContentType Type { get; }
 
     public CellContent(int playerId, ContentType type)
     {
-        _playerID = playerId;
-        _type = type;
+        PlayerId = playerId;
+        Type = type;
     }
 }
