@@ -18,9 +18,9 @@ public class TreesSpawner : IContentSpawner
         var cellsToSpawnTreesOn = GetCellsToSpawnTreesOn(board);
         foreach (var cell in cellsToSpawnTreesOn)
         {
-            
+            //TODO: Finish trees generation
+            //cell.AddContent(new Tree());
         }
-
     }
 
     private List<Cell> GetCellsToSpawnTreesOn(Board board)
