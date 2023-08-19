@@ -2,5 +2,5 @@
 
 public interface IContentSpawner
 {
-    IBoard SpawnContent(IBoard board);
+    Board SpawnContent(Board board);
 }

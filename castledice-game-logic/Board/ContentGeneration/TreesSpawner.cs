@@ -11,7 +11,7 @@ public class TreesSpawner : IContentSpawner
         _maxTreesCount = maxTreesCount;
     }
 
-    public IBoard SpawnContent(IBoard board)
+    public Board SpawnContent(Board board)
     {
         throw new NotImplementedException();
     }

@@ -11,14 +11,8 @@ public class CastlesSpawner : IContentSpawner
         _castlesCoordinates = castlesCoordinates;
     }
 
-    public IBoard SpawnContent(IBoard board)
+    public Board SpawnContent(Board board)
     {
-        foreach (var castlePosition in _castlesCoordinates)
-        {
-            var content = new CellContent(castlePosition.Key, ContentType.Castle);
-            var cell = board.GetCell(castlePosition.Value.X, castlePosition.Value.Y);
-            cell.Content = content;
-        }
 
         return board;
     }
