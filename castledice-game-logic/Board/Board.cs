@@ -1,9 +1,10 @@
-﻿using castledice_game_logic.Exceptions;
+﻿using System.Collections;
+using castledice_game_logic.Exceptions;
 using castledice_game_logic.Math;
 
 namespace castledice_game_logic.Board;
 
-public class Board
+public class Board : IEnumerable<Cell>
 {
     private CellType _cellType;
     private Cell[,] _cells;
@@ -27,6 +28,26 @@ public class Board
 
             return cell;
         }
+    }
+
+    public int GetMaxLength()
+    {
+        return GetCellArrayDimensionLength(0);
+    }
+
+    public int GetMaxWidth()
+    {
+        return GetCellArrayDimensionLength(1);
+    }
+
+    private int GetCellArrayDimensionLength(int dimensionIndex)
+    {
+        if (_cells == null)
+        {
+            return 0;
+        }
+
+        return _cells.GetLength(dimensionIndex);
     }
     
     public Board(CellType cellType)
@@ -87,5 +108,24 @@ public class Board
 
         var cell = _cells[x, y];
         return cell != null;
+    }
+
+    public IEnumerator<Cell> GetEnumerator()
+    {
+        for (int i = 0; i < _cells.GetLength(0); i++)
+        {
+            for (int j = 0; j < _cells.GetLength(1); j++)
+            {
+                if (_cells[i, j] != null)
+                {
+                    yield return _cells[i, j];
+                }
+            }
+        }
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
     }
 }

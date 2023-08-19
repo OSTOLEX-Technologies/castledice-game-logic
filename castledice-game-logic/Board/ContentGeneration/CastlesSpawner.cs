@@ -11,9 +11,8 @@ public class CastlesSpawner : IContentSpawner
         _castlesCoordinates = castlesCoordinates;
     }
 
-    public Board SpawnContent(Board board)
+    public void SpawnContent(Board board)
     {
-
-        return board;
+        
     }
 }

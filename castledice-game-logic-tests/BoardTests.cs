@@ -1,10 +1,31 @@
-﻿using castledice_game_logic.Board;
+﻿using castledice_game_logic;
+using castledice_game_logic.Board;
 using castledice_game_logic.Exceptions;
 
 namespace castledice_game_logic_tests;
 
 public class BoardTests
 {
+    [Fact]
+    public void TestIfBoardImplementsIEnumerableInterface()
+    {
+        var board = new Board(CellType.Square);
+        Assert.True(board is IEnumerable<Cell>);
+    }
+
+    [Fact]
+    public void TestIfBoardEnumeratorDoesntReturnNulls()
+    {
+        var board = new Board(CellType.Square);
+        board.AddCell(1,1);
+        board.AddCell(0, 0);
+        
+        foreach (var cell in board)
+        {
+            Assert.NotNull(cell);
+        }
+    }
+    
     [Fact]
     public void TestGetCellTypeReturnsGivenCellType()
     {
