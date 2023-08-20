@@ -1,18 +1,64 @@
-﻿using castledice_game_logic;
+﻿using System.Xml.Schema;
+using castledice_game_logic;
+using castledice_game_logic.GameObjects;
 
 namespace castledice_game_logic_tests;
 
 public class CellTests
 {
     [Fact]
-    public void TestCellContentIsNullAfterRemove()
+    public void TestGetContentReturnsEmptyListIfNoContentAdded()
     {
-        var content = new CellContent(1, ContentType.Castle);
         var cell = new Cell();
-        cell.Content = content;
 
-        cell.RemoveContent();
+        var cellContent = cell.GetContent();
         
-        Assert.True(cell.Content == null);
+        Assert.Empty(cellContent);
     }
+
+    [Fact]
+    public void TestGetContentReturnsListWithAddedContent()
+    {
+        var cell = new Cell();
+        var contentToAdd = new GameObject();
+
+        cell.AddContent(contentToAdd);
+        var cellContentList = cell.GetContent();
+
+        Assert.Contains(contentToAdd, cellContentList);
+    }
+
+    [Fact]
+    public void TestGetContentReturnsListWithoutRemovedContent()
+    {
+        var cell = new Cell();
+        var content = new GameObject();
+        cell.AddContent(content);
+
+        cell.RemoveContent(content);
+        var contentList = cell.GetContent();
+        
+        Assert.DoesNotContain(content, contentList);
+    }
+
+    [Fact]
+    public void TestRemoveContentReturnsFalseIfContentWasAbsent()
+    {
+        var cell = new Cell();
+        var content = new GameObject();
+        
+        Assert.False(cell.RemoveContent(content));
+    }
+
+    [Fact]
+    public void TestRemoveContentReturnsTrueIfContentWasRemoved()
+    {
+        var cell = new Cell();
+        var content = new GameObject();
+        cell.AddContent(content);
+        
+        Assert.True(cell.RemoveContent(content));
+    }
+    
+    
 }

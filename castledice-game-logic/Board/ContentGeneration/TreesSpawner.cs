@@ -4,13 +4,15 @@ public class TreesSpawner : IContentSpawner
 {
     private int _minTreesCount;
     private int _maxTreesCount;
+    private int _minDistanceBetweenTrees;
 
     private bool[,] _cellsAvailability;
 
-    public TreesSpawner(int minTreesCount, int maxTreesCount)
+    public TreesSpawner(int minTreesCount, int maxTreesCount, int minDistanceBetweenTrees)
     {
         _minTreesCount = minTreesCount;
         _maxTreesCount = maxTreesCount;
+        _minDistanceBetweenTrees = minDistanceBetweenTrees;
     }
 
     public void SpawnContent(Board board)
@@ -50,10 +52,7 @@ public class TreesSpawner : IContentSpawner
                 if (board.HasCell(i, j))
                 {
                     var cell = board[i, j];
-                    if (cell.Content != null)
-                    {
-                        
-                    }
+
                 }
             }
         }

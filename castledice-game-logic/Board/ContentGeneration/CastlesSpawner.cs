@@ -1,18 +1,26 @@
-﻿using castledice_game_logic.Math;
+﻿using castledice_game_logic.GameObjects;
+using castledice_game_logic.Math;
 
 namespace castledice_game_logic.Board.ContentGeneration;
 
 public class CastlesSpawner : IContentSpawner
 {
-    private Dictionary<int, Vector2Int> _castlesCoordinates; //Here key is a player`s id
+    private Dictionary<Player, Vector2Int> _castlesPlacementsData; 
 
-    public CastlesSpawner(Dictionary<int, Vector2Int> castlesCoordinates)
+    public CastlesSpawner(Dictionary<Player, Vector2Int> castlesPlacementsData)
     {
-        _castlesCoordinates = castlesCoordinates;
+        _castlesPlacementsData = castlesPlacementsData;
     }
 
     public void SpawnContent(Board board)
     {
-        
+        foreach (var placementData in _castlesPlacementsData)
+        {
+            var castlePosition = placementData.Value;
+            var castlePlayer = placementData.Key;
+            var cell = board[castlePosition];
+            var castle = new Castle(castlePlayer);
+            cell.AddContent(castle);
+        }
     }
 }

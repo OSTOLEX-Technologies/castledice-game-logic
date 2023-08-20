@@ -1,11 +1,31 @@
-﻿namespace castledice_game_logic;
+﻿using castledice_game_logic.GameObjects;
+using Microsoft.VisualBasic;
+
+namespace castledice_game_logic;
 
 public class Cell
 {
-    public CellContent Content { get; set; }
+    private List<GameObject> _content;
 
-    public void RemoveContent()
+    public Cell()
     {
-        Content = null;
+        _content = new List<GameObject>();
     }
+
+    public void AddContent(GameObject content)
+    {
+        _content.Add(content);
+    }
+
+    public bool RemoveContent(GameObject content)
+    {
+        return _content.Remove(content);
+    }
+
+    public List<GameObject> GetContent()
+    {
+        return _content;
+    }
+    
+    
 }

@@ -30,6 +30,14 @@ public class Board : IEnumerable<Cell>
         }
     }
 
+    public Cell this[Vector2Int position]
+    {
+        get
+        {
+            return this[position.X, position.Y];
+        }
+    }
+
     public int GetMaxLength()
     {
         return GetCellArrayDimensionLength(0);
