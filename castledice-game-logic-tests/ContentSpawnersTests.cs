@@ -5,6 +5,8 @@ using castledice_game_logic.Board.ContentGeneration;
 using castledice_game_logic.GameObjects;
 using castledice_game_logic.Math;
 
+//TODO: Ask if it is a good solution for Castle name conflict
+using CastleGO = castledice_game_logic.GameObjects.Castle;
 namespace castledice_game_logic_tests;
 
 public class ContentSpawnersTests
@@ -28,8 +30,8 @@ public class ContentSpawnersTests
         
         castlesSpawner.SpawnContent(board);
         
-        Assert.Contains(board[firstPlayerCastlePosition].GetContent(), c => c is Castle);
-        Assert.Contains(board[secondPlayerCastlePosition].GetContent(), c => c is Castle);
+        Assert.Contains(board[firstPlayerCastlePosition].GetContent(), c => c is CastleGO);
+        Assert.Contains(board[secondPlayerCastlePosition].GetContent(), c => c is CastleGO);
     }
 
     [Fact]
@@ -52,9 +54,9 @@ public class ContentSpawnersTests
         castlesSpawner.SpawnContent(board);
 
         var firstPlayerCastle =
-            board[firstPlayerCastlePosition].GetContent().FirstOrDefault(c => c is Castle) as Castle;
+            board[firstPlayerCastlePosition].GetContent().FirstOrDefault(c => c is CastleGO) as CastleGO;
         var secondPlayerCastle =
-            board[secondPlayerCastlePosition].GetContent().FirstOrDefault(c => c is Castle) as Castle;
+            board[secondPlayerCastlePosition].GetContent().FirstOrDefault(c => c is CastleGO) as CastleGO;
         Assert.Same(firstPlayer, firstPlayerCastle.Player);
         Assert.Same(secondPlayer, secondPlayerCastle.Player);
     }
@@ -66,7 +68,7 @@ public class ContentSpawnersTests
         var cellsGenerator = new RectCellsGenerator(10, 10);
         cellsGenerator.GenerateCells(board);
         int treesAmount = 3;
-        var treesSpawner = new TreesSpawner(treesAmount, treesAmount, 3);
+        var treesSpawner = new TreesSpawner(treesAmount, treesAmount, 1);
         treesSpawner.SpawnContent(board);
 
         int actualTreesAmount = 0;

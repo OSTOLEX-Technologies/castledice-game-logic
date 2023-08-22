@@ -37,18 +37,8 @@ public class Board : IEnumerable<Cell>
             return this[position.X, position.Y];
         }
     }
-
-    public int GetMaxLength()
-    {
-        return GetCellArrayDimensionLength(0);
-    }
-
-    public int GetMaxWidth()
-    {
-        return GetCellArrayDimensionLength(1);
-    }
-
-    private int GetCellArrayDimensionLength(int dimensionIndex)
+    
+    public int GetLength(int dimensionIndex)
     {
         if (_cells == null)
         {
@@ -66,6 +56,11 @@ public class Board : IEnumerable<Cell>
     public CellType GetCellType()
     {
         return _cellType;
+    }
+
+    public void AddCell(Vector2Int position)
+    {
+        AddCell(position.X, position.Y);
     }
 
     public void AddCell(int x, int y)
@@ -109,6 +104,10 @@ public class Board : IEnumerable<Cell>
 
     public bool HasCell(int x, int y)
     {
+        if (x < 0 || y < 0)
+        {
+            return false;
+        }
         if (_cells == null || x >= _cells.GetLength(0) || y >= _cells.GetLength(1))
         {
             return false;
@@ -135,5 +134,29 @@ public class Board : IEnumerable<Cell>
     IEnumerator IEnumerable.GetEnumerator()
     {
         return GetEnumerator();
+    }
+
+    public List<Vector2Int> GetCellsPositions(Func<Cell, bool> predicate)
+    {
+        List<Vector2Int> positions = new List<Vector2Int>();
+        if (_cells == null)
+        {
+            return positions;
+        }
+        for (int i = 0; i < _cells.GetLength(0); i++)
+        {
+            for (int j = 0; j < _cells.GetLength(1); j++)
+            {
+                if (_cells[i, j] == null)
+                {
+                    continue;
+                }
+                if (predicate(_cells[i, j]))
+                {
+                    positions.Add(new Vector2Int(i, j));
+                }
+            }
+        }
+        return positions;
     }
 }

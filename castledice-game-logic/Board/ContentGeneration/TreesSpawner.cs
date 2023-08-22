@@ -1,4 +1,6 @@
-﻿namespace castledice_game_logic.Board.ContentGeneration;
+﻿using castledice_game_logic.GameObjects;
+
+namespace castledice_game_logic.Board.ContentGeneration;
 
 public class TreesSpawner : IContentSpawner
 {
@@ -6,7 +8,7 @@ public class TreesSpawner : IContentSpawner
     private int _maxTreesCount;
     private int _minDistanceBetweenTrees;
 
-    private bool[,] _cellsAvailability;
+    private bool[,] _availableCells;
 
     public TreesSpawner(int minTreesCount, int maxTreesCount, int minDistanceBetweenTrees)
     {
@@ -15,45 +17,31 @@ public class TreesSpawner : IContentSpawner
         _minDistanceBetweenTrees = minDistanceBetweenTrees;
     }
 
+    
+    //TODO: Discuss trees spawning algorithm
     public void SpawnContent(Board board)
     {
-        var cellsToSpawnTreesOn = GetCellsToSpawnTreesOn(board);
-        foreach (var cell in cellsToSpawnTreesOn)
+        CellsPicker picker = new CellsPicker(board);
+        var castlesPositions = board.GetCellsPositions(c => c.HasContent(ct => ct is Castle));
+        //Step 1: Excluding castles rows and columns and their neighbours
+        foreach (var position in castlesPositions)
         {
-            //TODO: Finish trees generation
-            //cell.AddContent(new Tree());
+            picker.ExcludeRows(position.Y - 1, position.Y, position.Y + 1);
+            picker.ExcludeColumns(position.X - 1, position.X, position.X + 1);
         }
-    }
-
-    private List<Cell> GetCellsToSpawnTreesOn(Board board)
-    {
-        _cellsAvailability = new bool[board.GetMaxLength(), board.GetMaxWidth()];
-        ExcludeNotAvailableCells(board);
-        int spawnCount = GetTreesSpawnCount();
-        int cellsCount = GetBoardCellsCount(board);
-        var firstCell = board.First();
-        //Проверить, присутствует ли индекс клетки в списке запрещенных индексов. Если да, пропустить
-        //Проверить, присутствует ли на клетке замок. Если да, пометить клетку и её соседей как запрещенные и пропустить.
-        //Проверить, присутствует ли замок на соседних клетках. Если да, пометить клетку с замком как запрещенную и пропустить.
-        //
-        //
-        //
-        //
-        //
-        return null;
-    }
-
-    private void ExcludeNotAvailableCells(Board board)
-    {
-        for (int i = 0; i < board.GetMaxLength(); i++)
+        //Step 2: Excluding cells with other content
+        picker.ExcludeCells(c => c.HasContent());
+        int treesAmount = GetTreesSpawnCount();
+        while (treesAmount > 0)
         {
-            for (int j = 0; j < board.GetMaxWidth(); j++)
+            treesAmount--;
+            var cell = picker.PickRandomCell();
+            cell.AddContent(new Tree());
+            picker.ExcludePicked();
+            picker.ExcludeAroundPicked(_minDistanceBetweenTrees);
+            if (picker.AvailableCellsCount() < 1)
             {
-                if (board.HasCell(i, j))
-                {
-                    var cell = board[i, j];
-
-                }
+                break;
             }
         }
     }
@@ -62,16 +50,5 @@ public class TreesSpawner : IContentSpawner
     {
         var rnd = new Random();
         return rnd.Next(_minTreesCount, _maxTreesCount);
-    }
-
-    private int GetBoardCellsCount(Board board)
-    {
-        int count = 0;
-        foreach (var cell in board)
-        {
-            count++;
-        }
-
-        return count;
     }
 }

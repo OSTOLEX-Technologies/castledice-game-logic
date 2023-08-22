@@ -1,6 +1,7 @@
-﻿using System.Xml.Schema;
-using castledice_game_logic;
+﻿using castledice_game_logic;
 using castledice_game_logic.GameObjects;
+
+using CastleGO = castledice_game_logic.GameObjects.Castle;
 
 namespace castledice_game_logic_tests;
 
@@ -59,6 +60,42 @@ public class CellTests
         
         Assert.True(cell.RemoveContent(content));
     }
-    
-    
+
+    [Fact]
+    public void TestHasContentReturnsTrueIfFoundAppropriateContent()
+    {
+        var cell = new Cell();
+        var castle = new CastleGO(new Player());
+        cell.AddContent(castle);
+        Func<GameObject, bool> predicate = o => o is CastleGO;
+        
+        
+        Assert.True(cell.HasContent(predicate));
+    }
+
+    [Fact]
+    public void TestHasContentReturnsFalseIfNoAppropriateContentFound()
+    {
+        var cell = new Cell();
+        Func<GameObject, bool> predicate = o => o is CastleGO;
+        
+        Assert.False(cell.HasContent(predicate));
+    }
+
+    [Fact]
+    public void TestHasContentWithoutArgumentsReturnsFalseIfNoContentOnCell()
+    {
+        var cell = new Cell();
+        
+        Assert.False(cell.HasContent());
+    }
+
+    [Fact]
+    public void TestHasContentWithoutArgumentsReturnsTrueIfCellHasContent()
+    {
+        var cell = new Cell();
+        cell.AddContent(new Tree());
+        
+        Assert.True(cell.HasContent());
+    }
 }

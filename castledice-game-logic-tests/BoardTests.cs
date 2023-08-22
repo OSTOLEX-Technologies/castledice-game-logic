@@ -1,7 +1,10 @@
 ﻿using castledice_game_logic;
 using castledice_game_logic.Board;
 using castledice_game_logic.Exceptions;
+using castledice_game_logic.GameObjects;
+using castledice_game_logic.Math;
 
+using CastleGO = castledice_game_logic.GameObjects.Castle;
 namespace castledice_game_logic_tests;
 
 public class BoardTests
@@ -113,5 +116,29 @@ public class BoardTests
         board.AddCell(2, 2);
         
         Assert.True(board.HasCell(2, 2));
+    }
+
+    [Fact]
+    public void TestGetCellsPositionsReturnsEmptyListIfNoCellsFound()
+    {
+        var board = new Board(CellType.Square);
+        board.AddCell(2, 2);
+        board.AddCell(1, 1);
+        board[1, 1].AddContent(new Tree());
+        
+        Assert.Empty(board.GetCellsPositions(cl => cl.HasContent(ct => ct is CastleGO)));
+    }
+
+    [Fact]
+    public void TestGetCellsPositionReturnsRightPositionsIfCellsAreFound()
+    {
+        var tree = new Tree();
+        var treePosition = new Vector2Int(9, 9);
+        var board = new Board(CellType.Square);
+        board.AddCell(treePosition);
+        board[treePosition].AddContent(tree);
+
+        var cellPositions = board.GetCellsPositions(c => c.HasContent(ct => ct is Tree));
+        Assert.Contains(treePosition, cellPositions);
     }
 }
