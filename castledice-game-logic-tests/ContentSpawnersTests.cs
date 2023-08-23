@@ -68,7 +68,7 @@ public class ContentSpawnersTests
         var cellsGenerator = new RectCellsGenerator(10, 10);
         cellsGenerator.GenerateCells(board);
         int treesAmount = 3;
-        var treesSpawner = new TreesSpawner(treesAmount, treesAmount, 1);
+        var treesSpawner = new TreesSpawner(treesAmount, treesAmount, 3);
         treesSpawner.SpawnContent(board);
 
         int actualTreesAmount = 0;
@@ -81,5 +81,18 @@ public class ContentSpawnersTests
         }
         
         Assert.Equal(treesAmount, actualTreesAmount);
+    }
+
+    [Fact]
+    public void TestTreesSpawnerThrowsInvalidOperationExceptionIfImpossibleToSpawnTreesWithGivenConfiguration()
+    {
+        var board = new Board(CellType.Square);
+        var cellsGenerator = new RectCellsGenerator(5, 5);
+        cellsGenerator.GenerateCells(board);
+        int treesAmount = 5;
+        int minDistanceBetweenTrees = 3;
+        var treesSpawner = new TreesSpawner(treesAmount, treesAmount, minDistanceBetweenTrees);
+
+        Assert.Throws<InvalidOperationException>(() => treesSpawner.SpawnContent(board));
     }
 }

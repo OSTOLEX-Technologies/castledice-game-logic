@@ -102,6 +102,11 @@ public class Board : IEnumerable<Cell>
         }
     }
 
+    public bool HasCell(Vector2Int cellPosition)
+    {
+        return HasCell(cellPosition.X, cellPosition.Y);
+    }
+
     public bool HasCell(int x, int y)
     {
         if (x < 0 || y < 0)
