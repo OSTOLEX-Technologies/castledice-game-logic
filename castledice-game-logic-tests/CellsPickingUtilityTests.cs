@@ -10,8 +10,9 @@ namespace castledice_game_logic_tests;
 
 
 
-public class CellsPickerTests
+public class CellsPickingUtilityTests
 {
+    //TODO: Ask about better naming for test data classes
     public class ExcludeCellsAroundTestCases : IEnumerable<object[]>
     {
 
@@ -129,7 +130,7 @@ public class CellsPickerTests
         private static object[] UpperLeftCornerRadiusTwoCase()
         {
             var board = GetFullNByNBoard(5);
-            var picker = new CellsPicker(board);
+            var picker = new CellsPickingUtility(board);
             var cellPosition = new Vector2Int(0, 0);
             int radius = 2;
             int expectedIntersectionsCount = 13;
@@ -139,7 +140,7 @@ public class CellsPickerTests
         private static object[] UpperRightCornerRadiusTwoCase()
         {
             var board = GetFullNByNBoard(5);
-            var picker = new CellsPicker(board);
+            var picker = new CellsPickingUtility(board);
             var cellPosition = new Vector2Int(0, 4);
             int radius = 2;
             int expectedIntersectionsCount = 13;
@@ -149,7 +150,7 @@ public class CellsPickerTests
         private static object[] LowerRightCornerRadiusThreeCase()
         {
             var board = GetFullNByNBoard(5);
-            var picker = new CellsPicker(board);
+            var picker = new CellsPickingUtility(board);
             var cellPosition = new Vector2Int(4, 4);
             int radius = 3;
             int expectedIntersectionsCount = 24;
@@ -159,7 +160,7 @@ public class CellsPickerTests
         private static object[] LowerLeftCornerRadiusOneCase()
         {
             var board = GetFullNByNBoard(5);
-            var picker = new CellsPicker(board);
+            var picker = new CellsPickingUtility(board);
             var cellPosition = new Vector2Int(4, 0);
             int radius = 1;
             int expectedIntersectionsCount = 5;
@@ -169,7 +170,7 @@ public class CellsPickerTests
         private static object[] MiddleRadiusTwoCase()
         {
             var board = GetFullNByNBoard(5);
-            var picker = new CellsPicker(board);
+            var picker = new CellsPickingUtility(board);
             var cellPosition = new Vector2Int(2, 2);
             int radius = 2;
             int expectedIntersectionsCount = 0;
@@ -179,7 +180,7 @@ public class CellsPickerTests
         private static object[] CellNearToExcludedRowsAndColsRadiusOneCase()
         {
             var board = GetFullNByNBoard(5);
-            var picker = new CellsPicker(board);
+            var picker = new CellsPickingUtility(board);
             picker.ExcludeColumns(2);
             picker.ExcludeRows(2);
             var cellPosition = new Vector2Int(3, 3);
@@ -189,8 +190,9 @@ public class CellsPickerTests
         }
     }
 
+    //TODO: Ask if we can use entities such as AvailabilityMatrix (which do not really exist) in naming
     [Fact]
-    public void TestAvailabilityMatrixExcludesNonExistingCells()
+    public void AvailabilityMatrix_ShouldHaveFalseValues_ForNonExistingCells()
     {
         var board = new Board(CellType.Square);
         board.AddCell(1, 1);
@@ -200,7 +202,7 @@ public class CellsPickerTests
             { true, false },
             { false, true }
         };
-        var picker = new CellsPicker(board);
+        var picker = new CellsPickingUtility(board);
 
         var actualMatrix = picker.GetAvailabilityMatrix();
 
@@ -208,7 +210,7 @@ public class CellsPickerTests
     }
 
     [Fact]
-    public void TestGetAvailabilityMatrixReturnsCopyOfActualMatrix()
+    public void GetAvailabilityMatrix_ShouldNotReturnReferenceToTheOriginalMatrix()
     {
         var board = new Board(CellType.Square);
         board.AddCell(1, 1);
@@ -218,7 +220,7 @@ public class CellsPickerTests
             { true, false },
             { false, true }
         };
-        var picker = new CellsPicker(board);
+        var picker = new CellsPickingUtility(board);
 
         var matrixToModify = picker.GetAvailabilityMatrix();
         matrixToModify[0, 1] = true;
@@ -228,10 +230,10 @@ public class CellsPickerTests
     }
 
     [Fact]
-    public void TestAvailabilityMatrixRowIsFalseAfterExcludeRowsCalled()
+    public void ExcludeRows_ShouldSetAvailabilityMatrixRowsToFalse_ForGivenIndices()
     {
         var board = GetFullNByNBoard(n: 3);
-        var cellPicker = new CellsPicker(board);
+        var cellPicker = new CellsPickingUtility(board);
         var expectedMatrix = new bool[,]
         {
             { false, false, false },
@@ -246,10 +248,10 @@ public class CellsPickerTests
     }
 
     [Fact]
-    public void TestAvailabilityMatrixColumnIsFalseAfterExcludeColumnsCalled()
+    public void ExcludeColumns_ShouldSetAvailabilityMatrixColumnsToFalse_ForGivenIndices()
     {
         var board = GetFullNByNBoard(n: 3);
-        var cellPicker = new CellsPicker(board);
+        var cellPicker = new CellsPickingUtility(board);
         var expectedMatrix = new bool[,]
         {
             { false, true, true },
@@ -263,8 +265,10 @@ public class CellsPickerTests
         Assert.Equal(expectedMatrix, actualMatrix);
     }
 
+    
+    //TODO: Choose better name for this one
     [Fact]
-    public void TestExcludeCellsExcludesCellsAccordingToPredicate()
+    public void ExcludeCells_ShouldSetAvailabilityMatrixCellsToFalse_AccordingToThePredicate()
     {
         var board = GetFullNByNBoard(4);
         board[0, 0].AddContent(new Tree());
@@ -277,7 +281,7 @@ public class CellsPickerTests
             { true, false, true, true },
             { true, true, true, true },
         };
-        var cellPicker = new CellsPicker(board);
+        var cellPicker = new CellsPickingUtility(board);
 
         cellPicker.ExcludeCells(c => c.HasContent() == true);
         var actualMatrix = cellPicker.GetAvailabilityMatrix();
@@ -286,22 +290,22 @@ public class CellsPickerTests
     }
 
     [Fact]
-    public void TestExcludeCellsAroundThrowsArgumentExceptionIfNegativeRadiusGiven()
+    public void ExcludeCellsAround_ShouldThrowArgumentException_IfNegativeRadiusGiven()
     {
         var board = new Board(CellType.Square);
-        var cellPicker = new CellsPicker(board);
+        var cellPicker = new CellsPickingUtility(board);
         Func<Cell, bool> predicate = c => c.HasContent(ct => ct is Tree);
         Assert.Throws<ArgumentException>(() => cellPicker.ExcludeCellsAround(predicate, -1));
     }
 
     [Theory]
     [ClassData(typeof(ExcludeCellsAroundTestCases))]
-    public void TestExcludeCellsAroundExcludesCellsAroundNeededCell(Board board, 
+    public void ExcludeCellsAround_SetsAvailabilityMatrixCellsToFalse_InGivenRadiusAroundAppropriateCell(Board board, 
         bool[,] expectedMatrix, 
         Func<Cell, bool> predicate,
         int radius)
     {
-        var cellPicker = new CellsPicker(board);
+        var cellPicker = new CellsPickingUtility(board);
         
         cellPicker.ExcludeCellsAround(predicate, radius);
         var actualMatrix = cellPicker.GetAvailabilityMatrix();
@@ -310,11 +314,11 @@ public class CellsPickerTests
     }
 
     [Fact]
-    public void TestPickRandomReturnsOnlyAvailableCells()
+    public void PickRandom_ShouldNotReturnCells_WhichAreNotAvailable()
     {
         var board = GetFullNByNBoard(3);
         var centralCell = board[1, 1];
-        var cellsPicker = new CellsPicker(board);
+        var cellsPicker = new CellsPickingUtility(board);
         cellsPicker.ExcludeRows(0, 2);
         cellsPicker.ExcludeColumns(0, 2);
 
@@ -325,10 +329,10 @@ public class CellsPickerTests
 
     //TODO: Ask if it is a good idea to throw an exception in such situation
     [Fact]
-    public void TestPickRandomThrowsInvalidOperationExceptionIfNoCellsAvailable()
+    public void PickRandom_ShouldThrowInvalidOperationException_IfNoCellsAvailable()
     {
         var board = GetFullNByNBoard(2);
-        var cellsPicker = new CellsPicker(board);
+        var cellsPicker = new CellsPickingUtility(board);
         cellsPicker.ExcludeColumns(0, 1);
         cellsPicker.ExcludeRows(0, 1);
 
@@ -336,19 +340,19 @@ public class CellsPickerTests
     }
 
     [Fact]
-    public void TestExcludePickedThrowsInvalidOperationExceptionIfCalledBeforePickRandom()
+    public void ExcludePicked_ShouldThrowInvalidOperationException_IfCalledBeforePickingAnyCell()
     {
         var board = GetFullNByNBoard(3);
-        var cellPicker = new CellsPicker(board);
+        var cellPicker = new CellsPickingUtility(board);
 
         Assert.Throws<InvalidOperationException>(() => cellPicker.ExcludePicked());
     }
 
     [Fact]
-    public void TestPickedCellPositionIsFalseInAvailabilityMatrixAfterExcludePickedCalled()
+    public void ExcludePicked_ShouldSetPickedCellToFalseInTheAvailabilityMatrix()
     {
         var board = GetFullNByNBoard(3);
-        var cellsPicker = new CellsPicker(board);
+        var cellsPicker = new CellsPickingUtility(board);
         var expectedMatrix = new bool[,]
         {
             { false, false, false },
@@ -366,20 +370,20 @@ public class CellsPickerTests
     }
 
     [Fact]
-    public void TestExcludeAroundPickedThrowsInvalidOperationExceptionIfCalledBeforePickRandom()
+    public void ExcludeAroundPicked_ShouldThrowInvalidOperationException_IfCalledBeforePickingAnyCell()
     {
         var board = GetFullNByNBoard(3);
-        var cellPicker = new CellsPicker(board);
+        var cellPicker = new CellsPickingUtility(board);
         int radius = 1;
 
         Assert.Throws<InvalidOperationException>(() => cellPicker.ExcludeAroundPicked(radius));
     }
 
     [Fact]
-    public void TestExcludeAroundPickedThrowsArgumentExceptionIfGivenNegativeRadius()
+    public void ExcludeAroundPicked_ShouldThrowArgumentException_IfNegativeRadiusGiven()
     {
         var board = GetFullNByNBoard(3);
-        var cellPicker = new CellsPicker(board);
+        var cellPicker = new CellsPickingUtility(board);
         int radius = -1;
         cellPicker.PickRandom();
 
@@ -387,12 +391,12 @@ public class CellsPickerTests
     }
 
     [Fact]
-    public void TestExcludeAroundPickedSetsCellsInRadiusAvailabilityToFalse()
+    public void ExcludeAroundPicked_ShouldSetCorrespondingCellsInMatrixToFalse_InGivenRadius()
     {
         var board = GetFullNByNBoard(3);
         var randomGenerator = new Mock<IRandomNumberGenerator>();
         randomGenerator.Setup(rnd => rnd.Range(1, 10)).Returns(5);
-        var cellsPicker = new CellsPicker(board, randomGenerator.Object);
+        var cellsPicker = new CellsPickingUtility(board, randomGenerator.Object);
         var expectedMatrix = new bool[,]
         {
             { false, false, false },
@@ -407,20 +411,21 @@ public class CellsPickerTests
         Assert.Equal(expectedMatrix, actualMatrix);
     }
 
+    //TODO: Another test with questionable name
     [Theory]
     [ClassData(typeof(CountIntersectionsForCellTestCases))]
-    public void TestCountIntersectionsForCellReturnsValidIntersectionsNumber(CellsPicker picker, Vector2Int cellPosition, 
+    public void CountIntersectionsForCell_ShouldReturnValidIntersectionsNumber(CellsPickingUtility pickingUtility, Vector2Int cellPosition, 
         int radius, int expectedIntersectionsCount)
     {
-        int actualIntersectionsCount = picker.CountIntersectionsForCell(cellPosition, radius);
+        int actualIntersectionsCount = pickingUtility.CountIntersectionsForCell(cellPosition, radius);
         Assert.Equal(expectedIntersectionsCount, actualIntersectionsCount);
     }
 
     [Fact]
-    public void TestCountIntersectionsForCellThrowsArgumentExceptionIfNegativeRadiusGiven()
+    public void CountIntersectionsForCell_ShouldThrowArgumentException_IfNegativeRadiusGiven()
     {
         var board = GetFullNByNBoard(3);
-        var picker = new CellsPicker(board);
+        var picker = new CellsPickingUtility(board);
         var cellPosition = new Vector2Int(0, 0);
         int radius = -1;
 
@@ -428,10 +433,10 @@ public class CellsPickerTests
     }
 
     [Fact]
-    public void TestCountIntersectionsForCellThrowsArgumentExceptionIfNegativeCellCoordinateGiven()
+    public void CountIntersectionsForCell_ShouldThrowArgumentException_IfNegativeCellCoordinateGiven()
     {
         var board = GetFullNByNBoard(3);
-        var picker = new CellsPicker(board);
+        var picker = new CellsPickingUtility(board);
         var cellPosition = new Vector2Int(-1, -1);
         int radius = 1;
 
@@ -439,10 +444,10 @@ public class CellsPickerTests
     }
 
     [Fact]
-    public void TestCountIntersectionsForCellThrowsArgumentExceptionIfCellCoordinatesAreOutsideOfBoard()
+    public void CountIntersectionsForCell_ShouldThrowArgumentException_IfCellCoordinatesAreOutsideOfBoard()
     {
         var board = GetFullNByNBoard(3);
-        var picker = new CellsPicker(board);
+        var picker = new CellsPickingUtility(board);
         var cellPosition = new Vector2Int(3, 3);
         int radius = 1;
         
@@ -451,7 +456,7 @@ public class CellsPickerTests
     }
 
     [Fact]
-    public void TestExcludeCellSetsCellToFalseInAvailabilityMatrix()
+    public void ExcludeCell_ShouldSetFalseInAvailabilityMatrix_ForCellWithGivenIndex()
     {
         var board = GetFullNByNBoard(3);
         var expectedMatrix = new bool[,]
@@ -460,7 +465,7 @@ public class CellsPickerTests
             { true, false, true },
             { true, true, true }
         };
-        var picker = new CellsPicker(board);
+        var picker = new CellsPickingUtility(board);
         var cellPosition = new Vector2Int(1, 1);
         
         picker.ExcludeCell(cellPosition);
@@ -470,72 +475,73 @@ public class CellsPickerTests
     }
 
     [Fact]
-    public void TestExcludeCellThrowsArgumentExceptionIfNegativePositionIsGiven()
+    public void ExcludeCell_ShouldThrowArgumentException_IfNegativePositionGiven()
     {
         var board = GetFullNByNBoard(3);
-        var picker = new CellsPicker(board);
+        var picker = new CellsPickingUtility(board);
         var position = new Vector2Int(-1, -1);
 
         Assert.Throws<ArgumentException>(() => picker.ExcludeCell(position));
     }
 
     [Fact]
-    public void TestExcludeCellThrowsArgumentExceptionIfCellPositionIsOutsideTheBoard()
+    public void ExcludeCell_ShouldThrowArgumentException_IfCellPositionIsOutsideOfBoard()
     {
         var board = GetFullNByNBoard(3);
-        var picker = new CellsPicker(board);
+        var picker = new CellsPickingUtility(board);
         var position = new Vector2Int(4, 4);
 
         Assert.Throws<ArgumentException>(() => picker.ExcludeCell(position));
     }
 
     [Fact]
-    public void TestIncludeCellThrowsArgumentExceptionIfCellPositionIsNegative()
+    public void IncludeCell_ShouldThrowArgumentException_IfCellPositionIsNegative()
     {
         var board = GetFullNByNBoard(3);
-        var picker = new CellsPicker(board);
+        var picker = new CellsPickingUtility(board);
         var position = new Vector2Int(-1, -1);
 
         Assert.Throws<ArgumentException>(() => picker.IncludeCell(position));
     }
 
     [Fact]
-    public void TestIncludeCellThrowsArgumentExceptionIfCellIsOutsideOfTheBoard()
+    public void IncludeCell_ShouldThrowArgumentException_IfCellPositionIsOutsideOfBoard()
     {
         var board = GetFullNByNBoard(3);
-        var picker = new CellsPicker(board);
+        var picker = new CellsPickingUtility(board);
         var position = new Vector2Int(4, 4);
 
         Assert.Throws<ArgumentException>(() => picker.IncludeCell(position));
     }
 
     [Fact]
-    public void TestIncludeCellThrowsInvalidOperationExceptionIfCellDoesntExistOnTheBoard()
+    public void IncludeCell_ShouldThrowInvalidOperationException_IfCellDoesntExistOnBoard()
     {
         var board = new Board(CellType.Square);
         board.AddCell(2, 2);
-        var picker = new CellsPicker(board);
+        var picker = new CellsPickingUtility(board);
         var position = new Vector2Int(0, 0);
 
         Assert.Throws<InvalidOperationException>(() => picker.IncludeCell(position));
     }
 
     [Fact]
-    public void TestPickSmartThrowsInvalidOperationExceptionIfNoCellsAvailable()
+    public void PickSmart_ShouldThrowInvalidOperationException_IfNoCellsAvailable()
     {
         var board = GetFullNByNBoard(2);
-        var picker = new CellsPicker(board);
+        var picker = new CellsPickingUtility(board);
         picker.ExcludeColumns(0, 1);
         picker.ExcludeRows(0, 1);
 
         Assert.Throws<InvalidOperationException>(() => picker.PickSmart(2));
     }
     
+    //TODO: Another strange moment to consider
     [Fact]
-    public void TestPickSmartReturnsMostOptimalCell()
+    public void PickSmart_ShouldReturnCell_ThatTakesLeastSpaceIfExcludeAroundPickedCalledAfter()
     {
         var board = GetFullNByNBoard(5);
-        var cellsPicker = new CellsPicker(board);
+        var cellsPicker = new CellsPickingUtility(board);
         cellsPicker.ExcludeColumns(0, 1);
         cellsPicker.ExcludeRows(0, 1);
         cellsPicker.IncludeCell(new Vector2Int(0, 0));

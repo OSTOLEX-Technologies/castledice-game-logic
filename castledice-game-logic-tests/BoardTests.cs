@@ -10,14 +10,14 @@ namespace castledice_game_logic_tests;
 public class BoardTests
 {
     [Fact]
-    public void TestIfBoardImplementsIEnumerableInterface()
+    public void ShouldImplementIEnumerable()
     {
         var board = new Board(CellType.Square);
         Assert.True(board is IEnumerable<Cell>);
     }
 
     [Fact]
-    public void TestIfBoardEnumeratorDoesntReturnNulls()
+    public void BoardEnumerator_ShouldNotReturnNulls()
     {
         var board = new Board(CellType.Square);
         board.AddCell(1,1);
@@ -30,7 +30,7 @@ public class BoardTests
     }
     
     [Fact]
-    public void TestGetCellTypeReturnsGivenCellType()
+    public void GetCellType_ShouldReturnCellType_ThatWasGivenInConstructor()
     {
         var expectedType = CellType.Square;
         var board = new Board(expectedType);
@@ -41,21 +41,21 @@ public class BoardTests
     }
 
     [Fact]
-    public void TestIndexerThrowsCellNotFoundExceptionIfThereNoCellWithGivenIndex()
+    public void Indexer_ShouldThrowCellNotFoundException_IfCellWithGivenIndexDoesntExist()
     {
         var board = new Board(CellType.Square);
         Assert.Throws<CellNotFoundException>(() => board[1, 1]);
     }
 
     [Fact]
-    public void TestAddCellThrowsIndexOutOfRangeExceptionIfIndexIsNegative()
+    public void AddCell_ShouldThrowIndexOutOfRangeException_IfNegativeIndexGiven()
     {
         var board = new Board(CellType.Square);
         Assert.Throws<IndexOutOfRangeException>(() => board.AddCell(-1, -1));
     }
 
     [Fact]
-    public void TestAddCellDoesntChangeCellIfCellAlreadyExists()
+    public void AddCell_ShouldNotAffectCell_IfCellOnGivenIndexAlreadyExists()
     {
         var board = new Board(CellType.Square);
         board.AddCell(1, 1);
@@ -68,7 +68,7 @@ public class BoardTests
     }
 
     [Fact]
-    public void TestIndexerReturnsCellIfThereIsCellWithGivenIndex()
+    public void Indexer_ShouldReturnCell_IfThereIsCellWithGivenIndex()
     {
 
         var board = new Board(CellType.Square);
@@ -79,7 +79,7 @@ public class BoardTests
     }
 
     [Fact]
-    public void TestAddCellExpandsBoard()
+    public void AddCell_ShouldExpandBoardBoundaries()
     {
         var board = new Board(CellType.Square);
         Assert.Throws<CellNotFoundException>(() => board[0, 0]);
@@ -92,16 +92,25 @@ public class BoardTests
     }
 
     [Fact]
-    public void TestHasCellReturnsFalseIfIndexIsBiggerThanBoardCurrentSize()
+    public void HasCell_ShouldReturnFalse_IfIndexIsOutsideOfBoardBoundaries()
     {
         var board = new Board(CellType.Square);
         board.AddCell(2, 2);
         
         Assert.False(board.HasCell(3, 3));
     }
+
+    [Fact]
+    public void HasCell_ShouldReturnFalse_IfIndexIsNegative()
+    {
+        var board = new Board(CellType.Square);
+        board.AddCell(2, 2);
+        
+        Assert.False(board.HasCell(-1, 3));
+    }
     
     [Fact]
-    public void TestHasCellReturnsFalseIfCellIsNull()
+    public void HasCell_ShouldReturnFalse_IfCellIsNull()
     {
         var board = new Board(CellType.Square);
         board.AddCell(2, 2);
@@ -110,7 +119,7 @@ public class BoardTests
     }
 
     [Fact]
-    public void TestHasCellReturnsTrueIfCellWithSuchIndexExists()
+    public void HasCell_ShouldReturnTrue_IfCellWithGivenIndexExists()
     {
         var board = new Board(CellType.Square);
         board.AddCell(2, 2);
@@ -119,7 +128,7 @@ public class BoardTests
     }
 
     [Fact]
-    public void TestGetCellsPositionsReturnsEmptyListIfNoCellsFound()
+    public void GetCellsPositions_ShouldReturnEmptyList_IfNoCellsSatisfyGivenCondition()
     {
         var board = new Board(CellType.Square);
         board.AddCell(2, 2);
@@ -130,7 +139,7 @@ public class BoardTests
     }
 
     [Fact]
-    public void TestGetCellsPositionReturnsRightPositionsIfCellsAreFound()
+    public void GetCellsPositions_ShouldReturnAppropriatePositions()
     {
         var tree = new Tree();
         var treePosition = new Vector2Int(9, 9);

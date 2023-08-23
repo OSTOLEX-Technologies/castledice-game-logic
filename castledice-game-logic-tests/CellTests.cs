@@ -8,7 +8,7 @@ namespace castledice_game_logic_tests;
 public class CellTests
 {
     [Fact]
-    public void TestGetContentReturnsEmptyListIfNoContentAdded()
+    public void GetContent_ShouldReturnEmptyList_IfNoContentAdded()
     {
         var cell = new Cell();
 
@@ -18,7 +18,7 @@ public class CellTests
     }
 
     [Fact]
-    public void TestGetContentReturnsListWithAddedContent()
+    public void GetContent_ShouldReturnList_WithAddedContent()
     {
         var cell = new Cell();
         var contentToAdd = new GameObject();
@@ -30,7 +30,7 @@ public class CellTests
     }
 
     [Fact]
-    public void TestGetContentReturnsListWithoutRemovedContent()
+    public void GetContent_ShouldReturnList_WithoutRemovedContent()
     {
         var cell = new Cell();
         var content = new GameObject();
@@ -43,7 +43,7 @@ public class CellTests
     }
 
     [Fact]
-    public void TestRemoveContentReturnsFalseIfContentWasAbsent()
+    public void ReturnContent_ShouldReturnFalse_IfNoContentRemoved()
     {
         var cell = new Cell();
         var content = new GameObject();
@@ -52,7 +52,7 @@ public class CellTests
     }
 
     [Fact]
-    public void TestRemoveContentReturnsTrueIfContentWasRemoved()
+    public void RemoveContent_ShouldReturnTrue_IfContentWasRemoved()
     {
         var cell = new Cell();
         var content = new GameObject();
@@ -62,7 +62,7 @@ public class CellTests
     }
 
     [Fact]
-    public void TestHasContentReturnsTrueIfFoundAppropriateContent()
+    public void HasContent_ShouldReturnTrue_IfSomeContentOnCellMeetsGivenCondition()
     {
         var cell = new Cell();
         var castle = new CastleGO(new Player());
@@ -74,7 +74,7 @@ public class CellTests
     }
 
     [Fact]
-    public void TestHasContentReturnsFalseIfNoAppropriateContentFound()
+    public void HasContent_ShouldReturnFalse_IfNoContentOnCellMeetGivenCondition()
     {
         var cell = new Cell();
         Func<GameObject, bool> predicate = o => o is CastleGO;
@@ -83,7 +83,7 @@ public class CellTests
     }
 
     [Fact]
-    public void TestHasContentWithoutArgumentsReturnsFalseIfNoContentOnCell()
+    public void HasContentWithoutArguments_ShouldReturnFalse_IfNoContentOnCell()
     {
         var cell = new Cell();
         
@@ -91,7 +91,7 @@ public class CellTests
     }
 
     [Fact]
-    public void TestHasContentWithoutArgumentsReturnsTrueIfCellHasContent()
+    public void HasContentWithoutArguments_ShouldReturnTrue_IfSomeContentIsOnCell()
     {
         var cell = new Cell();
         cell.AddContent(new Tree());

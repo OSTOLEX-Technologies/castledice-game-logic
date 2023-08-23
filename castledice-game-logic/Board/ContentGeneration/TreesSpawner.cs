@@ -53,12 +53,12 @@ public class TreesSpawner : IContentSpawner
     private bool TryGetCellsToSpawnOn(int cellsCount, Board board, bool trySmart, out List<Cell> cells)
     {
         cells = new List<Cell>();
-        CellsPicker picker = new CellsPicker(board);
-        PreparePicker(picker, board);
+        CellsPickingUtility pickingUtility = new CellsPickingUtility(board);
+        PreparePicker(pickingUtility, board);
         while (cellsCount > 0)
         {
             cellsCount--;
-            if (picker.AvailableCellsCount() < 1)
+            if (pickingUtility.AvailableCellsCount() < 1)
             {
                 cells.Clear();
                 return false;
@@ -66,33 +66,27 @@ public class TreesSpawner : IContentSpawner
             Cell cell;
             if (trySmart)
             {
-                cell = picker.PickSmart(_minDistanceBetweenTrees);
+                cell = pickingUtility.PickSmart(_minDistanceBetweenTrees);
             }
             else
             {
-                cell = picker.PickRandom();
+                cell = pickingUtility.PickRandom();
             }
-            picker.ExcludePicked();
-            picker.ExcludeAroundPicked(_minDistanceBetweenTrees);
+            pickingUtility.ExcludePicked();
+            pickingUtility.ExcludeAroundPicked(_minDistanceBetweenTrees);
             cells.Add(cell);
         }
         return true;
     }
 
-    private void PreparePicker(CellsPicker picker, Board board)
+    private void PreparePicker(CellsPickingUtility pickingUtility, Board board)
     {        
         var castlesPositions = board.GetCellsPositions(c => c.HasContent(ct => ct is Castle));
         foreach (var position in castlesPositions)
         {
-            picker.ExcludeRows(position.Y - 1, position.Y, position.Y + 1);
-            picker.ExcludeColumns(position.X - 1, position.X, position.X + 1);
+            pickingUtility.ExcludeRows(position.Y - 1, position.Y, position.Y + 1);
+            pickingUtility.ExcludeColumns(position.X - 1, position.X, position.X + 1);
         }
-        picker.ExcludeCells(c => c.HasContent());
-    }
-
-    private int GetTreesSpawnCount()
-    {
-        var rnd = new Random();
-        return rnd.Next(_minTreesCount, _maxTreesCount);
+        pickingUtility.ExcludeCells(c => c.HasContent());
     }
 }

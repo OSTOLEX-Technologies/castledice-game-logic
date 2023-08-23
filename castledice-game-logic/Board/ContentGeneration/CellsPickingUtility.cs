@@ -3,7 +3,7 @@ using castledice_game_logic.Math;
 
 namespace castledice_game_logic.Board.ContentGeneration;
 
-public class CellsPicker
+public class CellsPickingUtility
 {
     private struct CellPick
     {
@@ -12,20 +12,20 @@ public class CellsPicker
     }
     
     private Board _board;
-    private bool[,] _availablilityMatrix;
+    private bool[,] _availabilityMatrix;
     private Vector2Int _lastPickedCellPosition;
     private IRandomNumberGenerator _randomNumberGenerator;
     private bool _cellPicked;
 
-    public CellsPicker(Board board)
+    public CellsPickingUtility(Board board)
     {
         _board = board;
-        _availablilityMatrix = new bool[_board.GetLength(0), _board.GetLength(1)];
+        _availabilityMatrix = new bool[_board.GetLength(0), _board.GetLength(1)];
         _randomNumberGenerator = new RandomNumberGenerator();
         IncludeExistingCells();
     }
 
-    public CellsPicker(Board board, IRandomNumberGenerator generator) : this(board)
+    public CellsPickingUtility(Board board, IRandomNumberGenerator generator) : this(board)
     {
         _randomNumberGenerator = generator;
     }
@@ -38,7 +38,7 @@ public class CellsPicker
             {
                 if (_board.HasCell(i, j))
                 {
-                    _availablilityMatrix[i, j] = true;
+                    _availabilityMatrix[i, j] = true;
                 }
             }
         }
@@ -58,7 +58,7 @@ public class CellsPicker
         {
             throw new InvalidOperationException("Board doesnt have cell on this position: " + cellPosition);
         }
-        _availablilityMatrix[cellPosition.X, cellPosition.Y] = true;
+        _availabilityMatrix[cellPosition.X, cellPosition.Y] = true;
     }
 
     public void ExcludeCell(Vector2Int cellPosition)
@@ -71,7 +71,7 @@ public class CellsPicker
         {
             throw new ArgumentException("Cell position is outside of the board boundaries!");
         }
-        _availablilityMatrix[cellPosition.X, cellPosition.Y] = false;
+        _availabilityMatrix[cellPosition.X, cellPosition.Y] = false;
     }
 
     public void ExcludeRows(params int[] indices)
@@ -88,13 +88,13 @@ public class CellsPicker
 
     private void ExcludeRow(int index)
     {
-        if (index > _availablilityMatrix.GetLength(0))
+        if (index > _availabilityMatrix.GetLength(0))
         {
             return;
         }
-        for (int i = 0; i < _availablilityMatrix.GetLength(1); i++)
+        for (int i = 0; i < _availabilityMatrix.GetLength(1); i++)
         {
-            _availablilityMatrix[index, i] = false;
+            _availabilityMatrix[index, i] = false;
         }
     }
 
@@ -112,19 +112,19 @@ public class CellsPicker
 
     private void ExcludeColumn(int index)
     {
-        if (index > _availablilityMatrix.GetLength(1))
+        if (index > _availabilityMatrix.GetLength(1))
         {
             return;
         }
-        for (int i = 0; i < _availablilityMatrix.GetLength(0); i++)
+        for (int i = 0; i < _availabilityMatrix.GetLength(0); i++)
         {
-            _availablilityMatrix[i, index] = false;
+            _availabilityMatrix[i, index] = false;
         }
     }
 
     public bool[,] GetAvailabilityMatrix()
     {
-        return _availablilityMatrix;
+        return _availabilityMatrix;
     }
 
     public Cell PickRandom()
@@ -153,7 +153,7 @@ public class CellsPicker
         {
             for (int j = 0; j < _board.GetLength(1); j++)
             {
-                if (_availablilityMatrix[i, j])
+                if (_availabilityMatrix[i, j])
                 {
                     count++;
                 }
@@ -168,7 +168,7 @@ public class CellsPicker
         {
             for (int j = 0; j < _board.GetLength(1); j++)
             {
-                if (_availablilityMatrix[i, j])
+                if (_availabilityMatrix[i, j])
                 {
                     cellNumber--;
                     if (cellNumber == 0)
@@ -188,7 +188,7 @@ public class CellsPicker
             throw new InvalidOperationException("Cell haven't been picked yet!");
         }
 
-        _availablilityMatrix[_lastPickedCellPosition.X, _lastPickedCellPosition.Y] = false;
+        _availabilityMatrix[_lastPickedCellPosition.X, _lastPickedCellPosition.Y] = false;
     }
 
     public void ExcludeAroundPicked(int radius)
@@ -216,7 +216,7 @@ public class CellsPicker
                 }
                 if (predicate(_board[i, j]))
                 {
-                    _availablilityMatrix[i, j] = false;
+                    _availabilityMatrix[i, j] = false;
                 }
             }
         }
@@ -266,7 +266,7 @@ public class CellsPicker
                 int roundedDistance = Round(distanceToCell);
                 if (roundedDistance <= radius)
                 {
-                    _availablilityMatrix[i, j] = false;
+                    _availabilityMatrix[i, j] = false;
                 }
             }
         }
@@ -309,7 +309,7 @@ public class CellsPicker
         {
             for (int j = 0; j < _board.GetLength(1); j++)
             {
-                if (!_availablilityMatrix[i, j])
+                if (!_availabilityMatrix[i, j])
                 {
                     continue;
                 }
@@ -348,7 +348,7 @@ public class CellsPicker
             {
                 if (i >= 0 && j >= 0  && i < _board.GetLength(0) && j < _board.GetLength(1))
                 {
-                    if (_availablilityMatrix[i, j])
+                    if (_availabilityMatrix[i, j])
                     {
                         continue;
                     }

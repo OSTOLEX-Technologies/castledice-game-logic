@@ -6,7 +6,7 @@ namespace castledice_game_logic_tests;
 public class CellsGeneratorsTests
 {
     [Fact]
-    public void RectCellsGeneratorGeneratesCellsInNByMArea()
+    public void GenerateCells_ShouldCreateCells_InNByMRectangleForm()
     {
         int boardWidth = 10;
         int boardLength = 15;
