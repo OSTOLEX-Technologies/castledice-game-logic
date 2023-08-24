@@ -86,7 +86,7 @@ public class Board : IEnumerable<Cell>
         {
             return;
         }
-        _cells[x, y] = new Cell();
+        _cells[x, y] = new Cell(new Vector2Int(x, y));
     }
 
     private void ExpandCellsArray(int newLength, int newWidth)

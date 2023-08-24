@@ -1,6 +1,6 @@
 ﻿namespace castledice_game_logic.GameObjects;
 
-public class Castle : GameObject
+public class Castle : Content
 {
     private Player _player;
 

@@ -1,6 +1,6 @@
 ﻿namespace castledice_game_logic.GameObjects;
 
-public class GameObject
+public class Content
 {
     
 }

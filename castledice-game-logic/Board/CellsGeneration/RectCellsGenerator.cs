@@ -1,5 +1,10 @@
 ﻿namespace castledice_game_logic.Board.CellsGeneration;
 
+
+/// <summary>
+/// <inheritdoc />
+/// This one generates cells in rectangular form.
+/// </summary>
 public class RectCellsGenerator : ICellsGenerator
 {
     private int _boardLength;
