@@ -16,6 +16,11 @@ public class Cell
         _position = position;
     }
 
+    public Cell(int x, int y)
+    {
+        _position = new Vector2Int(x, y);
+    }
+
     public void AddContent(Content content)
     {
         _content.Add(content);

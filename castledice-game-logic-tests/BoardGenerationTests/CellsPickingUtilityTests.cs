@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using castledice_game_logic;
-using castledice_game_logic.Board;
-using castledice_game_logic.Board.ContentGeneration;
+using castledice_game_logic;
+using castledice_game_logic.BoardGeneration.ContentGeneration;
 using castledice_game_logic.GameObjects;
 using castledice_game_logic.Math;
 using Moq;
+using static castledice_game_logic_tests.ObjectCreationUtility;
 
 namespace castledice_game_logic_tests;
 
@@ -232,7 +233,7 @@ public class CellsPickingUtilityTests
     [Fact]
     public void ExcludeRows_ShouldSetAvailabilityMatrixRowsToFalse_ForGivenIndices()
     {
-        var board = GetFullNByNBoard(n: 3);
+        var board = GetFullNByNBoard(3);
         var cellPicker = new CellsPickingUtility(board);
         var expectedMatrix = new bool[,]
         {
@@ -250,7 +251,7 @@ public class CellsPickingUtilityTests
     [Fact]
     public void ExcludeColumns_ShouldSetAvailabilityMatrixColumnsToFalse_ForGivenIndices()
     {
-        var board = GetFullNByNBoard(n: 3);
+        var board = GetFullNByNBoard(3);
         var cellPicker = new CellsPickingUtility(board);
         var expectedMatrix = new bool[,]
         {
@@ -550,18 +551,5 @@ public class CellsPickingUtilityTests
         var actualCell = cellsPicker.PickSmart(2);
         
         Assert.Equal(expectedCell, actualCell);
-    }
-
-    private static Board GetFullNByNBoard(int n)
-    {
-        var board = new Board(CellType.Square);
-        for (int i = 0; i < n; i++)
-        {
-            for (int j = 0; j < n; j++)
-            {
-                board.AddCell(i, j);
-            }
-        }
-        return board;
     }
 }

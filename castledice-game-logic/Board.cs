@@ -2,7 +2,7 @@
 using castledice_game_logic.Exceptions;
 using castledice_game_logic.Math;
 
-namespace castledice_game_logic.Board;
+namespace castledice_game_logic;
 
 public class Board : IEnumerable<Cell>
 {

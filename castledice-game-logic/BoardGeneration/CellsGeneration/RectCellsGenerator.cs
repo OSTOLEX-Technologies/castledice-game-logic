@@ -1,4 +1,4 @@
-﻿namespace castledice_game_logic.Board.CellsGeneration;
+﻿namespace castledice_game_logic.BoardGeneration.CellsGeneration;
 
 
 /// <summary>

@@ -2,11 +2,21 @@
 using castledice_game_logic.GameObjects;
 using castledice_game_logic.Math;
 using CastleGO = castledice_game_logic.GameObjects.Castle;
+using static castledice_game_logic_tests.ObjectCreationUtility;
 
 namespace castledice_game_logic_tests;
 
 public class CellTests
 {
+    [Fact]
+    public void PositionProperty_ShouldReturnPosition_GivenInConstructor()
+    {
+        var position = new Vector2Int(0, 1);
+        var cell = new Cell(position);
+        
+        Assert.Equal(position, cell.Position);
+    }
+    
     [Fact]
     public void GetContent_ShouldReturnEmptyList_IfNoContentAdded()
     {
@@ -99,8 +109,5 @@ public class CellTests
         Assert.True(cell.HasContent());
     }
 
-    private Cell GetCell()
-    {
-        return new Cell(new Vector2Int(0, 0));
-    }
+
 }

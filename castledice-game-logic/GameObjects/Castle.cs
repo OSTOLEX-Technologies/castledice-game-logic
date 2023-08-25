@@ -1,13 +1,9 @@
 ﻿namespace castledice_game_logic.GameObjects;
 
-public class Castle : Content
+public class Castle : PlayerContent
 {
-    private Player _player;
-
-    public Player Player => _player;
-
-    public Castle(Player player)
+    public Castle(Player player) : base(player)
     {
-        _player = player;
+        
     }
 }

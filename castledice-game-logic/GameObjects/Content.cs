@@ -2,5 +2,11 @@
 
 public class Content
 {
-    
+    public virtual bool IsRemovable
+    {
+        get
+        {
+            return false;
+        }
+    }
 }
