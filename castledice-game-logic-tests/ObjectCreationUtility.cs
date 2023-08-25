@@ -1,5 +1,5 @@
 ﻿using castledice_game_logic;
-using castledice_game_logic;
+using castledice_game_logic.GameObjects;
 using castledice_game_logic.Math;
 
 namespace castledice_game_logic_tests;
@@ -27,5 +27,10 @@ public static class ObjectCreationUtility
     public static Player GetPlayer()
     {
         return new Player();
+    }
+
+    public static Content GetCellContent()
+    {
+        return new Tree();
     }
 }

@@ -3,7 +3,6 @@ using castledice_game_logic.BoardGeneration.CellsGeneration;
 using castledice_game_logic.BoardGeneration.ContentGeneration;
 using castledice_game_logic.Math;
 
-//TODO: Ask if it is a good solution for Castle name conflict
 using CastleGO = castledice_game_logic.GameObjects.Castle;
 namespace castledice_game_logic_tests;
 
@@ -55,7 +54,7 @@ public class CastleSpawnerTests
             board[firstPlayerCastlePosition].GetContent().FirstOrDefault(c => c is CastleGO) as CastleGO;
         var secondPlayerCastle =
             board[secondPlayerCastlePosition].GetContent().FirstOrDefault(c => c is CastleGO) as CastleGO;
-        Assert.Same(firstPlayer, firstPlayerCastle.Player);
-        Assert.Same(secondPlayer, secondPlayerCastle.Player);
+        Assert.Same(firstPlayer, firstPlayerCastle.GetOwner());
+        Assert.Same(secondPlayer, secondPlayerCastle.GetOwner());
     }
 }

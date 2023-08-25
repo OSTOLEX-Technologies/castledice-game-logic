@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using castledice_game_logic;
-using castledice_game_logic;
 using castledice_game_logic.BoardGeneration.ContentGeneration;
 using castledice_game_logic.GameObjects;
 using castledice_game_logic.Math;

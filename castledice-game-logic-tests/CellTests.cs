@@ -31,7 +31,7 @@ public class CellTests
     public void GetContent_ShouldReturnList_WithAddedContent()
     {
         var cell = GetCell();
-        var contentToAdd = new Content();
+        var contentToAdd = GetCellContent();
 
         cell.AddContent(contentToAdd);
         var cellContentList = cell.GetContent();
@@ -43,7 +43,7 @@ public class CellTests
     public void GetContent_ShouldReturnList_WithoutRemovedContent()
     {
         var cell = GetCell();
-        var content = new Content();
+        var content = GetCellContent();
         cell.AddContent(content);
 
         cell.RemoveContent(content);
@@ -56,7 +56,7 @@ public class CellTests
     public void ReturnContent_ShouldReturnFalse_IfNoContentRemoved()
     {
         var cell = GetCell();
-        var content = new Content();
+        var content = GetCellContent();
         
         Assert.False(cell.RemoveContent(content));
     }
@@ -65,7 +65,7 @@ public class CellTests
     public void RemoveContent_ShouldReturnTrue_IfContentWasRemoved()
     {
         var cell = GetCell();
-        var content = new Content();
+        var content = GetCellContent();
         cell.AddContent(content);
         
         Assert.True(cell.RemoveContent(content));
