@@ -33,4 +33,9 @@ public static class ObjectCreationUtility
     {
         return new Tree();
     }
+
+    public static Content GetObstacle()
+    {
+        return new Tree();
+    }
 }
