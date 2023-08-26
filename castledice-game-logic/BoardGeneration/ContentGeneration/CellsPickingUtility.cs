@@ -4,7 +4,7 @@ using castledice_game_logic.Math;
 namespace castledice_game_logic.BoardGeneration.ContentGeneration;
 
 /// <summary>
-/// Helper class which provides tools for excluding cells from possible selection with different conditions.
+/// Helper class that provides tools for excluding cells from possible selection with different conditions.
 /// </summary>
 // This class can be divided into two other classes: CellsExclusionUtility and CellsSelectionUtility
 public class CellsPickingUtility
