@@ -14,6 +14,16 @@ public class Knight : Content, IPlayerOwned, IUpgradeable, IRemovable
         return _player;
     }
 
+    public bool CanBeUpgraded()
+    {
+        return true;
+    }
+
+    public int GetUpgradeCost()
+    {
+        throw new NotImplementedException();
+    }
+
     public bool TryUpgrade(Player upgrader)
     {
         throw new NotImplementedException();

@@ -1,6 +1,6 @@
 ﻿using castledice_game_logic;
 using castledice_game_logic.MovesLogic;
-
+using static castledice_game_logic_tests.ObjectCreationUtility;
 namespace castledice_game_logic_tests;
 
 public class MoveCellTests
@@ -22,10 +22,5 @@ public class MoveCellTests
         var moveCell = new MoveCell(cell, moveType);
         
         Assert.Equal(moveType, moveCell.MoveType);
-    }
-    
-    private Cell GetCell()
-    {
-        return new Cell(0, 0);
     }
 }

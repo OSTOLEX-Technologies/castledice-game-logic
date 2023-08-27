@@ -39,4 +39,13 @@ public class KnightTests
         
         Assert.Same(player, owner);
     }
+
+    [Fact]
+    public void CanBeUpgraded_ShouldReturnTrue_IfKnightIsNotMaxLevel()
+    {
+        var player = GetPlayer();
+        var knight = new Knight(player);
+        
+        Assert.True(knight.CanBeUpgraded());
+    }
 }

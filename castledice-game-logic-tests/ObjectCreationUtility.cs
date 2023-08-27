@@ -22,6 +22,10 @@ public static class ObjectCreationUtility
         return board;
     }
     
+    /// <summary>
+    /// Returns cell with (0, 0) coordinates.
+    /// </summary>
+    /// <returns></returns>
     public static Cell GetCell()
     {
         return new Cell(new Vector2Int(0, 0));
@@ -64,11 +68,21 @@ public static class ObjectCreationUtility
         return new Player();
     }
 
+    
+    /// <summary>
+    /// Returns some cell content that is easy to create. You should not expect any particular content.
+    /// </summary>
+    /// <returns></returns>
     public static Content GetCellContent()
     {
         return new Tree();
     }
 
+    
+    /// <summary>
+    /// Returns cell content that can't be removed by player.
+    /// </summary>
+    /// <returns></returns>
     public static Content GetObstacle()
     {
         return new Tree();

@@ -14,6 +14,7 @@ public class MoveCellsSelectorTests
         private readonly List<object[]> _data = new List<object[]>()
         {
             TwoCastlesOnBoardCase(),
+            TwoCastlesOnBoardCaseForSecondPlayer(),
             CastleAndKnightCase(),
             KnightAndEnemyCase(),
             KnigthAndEnemyCastleCase(),
@@ -49,6 +50,25 @@ public class MoveCellsSelectorTests
                 new MoveCell(board[1, 1], MoveType.Place)
             };
             return new object[] { board, firstPlayer, expectedCells };
+        }
+        
+        private static object[] TwoCastlesOnBoardCaseForSecondPlayer()
+        {
+            var firstPlayer = GetPlayer();
+            var secondPlayer = GetPlayer();
+            var firstCastle = new CastleGO(firstPlayer);
+            var secondCastle = new CastleGO(secondPlayer);
+            var board = GetFullNByNBoard(10);
+            board[0, 0].AddContent(firstCastle);
+            board[9, 9].AddContent(secondCastle);
+            List<MoveCell> expectedCells = new List<MoveCell>()
+            {
+                new MoveCell(board[9, 9], MoveType.Upgrade),
+                new MoveCell(board[9, 8], MoveType.Place),
+                new MoveCell(board[8, 9], MoveType.Place),
+                new MoveCell(board[8, 8], MoveType.Place)
+            };
+            return new object[] { board, secondPlayer, expectedCells };
         }
 
         private static object[] CastleAndKnightCase()
