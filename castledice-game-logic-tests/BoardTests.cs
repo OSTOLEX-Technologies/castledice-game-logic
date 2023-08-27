@@ -1,5 +1,5 @@
 ﻿using castledice_game_logic;
-using castledice_game_logic.Board;
+using castledice_game_logic;
 using castledice_game_logic.Exceptions;
 using castledice_game_logic.GameObjects;
 using castledice_game_logic.Math;

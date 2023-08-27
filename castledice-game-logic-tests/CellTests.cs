@@ -2,11 +2,21 @@
 using castledice_game_logic.GameObjects;
 using castledice_game_logic.Math;
 using CastleGO = castledice_game_logic.GameObjects.Castle;
+using static castledice_game_logic_tests.ObjectCreationUtility;
 
 namespace castledice_game_logic_tests;
 
 public class CellTests
 {
+    [Fact]
+    public void PositionProperty_ShouldReturnPosition_GivenInConstructor()
+    {
+        var position = new Vector2Int(0, 1);
+        var cell = new Cell(position);
+        
+        Assert.Equal(position, cell.Position);
+    }
+    
     [Fact]
     public void GetContent_ShouldReturnEmptyList_IfNoContentAdded()
     {
@@ -21,7 +31,7 @@ public class CellTests
     public void GetContent_ShouldReturnList_WithAddedContent()
     {
         var cell = GetCell();
-        var contentToAdd = new Content();
+        var contentToAdd = GetCellContent();
 
         cell.AddContent(contentToAdd);
         var cellContentList = cell.GetContent();
@@ -33,7 +43,7 @@ public class CellTests
     public void GetContent_ShouldReturnList_WithoutRemovedContent()
     {
         var cell = GetCell();
-        var content = new Content();
+        var content = GetCellContent();
         cell.AddContent(content);
 
         cell.RemoveContent(content);
@@ -46,7 +56,7 @@ public class CellTests
     public void ReturnContent_ShouldReturnFalse_IfNoContentRemoved()
     {
         var cell = GetCell();
-        var content = new Content();
+        var content = GetCellContent();
         
         Assert.False(cell.RemoveContent(content));
     }
@@ -55,7 +65,7 @@ public class CellTests
     public void RemoveContent_ShouldReturnTrue_IfContentWasRemoved()
     {
         var cell = GetCell();
-        var content = new Content();
+        var content = GetCellContent();
         cell.AddContent(content);
         
         Assert.True(cell.RemoveContent(content));
@@ -99,8 +109,5 @@ public class CellTests
         Assert.True(cell.HasContent());
     }
 
-    private Cell GetCell()
-    {
-        return new Cell(new Vector2Int(0, 0));
-    }
+
 }

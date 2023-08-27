@@ -1,4 +1,4 @@
-﻿namespace castledice_game_logic.Board;
+﻿namespace castledice_game_logic;
 
 public enum CellType
 {

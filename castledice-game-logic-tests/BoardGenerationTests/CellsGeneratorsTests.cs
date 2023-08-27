@@ -1,5 +1,5 @@
-﻿using castledice_game_logic.Board;
-using castledice_game_logic.Board.CellsGeneration;
+﻿using castledice_game_logic;
+using castledice_game_logic.BoardGeneration.CellsGeneration;
 
 namespace castledice_game_logic_tests;
 

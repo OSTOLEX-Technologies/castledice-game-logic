@@ -1,7 +1,7 @@
 ﻿using castledice_game_logic.GameObjects;
 using castledice_game_logic.Math;
 
-namespace castledice_game_logic.Board.ContentGeneration;
+namespace castledice_game_logic.BoardGeneration.ContentGeneration;
 
 public class CastlesSpawner : IContentSpawner
 {

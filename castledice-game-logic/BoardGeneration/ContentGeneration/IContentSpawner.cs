@@ -1,4 +1,4 @@
-﻿namespace castledice_game_logic.Board.ContentGeneration;
+﻿namespace castledice_game_logic.BoardGeneration.ContentGeneration;
 
 /// <summary>
 /// Class responsible for spawning initial content on the board, that is content which is not created by player.

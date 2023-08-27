@@ -1,6 +1,6 @@
 ﻿using castledice_game_logic.GameObjects;
 
-namespace castledice_game_logic.Board.ContentGeneration;
+namespace castledice_game_logic.BoardGeneration.ContentGeneration;
 
 public class TreesSpawner : IContentSpawner
 {
