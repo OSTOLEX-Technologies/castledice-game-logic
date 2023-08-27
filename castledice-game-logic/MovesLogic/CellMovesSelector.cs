@@ -2,39 +2,39 @@
 
 namespace castledice_game_logic.MovesLogic;
 
-public class MoveCellsSelector
+public class CellMovesSelector
 {
     private Board _board;
 
-    public MoveCellsSelector(Board board)
+    public CellMovesSelector(Board board)
     {
         _board = board;
     }
 
-    public List<MoveCell> SelectMoveCells(Player player)
+    public List<CellMove> SelectMoveCells(Player player)
     {
-        List<MoveCell> selectedCells = new List<MoveCell>();
+        List<CellMove> selectedCells = new List<CellMove>();
         foreach (var cell in _board)
         {
             if (CellContentOwnedByPlayer(cell, player) && CellContentIsUpgradeable(cell))
             {
-                selectedCells.Add(new MoveCell(cell, MoveType.Upgrade));
+                selectedCells.Add(new CellMove(cell, MoveType.Upgrade));
             }
-            else if (AtLeastOneCellNeighbourContentOwnedByPlayer(cell, player))
+            else if (HasNeighbourOwnedByPlayer(cell, player))
             {
                 
                 if (CellContentIsCapturable(cell))
                 {
-                    selectedCells.Add(new MoveCell(cell, MoveType.Capture));
+                    selectedCells.Add(new CellMove(cell, MoveType.Capture));
 
                 }
                 else if(CellContentIsRemovable(cell))
                 { 
-                    selectedCells.Add(new MoveCell(cell, MoveType.Remove));
+                    selectedCells.Add(new CellMove(cell, MoveType.Remove));
                 }
                 else if (CanPlaceOnCell(cell, player))
                 {
-                    selectedCells.Add(new MoveCell(cell, MoveType.Place));
+                    selectedCells.Add(new CellMove(cell, MoveType.Place));
                 }
             }
         }
@@ -49,12 +49,22 @@ public class MoveCellsSelector
 
     private bool CellContentIsUpgradeable(Cell cell)
     {
-        return cell.HasContent(c => c is IUpgradeable);
+        return cell.HasContent(ContentCanBeUpgraded);
+    }
+
+    private bool ContentCanBeUpgraded(Content content)
+    {
+        if (content is IUpgradeable)
+        {
+            var upgradeable = content as IUpgradeable;
+            return upgradeable.CanBeUpgraded();
+        }
+
+        return false;
     }
 
     
-    //TODO: Ask what to do if we have different cell form?
-    private bool AtLeastOneCellNeighbourContentOwnedByPlayer(Cell cell, Player player)
+    private bool HasNeighbourOwnedByPlayer(Cell cell, Player player)
     {
         var cellPosition = cell.Position;
         for (int i = cellPosition.X - 1; i <= cellPosition.X + 1; i++)
@@ -84,10 +94,7 @@ public class MoveCellsSelector
         {
             var ownedContent = content as IPlayerOwned;
             var owner = ownedContent.GetOwner();
-            if (player == owner)
-            {
-                return true;
-            }
+            return player == owner;
         }
         return false;
     }
@@ -104,10 +111,7 @@ public class MoveCellsSelector
         {
             var ownedContent = content as IPlayerOwned;
             var owner = ownedContent.GetOwner();
-            if (player != owner)
-            {
-                return true;
-            }
+            return player != owner;
         }
         return false;
     }
@@ -124,6 +128,17 @@ public class MoveCellsSelector
 
     private bool CellContentIsRemovable(Cell cell)
     {
-        return cell.HasContent(c => c is IRemovable);
+        return cell.HasContent(ContentCanBeRemoved);
+    }
+
+    private bool ContentCanBeRemoved(Content content)
+    {
+        if (content is IRemovable)
+        {
+            var removable = content as IRemovable;
+            return removable.CanBeRemoved();
+        }
+
+        return false;
     }
 }

@@ -39,4 +39,13 @@ public class CastleTests
         
         Assert.Same(player, owner);
     }
+
+    [Fact]
+    public void CanBeUpgraded_ShouldReturnTrue_IfCastleIsNotMaxLevel()
+    {
+        var player = GetPlayer();
+        var castle = new CastleGO(player);
+        
+        Assert.True(castle.CanBeUpgraded());
+    }
 }

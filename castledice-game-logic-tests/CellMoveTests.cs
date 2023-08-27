@@ -1,15 +1,15 @@
 ﻿using castledice_game_logic;
 using castledice_game_logic.MovesLogic;
-
+using static castledice_game_logic_tests.ObjectCreationUtility;
 namespace castledice_game_logic_tests;
 
-public class MoveCellTests
+public class CellMoveTests
 {
     [Fact]
     public void CellProperty_ShouldReturnCell_ThatWasGivenInConstructor()
     {
         var cell = GetCell();
-        var moveCell = new MoveCell(cell, MoveType.Place);
+        var moveCell = new CellMove(cell, MoveType.Place);
         
         Assert.Same(cell, moveCell.Cell);
     }
@@ -19,13 +19,8 @@ public class MoveCellTests
     {
         var cell = GetCell();
         var moveType = MoveType.Place;
-        var moveCell = new MoveCell(cell, moveType);
+        var moveCell = new CellMove(cell, moveType);
         
         Assert.Equal(moveType, moveCell.MoveType);
-    }
-    
-    private Cell GetCell()
-    {
-        return new Cell(0, 0);
     }
 }

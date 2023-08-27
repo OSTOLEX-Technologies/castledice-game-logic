@@ -14,6 +14,16 @@ public class Castle : Content, ICapturable, IUpgradeable, IPlayerOwned
         throw new NotImplementedException();
     }
 
+    public bool CanBeUpgraded()
+    {
+        return true;
+    }
+
+    public int GetUpgradeCost()
+    {
+        throw new NotImplementedException();
+    }
+
     public bool TryUpgrade(Player upgrader)
     {
         throw new NotImplementedException();

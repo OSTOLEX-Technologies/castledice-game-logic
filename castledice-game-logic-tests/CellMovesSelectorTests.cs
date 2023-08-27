@@ -7,13 +7,14 @@ using static castledice_game_logic_tests.ObjectCreationUtility;
 
 namespace castledice_game_logic_tests;
 
-public class MoveCellsSelectorTests
+public class CellMovesSelectorTests
 {
     public class SelectMoveCellWithoutTypeTestCases : IEnumerable<object[]>
     {
         private readonly List<object[]> _data = new List<object[]>()
         {
             TwoCastlesOnBoardCase(),
+            TwoCastlesOnBoardCaseForSecondPlayer(),
             CastleAndKnightCase(),
             KnightAndEnemyCase(),
             KnigthAndEnemyCastleCase(),
@@ -41,14 +42,33 @@ public class MoveCellsSelectorTests
             var board = GetFullNByNBoard(10);
             board[0, 0].AddContent(firstCastle);
             board[9, 9].AddContent(secondCastle);
-            List<MoveCell> expectedCells = new List<MoveCell>()
+            List<CellMove> expectedCells = new List<CellMove>()
             {
-                new MoveCell(board[0, 0], MoveType.Upgrade),
-                new MoveCell(board[0, 1], MoveType.Place),
-                new MoveCell(board[1, 0], MoveType.Place),
-                new MoveCell(board[1, 1], MoveType.Place)
+                new CellMove(board[0, 0], MoveType.Upgrade),
+                new CellMove(board[0, 1], MoveType.Place),
+                new CellMove(board[1, 0], MoveType.Place),
+                new CellMove(board[1, 1], MoveType.Place)
             };
             return new object[] { board, firstPlayer, expectedCells };
+        }
+        
+        private static object[] TwoCastlesOnBoardCaseForSecondPlayer()
+        {
+            var firstPlayer = GetPlayer();
+            var secondPlayer = GetPlayer();
+            var firstCastle = new CastleGO(firstPlayer);
+            var secondCastle = new CastleGO(secondPlayer);
+            var board = GetFullNByNBoard(10);
+            board[0, 0].AddContent(firstCastle);
+            board[9, 9].AddContent(secondCastle);
+            List<CellMove> expectedCells = new List<CellMove>()
+            {
+                new CellMove(board[9, 9], MoveType.Upgrade),
+                new CellMove(board[9, 8], MoveType.Place),
+                new CellMove(board[8, 9], MoveType.Place),
+                new CellMove(board[8, 8], MoveType.Place)
+            };
+            return new object[] { board, secondPlayer, expectedCells };
         }
 
         private static object[] CastleAndKnightCase()
@@ -59,17 +79,17 @@ public class MoveCellsSelectorTests
             var board = GetFullNByNBoard(10);
             board[0, 0].AddContent(castle);
             board[1, 1].AddContent(knight);
-            List<MoveCell> expectedCells = new List<MoveCell>()
+            List<CellMove> expectedCells = new List<CellMove>()
             {
-                new MoveCell(board[0, 0], MoveType.Upgrade),
-                new MoveCell(board[1, 1], MoveType.Upgrade),
-                new MoveCell(board[0, 1], MoveType.Place),
-                new MoveCell(board[1, 0], MoveType.Place),
-                new MoveCell(board[2, 2], MoveType.Place),
-                new MoveCell(board[2, 1], MoveType.Place),
-                new MoveCell(board[1, 2], MoveType.Place),
-                new MoveCell(board[0, 2], MoveType.Place),
-                new MoveCell(board[2, 0], MoveType.Place)
+                new CellMove(board[0, 0], MoveType.Upgrade),
+                new CellMove(board[1, 1], MoveType.Upgrade),
+                new CellMove(board[0, 1], MoveType.Place),
+                new CellMove(board[1, 0], MoveType.Place),
+                new CellMove(board[2, 2], MoveType.Place),
+                new CellMove(board[2, 1], MoveType.Place),
+                new CellMove(board[1, 2], MoveType.Place),
+                new CellMove(board[0, 2], MoveType.Place),
+                new CellMove(board[2, 0], MoveType.Place)
             };
             return new object[] { board, player, expectedCells };
         }
@@ -83,12 +103,12 @@ public class MoveCellsSelectorTests
             var board = GetFullNByNBoard(10);
             board[0, 0].AddContent(knight);
             board[1, 1].AddContent(enemy);
-            List<MoveCell> expectedCells = new List<MoveCell>()
+            List<CellMove> expectedCells = new List<CellMove>()
             {
-                new MoveCell(board[0, 0], MoveType.Upgrade),
-                new MoveCell(board[1, 1], MoveType.Remove),
-                new MoveCell(board[0, 1], MoveType.Place),
-                new MoveCell(board[1, 0], MoveType.Place),
+                new CellMove(board[0, 0], MoveType.Upgrade),
+                new CellMove(board[1, 1], MoveType.Remove),
+                new CellMove(board[0, 1], MoveType.Place),
+                new CellMove(board[1, 0], MoveType.Place),
             };
             return new object[] { board, player, expectedCells };
         }
@@ -102,14 +122,14 @@ public class MoveCellsSelectorTests
             var board = GetFullNByNBoard(10);
             board[9, 9].AddContent(enemyCastle);
             board[8, 9].AddContent(knight);
-            List<MoveCell> expectedCells = new List<MoveCell>()
+            List<CellMove> expectedCells = new List<CellMove>()
             {
-                new MoveCell(board[9, 9], MoveType.Capture),
-                new MoveCell(board[8, 9], MoveType.Upgrade),
-                new MoveCell(board[9, 8], MoveType.Place),
-                new MoveCell(board[8, 8], MoveType.Place),
-                new MoveCell(board[7, 8], MoveType.Place),
-                new MoveCell(board[7, 9], MoveType.Place)
+                new CellMove(board[9, 9], MoveType.Capture),
+                new CellMove(board[8, 9], MoveType.Upgrade),
+                new CellMove(board[9, 8], MoveType.Place),
+                new CellMove(board[8, 8], MoveType.Place),
+                new CellMove(board[7, 8], MoveType.Place),
+                new CellMove(board[7, 9], MoveType.Place)
             };
             return new object[] { board, player, expectedCells };
         }
@@ -124,21 +144,21 @@ public class MoveCellsSelectorTests
             board[1, 1].AddContent(castle);
             board[2, 2].AddContent(knight);
             board[1, 2].AddContent(obstacle);
-            List<MoveCell> expectedCells = new List<MoveCell>()
+            List<CellMove> expectedCells = new List<CellMove>()
             {
-                new MoveCell(board[0, 0], MoveType.Place),
-                new MoveCell(board[1, 1], MoveType.Upgrade),
-                new MoveCell(board[2, 2], MoveType.Upgrade),
-                new MoveCell(board[0, 1], MoveType.Place),
-                new MoveCell(board[0, 2], MoveType.Place),
-                new MoveCell(board[1, 0], MoveType.Place),
-                new MoveCell(board[1, 3], MoveType.Place),
-                new MoveCell(board[2, 0], MoveType.Place),
-                new MoveCell(board[2, 1], MoveType.Place),
-                new MoveCell(board[2, 3], MoveType.Place),
-                new MoveCell(board[3, 1], MoveType.Place),
-                new MoveCell(board[3, 2], MoveType.Place),
-                new MoveCell(board[3, 3], MoveType.Place)
+                new CellMove(board[0, 0], MoveType.Place),
+                new CellMove(board[1, 1], MoveType.Upgrade),
+                new CellMove(board[2, 2], MoveType.Upgrade),
+                new CellMove(board[0, 1], MoveType.Place),
+                new CellMove(board[0, 2], MoveType.Place),
+                new CellMove(board[1, 0], MoveType.Place),
+                new CellMove(board[1, 3], MoveType.Place),
+                new CellMove(board[2, 0], MoveType.Place),
+                new CellMove(board[2, 1], MoveType.Place),
+                new CellMove(board[2, 3], MoveType.Place),
+                new CellMove(board[3, 1], MoveType.Place),
+                new CellMove(board[3, 2], MoveType.Place),
+                new CellMove(board[3, 3], MoveType.Place)
             };
             return new object[] { board, player, expectedCells };
         }
@@ -156,21 +176,21 @@ public class MoveCellsSelectorTests
             board[2, 2].AddContent(knight);
             board[1, 2].AddContent(obstacle);
             board[1, 3].AddContent(enemyKnight);
-            List<MoveCell> expectedCells = new List<MoveCell>()
+            List<CellMove> expectedCells = new List<CellMove>()
             {
-                new MoveCell(board[0, 0], MoveType.Place),
-                new MoveCell(board[1, 1], MoveType.Upgrade),
-                new MoveCell(board[2, 2], MoveType.Upgrade),
-                new MoveCell(board[0, 1], MoveType.Place),
-                new MoveCell(board[0, 2], MoveType.Place),
-                new MoveCell(board[1, 0], MoveType.Place),
-                new MoveCell(board[1, 3], MoveType.Remove),
-                new MoveCell(board[2, 0], MoveType.Place),
-                new MoveCell(board[2, 1], MoveType.Place),
-                new MoveCell(board[2, 3], MoveType.Place),
-                new MoveCell(board[3, 1], MoveType.Place),
-                new MoveCell(board[3, 2], MoveType.Place),
-                new MoveCell(board[3, 3], MoveType.Place)
+                new CellMove(board[0, 0], MoveType.Place),
+                new CellMove(board[1, 1], MoveType.Upgrade),
+                new CellMove(board[2, 2], MoveType.Upgrade),
+                new CellMove(board[0, 1], MoveType.Place),
+                new CellMove(board[0, 2], MoveType.Place),
+                new CellMove(board[1, 0], MoveType.Place),
+                new CellMove(board[1, 3], MoveType.Remove),
+                new CellMove(board[2, 0], MoveType.Place),
+                new CellMove(board[2, 1], MoveType.Place),
+                new CellMove(board[2, 3], MoveType.Place),
+                new CellMove(board[3, 1], MoveType.Place),
+                new CellMove(board[3, 2], MoveType.Place),
+                new CellMove(board[3, 3], MoveType.Place)
             };
             return new object[] { board, player, expectedCells };
         }
@@ -185,16 +205,16 @@ public class MoveCellsSelectorTests
             board[0, 0].AddContent(castle);
             board[0, 1].AddContent(firstKnight);
             board[1, 0].AddContent(secondKnight);
-            List<MoveCell> expectedCells = new List<MoveCell>()
+            List<CellMove> expectedCells = new List<CellMove>()
             {
-                new MoveCell(board[0, 0], MoveType.Upgrade),
-                new MoveCell(board[0, 1], MoveType.Upgrade),
-                new MoveCell(board[1, 0], MoveType.Upgrade),
-                new MoveCell(board[1, 1], MoveType.Place),
-                new MoveCell(board[0, 2], MoveType.Place),
-                new MoveCell(board[1, 2], MoveType.Place),
-                new MoveCell(board[2, 0], MoveType.Place),
-                new MoveCell(board[2, 1], MoveType.Place),
+                new CellMove(board[0, 0], MoveType.Upgrade),
+                new CellMove(board[0, 1], MoveType.Upgrade),
+                new CellMove(board[1, 0], MoveType.Upgrade),
+                new CellMove(board[1, 1], MoveType.Place),
+                new CellMove(board[0, 2], MoveType.Place),
+                new CellMove(board[1, 2], MoveType.Place),
+                new CellMove(board[2, 0], MoveType.Place),
+                new CellMove(board[2, 1], MoveType.Place),
             };
             return new object[] { board, player, expectedCells };
         }
@@ -204,9 +224,9 @@ public class MoveCellsSelectorTests
     //TODO: Ask if it is a good idea to make such a generalized test
     [Theory]
     [ClassData(typeof(SelectMoveCellWithoutTypeTestCases))]
-    public void SelectMoveCells_ShouldReturnListWithMoveCells_WithCorrespondingCellsAndMoveTypes(Board board, Player player, List<MoveCell> expectedCells)
+    public void SelectMoveCells_ShouldReturnListWithMoveCells_WithCorrespondingCellsAndMoveTypes(Board board, Player player, List<CellMove> expectedCells)
     {
-        var cellsSelector = new MoveCellsSelector(board);
+        var cellsSelector = new CellMovesSelector(board);
 
         var actualCells = cellsSelector.SelectMoveCells(player);
         

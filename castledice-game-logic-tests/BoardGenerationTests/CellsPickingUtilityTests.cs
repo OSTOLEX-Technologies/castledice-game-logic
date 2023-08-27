@@ -264,11 +264,9 @@ public class CellsPickingUtilityTests
         
         Assert.Equal(expectedMatrix, actualMatrix);
     }
-
     
-    //TODO: Choose better name for this one
     [Fact]
-    public void ExcludeCells_ShouldSetAvailabilityMatrixCellsToFalse_AccordingToThePredicate()
+    public void ExcludeCells_ShouldSetAvailabilityMatrixCellsToFalse_ByPredicate()
     {
         var board = GetFullNByNBoard(4);
         board[0, 0].AddContent(new Tree());
