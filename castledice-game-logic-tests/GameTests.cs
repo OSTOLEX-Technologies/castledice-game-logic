@@ -37,7 +37,7 @@ public class GameTests
             firstPlayer,
             secondPlayer
         };
-        var casltesSpawner = new CastlesSpawner(new Dictionary<Player, Vector2Int>()
+        var castlesSpawner = new CastlesSpawner(new Dictionary<Player, Vector2Int>()
         {
             {firstPlayer, new Vector2Int(0, 0)}
         });
@@ -46,7 +46,7 @@ public class GameTests
         var boardConfig = new BoardConfig()
         {
             CellsGenerator = cellsGenerator,
-            ContentSpawners = new List<IContentSpawner>() { casltesSpawner },
+            ContentSpawners = new List<IContentSpawner>() { castlesSpawner },
             CellType = cellType
         };
         

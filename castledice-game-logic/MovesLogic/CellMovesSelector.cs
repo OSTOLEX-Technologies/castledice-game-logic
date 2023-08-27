@@ -2,39 +2,39 @@
 
 namespace castledice_game_logic.MovesLogic;
 
-public class MoveCellsSelector
+public class CellMovesSelector
 {
     private Board _board;
 
-    public MoveCellsSelector(Board board)
+    public CellMovesSelector(Board board)
     {
         _board = board;
     }
 
-    public List<MoveCell> SelectMoveCells(Player player)
+    public List<CellMove> SelectMoveCells(Player player)
     {
-        List<MoveCell> selectedCells = new List<MoveCell>();
+        List<CellMove> selectedCells = new List<CellMove>();
         foreach (var cell in _board)
         {
             if (CellContentOwnedByPlayer(cell, player) && CellContentIsUpgradeable(cell))
             {
-                selectedCells.Add(new MoveCell(cell, MoveType.Upgrade));
+                selectedCells.Add(new CellMove(cell, MoveType.Upgrade));
             }
             else if (HasNeighbourOwnedByPlayer(cell, player))
             {
                 
                 if (CellContentIsCapturable(cell))
                 {
-                    selectedCells.Add(new MoveCell(cell, MoveType.Capture));
+                    selectedCells.Add(new CellMove(cell, MoveType.Capture));
 
                 }
                 else if(CellContentIsRemovable(cell))
                 { 
-                    selectedCells.Add(new MoveCell(cell, MoveType.Remove));
+                    selectedCells.Add(new CellMove(cell, MoveType.Remove));
                 }
                 else if (CanPlaceOnCell(cell, player))
                 {
-                    selectedCells.Add(new MoveCell(cell, MoveType.Place));
+                    selectedCells.Add(new CellMove(cell, MoveType.Place));
                 }
             }
         }
