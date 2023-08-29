@@ -20,4 +20,9 @@ public struct Vector2Int
     {
         return first.X != second.X || first.Y != second.Y;
     }
+
+    public override string ToString()
+    {
+        return $"({X}, {Y})";
+    }
 }

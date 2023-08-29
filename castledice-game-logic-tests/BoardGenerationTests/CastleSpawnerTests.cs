@@ -3,6 +3,7 @@ using castledice_game_logic.BoardGeneration.CellsGeneration;
 using castledice_game_logic.BoardGeneration.ContentGeneration;
 using castledice_game_logic.Math;
 
+using static castledice_game_logic_tests.ObjectCreationUtility;
 using CastleGO = castledice_game_logic.GameObjects.Castle;
 namespace castledice_game_logic_tests;
 
@@ -11,8 +12,8 @@ public class CastleSpawnerTests
     [Fact]
     public void SpawnContent_ShouldSpawnCastles_OnGivenPositions()
     {
-        var firstPlayer = new Player();
-        var secondPlayer = new Player();
+        var firstPlayer = GetPlayer();
+        var secondPlayer = GetPlayer();
         var firstPlayerCastlePosition = new Vector2Int(0, 0);
         var secondPlayerCastlePosition = new Vector2Int(9, 9);
         var castlesSpawnData = new Dictionary<Player, Vector2Int>()
@@ -34,8 +35,8 @@ public class CastleSpawnerTests
     [Fact]
     public void SpawnContent_ShouldSpawnCastles_WithAppropriatePlayersAssigned()
     {
-        var firstPlayer = new Player();
-        var secondPlayer = new Player();
+        var firstPlayer = GetPlayer();
+        var secondPlayer = GetPlayer();
         var firstPlayerCastlePosition = new Vector2Int(0, 0);
         var secondPlayerCastlePosition = new Vector2Int(9, 9);
         var castlesSpawnData = new Dictionary<Player, Vector2Int>()

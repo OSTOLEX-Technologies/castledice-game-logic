@@ -1,4 +1,6 @@
 ﻿using castledice_game_logic;
+using castledice_game_logic_tests.Mocks;
+using castledice_game_logic.ActionPointsLogic;
 using castledice_game_logic.BoardGeneration.CellsGeneration;
 using castledice_game_logic.BoardGeneration.ContentGeneration;
 using castledice_game_logic.GameConfiguration;
@@ -63,9 +65,27 @@ public static class ObjectCreationUtility
         return boardConfig;
     }
     
+    
+    /// <summary>
+    /// Returns player object with 6 action points.
+    /// </summary>
+    /// <returns></returns>
     public static Player GetPlayer()
     {
-        return new Player();
+        return GetPlayer(6);
+    }
+
+    /// <summary>
+    /// Returns player object with given amount of action points.
+    /// </summary>
+    /// <returns></returns>
+    public static Player GetPlayer(int actionPoints)
+    {
+        var playerActionPoints = new PlayerActionPoints
+        {
+            Amount = actionPoints,
+        };
+        return new Player(playerActionPoints);
     }
 
     
@@ -75,7 +95,7 @@ public static class ObjectCreationUtility
     /// <returns></returns>
     public static Content GetCellContent()
     {
-        return new Tree();
+        return new ObstacleMock();
     }
 
     

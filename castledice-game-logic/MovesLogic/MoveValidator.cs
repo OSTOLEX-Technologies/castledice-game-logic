@@ -24,7 +24,7 @@ public class MoveValidator
             return false;
         }
         
-        var cellMoves = _cellMovesSelector.SelectMoveCells(move.Player);
+        var cellMoves = _cellMovesSelector.SelectCellMoves(move.Player);
         if (move is PlaceMove)
         {
             var placeMove = move as PlaceMove;

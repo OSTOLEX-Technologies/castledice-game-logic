@@ -228,7 +228,7 @@ public class CellMovesSelectorTests
     {
         var cellsSelector = new CellMovesSelector(board);
 
-        var actualCells = cellsSelector.SelectMoveCells(player);
+        var actualCells = cellsSelector.SelectCellMoves(player);
         
         Assert.Equal(expectedCells.Count, actualCells.Count);
         foreach (var expectedCell in expectedCells)

@@ -1,4 +1,5 @@
 ﻿using castledice_game_logic;
+using castledice_game_logic_tests.Mocks;
 using castledice_game_logic.GameObjects;
 using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
@@ -56,7 +57,7 @@ public class MoveValidatorTests
         board[0, 0].AddContent(castle);
         board[1, 1].AddContent(obstacle);
         var position = new Vector2Int(1, 1);
-        var contentToPlace = new Knight(player);
+        var contentToPlace = new PlayerUnitMock(){Owner = player};
         var move = new PlaceMove(player, position, contentToPlace);
         var validator = new MoveValidator(board);
         
@@ -71,7 +72,7 @@ public class MoveValidatorTests
         var castle = new CastleGO(player);
         board[0, 0].AddContent(castle);
         var position = new Vector2Int(2, 2);
-        var contentToPlace = new Knight(player);
+        var contentToPlace = new PlayerUnitMock(){Owner = player};
         var move = new PlaceMove(player, position, contentToPlace);
         var validator = new MoveValidator(board);
         
@@ -86,10 +87,10 @@ public class MoveValidatorTests
         var board = GetFullNByNBoard(10);
         var castle = new CastleGO(player);
         board[0, 0].AddContent(castle);
-        var enemyKnight = new Knight(enemy);
+        var enemyKnight = new PlayerUnitMock(){Owner = enemy};
         board[1, 1].AddContent(enemyKnight);
         var position = new Vector2Int(1, 1);
-        var contentToPlace = new Knight(player);
+        var contentToPlace = new PlayerUnitMock(){Owner = player};
         var move = new PlaceMove(player, position, contentToPlace);
         var validator = new MoveValidator(board);
         
@@ -102,11 +103,11 @@ public class MoveValidatorTests
         var player = GetPlayer();
         var board = GetFullNByNBoard(10);
         var castle = new CastleGO(player);
-        var knight = new Knight(player);
+        var knight = new PlayerUnitMock(){Owner = player};
         board[0, 0].AddContent(castle);
         board[1, 1].AddContent(knight);
         var position = new Vector2Int(1, 1);
-        var contentToPlace = new Knight(player);
+        var contentToPlace = new PlayerUnitMock(){Owner = player};
         var move = new PlaceMove(player, position, contentToPlace);
         var validator = new MoveValidator(board);
         
@@ -121,7 +122,7 @@ public class MoveValidatorTests
         var castle = new CastleGO(player);
         board[0, 0].AddContent(castle);
         var position = new Vector2Int(1, 1);
-        var contentToPlace = new Knight(player);
+        var contentToPlace = new PlayerUnitMock(){Owner = player};
         var move = new PlaceMove(player, position, contentToPlace);
         var validator = new MoveValidator(board);
 
@@ -136,7 +137,7 @@ public class MoveValidatorTests
         var castle = new CastleGO(player);
         board[0, 0].AddContent(castle);
         var position = new Vector2Int(1, 1);
-        var replacement = new Knight(player);
+        var replacement = new PlayerUnitMock(){Owner = player};
         var move = new RemoveMove(player, position, replacement);
         var validator = new MoveValidator(board);
         
@@ -153,7 +154,7 @@ public class MoveValidatorTests
         board[0, 0].AddContent(castle);
         board[1, 1].AddContent(obstacle);
         var position = new Vector2Int(1, 1);
-        var replacement = new Knight(player);
+        var replacement = new PlayerUnitMock(){Owner = player};
         var move = new RemoveMove(player, position, replacement);
         var validator = new MoveValidator(board);
         
@@ -168,7 +169,7 @@ public class MoveValidatorTests
         var castle = new CastleGO(player);
         board[0, 0].AddContent(castle);
         var position = new Vector2Int(2, 2);
-        var replacement = new Knight(player);
+        var replacement = new PlayerUnitMock(){Owner = player};
         var move = new RemoveMove(player, position, replacement);
         var validator = new MoveValidator(board);
         
@@ -182,11 +183,11 @@ public class MoveValidatorTests
         var enemy = GetPlayer();
         var board = GetFullNByNBoard(10);
         var castle = new CastleGO(player);
-        var enemyKnight = new Knight(enemy);
+        var enemyKnight = new PlayerUnitMock(){Owner = enemy};
         board[0, 0].AddContent(castle);
         board[1, 1].AddContent(enemyKnight);
         var position = new Vector2Int(1, 1);
-        var replacement = new Knight(player);
+        var replacement = new PlayerUnitMock(){Owner = player};
         var move = new RemoveMove(player, position, replacement);
         var validator = new MoveValidator(board);
         
@@ -214,7 +215,7 @@ public class MoveValidatorTests
         var enemy = GetPlayer();
         var board = GetFullNByNBoard(10);
         var castle = new CastleGO(player);
-        var enemyKnight = new Knight(enemy);
+        var enemyKnight = new PlayerUnitMock(){Owner = enemy};
         board[0, 0].AddContent(castle);
         board[1, 1].AddContent(enemyKnight);
         var movePosition = new Vector2Int(1, 1);
@@ -273,7 +274,7 @@ public class MoveValidatorTests
         var enemy = GetPlayer();
         var board = GetFullNByNBoard(10);
         var enemyCastle = new CastleGO(enemy);
-        var playerKnight = new Knight(player);
+        var playerKnight = new PlayerUnitMock(){Owner = player};
         board[9, 9].AddContent(enemyCastle);
         board[8, 8].AddContent(playerKnight);
         var movePosition = new Vector2Int(9, 9);
@@ -290,7 +291,7 @@ public class MoveValidatorTests
         var enemy = GetPlayer();
         var board = GetFullNByNBoard(10);
         var enemyCastle = new CastleGO(enemy);
-        var playerKnight = new Knight(player);
+        var playerKnight = new PlayerUnitMock(){Owner = player};
         board[9, 9].AddContent(enemyCastle);
         board[5, 5].AddContent(playerKnight);
         var movePosition = new Vector2Int(9, 9);
