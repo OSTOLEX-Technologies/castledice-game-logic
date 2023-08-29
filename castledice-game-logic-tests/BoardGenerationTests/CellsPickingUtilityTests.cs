@@ -393,7 +393,7 @@ public class CellsPickingUtilityTests
     {
         var board = GetFullNByNBoard(3);
         var randomGenerator = new Mock<IRandomNumberGenerator>();
-        randomGenerator.Setup(rnd => rnd.Range(1, 10)).Returns(5);
+        randomGenerator.Setup(rnd => rnd.GetRandom(1, 10)).Returns(5);
         var cellsPicker = new CellsPickingUtility(board, randomGenerator.Object);
         var expectedMatrix = new bool[,]
         {
