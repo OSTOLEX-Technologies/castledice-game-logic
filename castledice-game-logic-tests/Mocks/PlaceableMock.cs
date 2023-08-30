@@ -1,0 +1,19 @@
+﻿using castledice_game_logic;
+using castledice_game_logic.GameObjects;
+
+namespace castledice_game_logic_tests.Mocks;
+
+public class PlaceableMock : Content, IPlaceable
+{
+    public int Cost;
+    
+    public int GetPlacementCost()
+    {
+        return Cost;
+    }
+
+    public bool CanBePlacedOn(Cell cell)
+    {
+        return true;
+    }
+}

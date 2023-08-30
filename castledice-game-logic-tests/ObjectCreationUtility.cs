@@ -82,11 +82,17 @@ public static class ObjectCreationUtility
     /// <returns></returns>
     public static Player GetPlayer(int actionPoints)
     {
+        return GetPlayer(actionPoints, 0);
+    }
+
+    public static Player GetPlayer(int actionPoints, int id)
+    {
         var playerActionPoints = new PlayerActionPoints
         {
             Amount = actionPoints,
         };
-        return new Player(playerActionPoints);
+        var playerId = id;
+        return new Player(playerActionPoints, playerId);
     }
 
     
@@ -108,12 +114,17 @@ public static class ObjectCreationUtility
     {
         return new Tree();
     }
+
+    public static IPlaceable GetPlaceable()
+    {
+        return new PlaceableMock();
+    }
     
     public class PlaceMoveBuilder
     {
         public Player Player = GetPlayer();
         public Vector2Int Position = new Vector2Int(0, 0);
-        public Content Content = GetCellContent();
+        public IPlaceable Content = GetPlaceable();
         
         public PlaceMove Build()
         {
@@ -125,7 +136,7 @@ public static class ObjectCreationUtility
     {
         public Player Player = GetPlayer();
         public Vector2Int Position = new Vector2Int(0, 0);
-        public Content Replacement = GetCellContent();
+        public IPlaceable Replacement = GetPlaceable();
         
         public RemoveMove Build()
         {

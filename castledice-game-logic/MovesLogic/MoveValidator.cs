@@ -1,4 +1,6 @@
-﻿namespace castledice_game_logic.MovesLogic;
+﻿using castledice_game_logic.GameObjects;
+
+namespace castledice_game_logic.MovesLogic;
 
 
 //TODO: Moves validator should take into account the current player turn
@@ -45,45 +47,34 @@ public class MoveValidator : IMoveVisitor
     private bool ValidatePlaceMove(PlaceMove move)
     {
         var cellMoves = _cellMovesSelector.SelectCellMoves(move.Player);
-        if (cellMoves.Any(c => c.MoveType == MoveType.Place && c.Cell.Position == move.Position))
-        {
-            //TODO: Should there be checking for additional conditions? Like for bridge.
-            return true;
-        }
-        return false;
+        if (!cellMoves.Any(c => c.MoveType == MoveType.Place && c.Cell.Position == move.Position)) return false;
+        var placeable = move.ContentToPlace;
+        var cell = _board[move.Position];
+        var placeCost = placeable.GetPlacementCost();
+        var playerActionPoints = move.Player.ActionPoints.Amount;
+        return placeCost <= playerActionPoints && placeable.CanBePlacedOn(cell);
     }
 
     private bool ValidateRemoveMove(RemoveMove move)
     {
         var cellMoves = _cellMovesSelector.SelectCellMoves(move.Player);
-        if (cellMoves.Any(c => c.MoveType == MoveType.Remove && c.Cell.Position == move.Position))
-        {
-            //TODO: Should validator take player's a.p into account? 
-            // And should it check player's turn?
-            return true;
-        }
-        return false;
+        if (!cellMoves.Any(c => c.MoveType == MoveType.Remove && c.Cell.Position == move.Position)) return false;
+        var cell = _board[move.Position];
+        var removable = cell.GetContent().FirstOrDefault(c => c is IRemovable) as IRemovable;
+        var removeCost = removable.GetRemoveCost(move.Replacement.GetPlacementCost());
+        var playerActionPoints = move.Player.ActionPoints.Amount;
+        return removeCost <= playerActionPoints;
     }
 
     private bool ValidateUpgradeMove(UpgradeMove move)
     {
         var cellMoves = _cellMovesSelector.SelectCellMoves(move.Player);
-        if (cellMoves.Any(c => c.MoveType == MoveType.Upgrade && c.Cell.Position == move.Position))
-        {
-            return true;
-        }
-        return false;
+        return cellMoves.Any(c => c.MoveType == MoveType.Upgrade && c.Cell.Position == move.Position);
     }
 
     private bool ValidateCaptureMove(CaptureMove move)
     {
         var cellMoves = _cellMovesSelector.SelectCellMoves(move.Player);
-        if (cellMoves.Any(c => c.MoveType == MoveType.Capture && c.Cell.Position == move.Position))
-        {
-            return true;
-        }
-        return false;
+        return cellMoves.Any(c => c.MoveType == MoveType.Capture && c.Cell.Position == move.Position);
     }
-
-
 }

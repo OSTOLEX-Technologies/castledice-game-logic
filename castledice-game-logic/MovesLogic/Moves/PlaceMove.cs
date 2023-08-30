@@ -5,13 +5,13 @@ namespace castledice_game_logic.MovesLogic;
 
 public class PlaceMove : AbstractMove
 {
-    private Content _content;
+    private IPlaceable _contentToPlace;
 
-    public Content Content => _content;
+    public IPlaceable ContentToPlace => _contentToPlace;
     
-    public PlaceMove(Player player, Vector2Int position, Content content) : base(player, position)
+    public PlaceMove(Player player, Vector2Int position, IPlaceable contentToPlace) : base(player, position)
     {
-        _content = content;
+        _contentToPlace = contentToPlace;
     }
 
     public override bool Accept(IMoveVisitor visitor)

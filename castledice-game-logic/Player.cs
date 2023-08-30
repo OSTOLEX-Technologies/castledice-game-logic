@@ -5,9 +5,12 @@ namespace castledice_game_logic;
 public class Player
 {
     public PlayerActionPoints ActionPoints { get; }
+    
+    public int Id { get; }
 
-    public Player(PlayerActionPoints actionPoints)
+    public Player(PlayerActionPoints actionPoints, int id)
     {
         ActionPoints = actionPoints;
+        Id = id;
     }
 }

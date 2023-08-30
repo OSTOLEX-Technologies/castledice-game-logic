@@ -302,4 +302,37 @@ public class MoveValidatorTests
 
         Assert.Throws<NotImplementedException>(() => validator.ValidateMove(testMove));
     }
+
+    [Fact]
+    public void ValidateMove_ShouldReturnFalse_IfPlaceMoveTooExpensive()
+    {
+        var player = GetPlayer(1, 2);
+        var board = GetFullNByNBoard(2);
+        var playerUnit = new PlayerUnitMock() { Owner = player };
+        var contentToPlace = new PlaceableMock(){Cost = 4};
+        board[0, 0].AddContent(playerUnit);
+        var validator = new MoveValidator(board);
+        var position = new Vector2Int(1, 1);
+        var move = new PlaceMove(player, position, contentToPlace);
+        
+        Assert.False(validator.ValidateMove(move));
+    }
+
+    [Fact]
+    public void ValidateMove_ShouldReturnFalse_IfRemoveMoveIsTooExpensive()
+    {
+        var player = GetPlayer(1, 2);
+        var enemy = GetPlayer();
+        var board = GetFullNByNBoard(2);
+        var playerUnit = new PlayerUnitMock() { Owner = player };
+        var enemyUnit = new PlayerUnitMock(){Owner = enemy, RemoveCost = 5};
+        var replacement = new PlaceableMock() { Cost = 1 };
+        board[0, 0].AddContent(playerUnit);
+        board[1, 1].AddContent(enemyUnit);
+        var validator = new MoveValidator(board);
+        var position = new Vector2Int(1, 1);
+        var move = new RemoveMove(player, position, replacement);
+        
+        Assert.False(validator.ValidateMove(move));
+    }
 }

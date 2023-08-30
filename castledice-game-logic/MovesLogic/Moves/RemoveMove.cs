@@ -5,11 +5,11 @@ namespace castledice_game_logic.MovesLogic;
 
 public class RemoveMove : AbstractMove
 {
-    private Content _replacement;
+    private IPlaceable _replacement;
 
-    public Content Replacement => _replacement;
+    public IPlaceable Replacement => _replacement;
     
-    public RemoveMove(Player player, Vector2Int position, Content replacement) : base(player, position)
+    public RemoveMove(Player player, Vector2Int position, IPlaceable replacement) : base(player, position)
     {
         _replacement = replacement;
     }

@@ -10,12 +10,12 @@ public class PlaceMoveTests
     [Fact]
     public void ContentProperty_ShouldReturnContent_GivenInConstructor()
     {
-        var content = GetCellContent();
+        var content = GetPlaceable();
         var player = GetPlayer();
         var position = new Vector2Int(0, 0);
         var move = new PlaceMove(player, position, content);
 
-        var actualContent = move.Content;
+        var actualContent = move.ContentToPlace;
         
         Assert.Same(content, actualContent);
     }
