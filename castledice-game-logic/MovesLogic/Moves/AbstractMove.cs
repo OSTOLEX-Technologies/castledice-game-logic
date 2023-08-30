@@ -15,6 +15,7 @@ public abstract class AbstractMove
         _player = player;
         _position = position;
     }
-    
-    
+
+    public abstract bool Accept(IMoveVisitor visitor);
+
 }

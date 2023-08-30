@@ -1,8 +1,8 @@
-﻿using castledice_game_logic.GameObjects;
+﻿namespace castledice_game_logic.MovesLogic;
 
-namespace castledice_game_logic.MovesLogic;
 
-public class MoveValidator
+//TODO: Moves validator should take into account the current player turn
+public class MoveValidator : IMoveVisitor
 {
     private Board _board;
     private CellMovesSelector _cellMovesSelector;
@@ -15,42 +15,36 @@ public class MoveValidator
 
     public bool ValidateMove(AbstractMove move)
     {
-        if (move.Position.X < 0 || move.Position.Y < 0)
-        {
-            return false;
-        }
         if (!_board.HasCell(move.Position))
         {
             return false;
         }
-        
-        var cellMoves = _cellMovesSelector.SelectCellMoves(move.Player);
-        if (move is PlaceMove)
-        {
-            var placeMove = move as PlaceMove;
-            return ValidatePlaceMove(placeMove, cellMoves);
-        }
-        if (move is RemoveMove)
-        {
-            var removeMove = move as RemoveMove;
-            return ValidateRemoveMove(removeMove, cellMoves);
-        }
-        if (move is UpgradeMove)
-        {
-            var upgradeMove = move as UpgradeMove;
-            return ValidateUpgradeMove(upgradeMove, cellMoves);
-        }
-
-        if (move is CaptureMove)
-        {
-            var caputreMove = move as CaptureMove;
-            return ValidateCaptureMove(caputreMove, cellMoves);
-        }
-        throw new NotImplementedException("No validation implemented for this type of move: " + move.GetType().Name);
+        return move.Accept(this);
+    }
+    
+    public bool VisitPlaceMove(PlaceMove move)
+    {
+        return ValidatePlaceMove(move);
     }
 
-    private bool ValidatePlaceMove(PlaceMove move, List<CellMove> cellMoves)
+    public bool VisitRemoveMove(RemoveMove move)
     {
+        return ValidateRemoveMove(move);
+    }
+
+    public bool VisitUpgradeMove(UpgradeMove move)
+    {
+        return ValidateUpgradeMove(move);
+    }
+
+    public bool VisitCaptureMove(CaptureMove move)
+    {
+        return ValidateCaptureMove(move);
+    }
+
+    private bool ValidatePlaceMove(PlaceMove move)
+    {
+        var cellMoves = _cellMovesSelector.SelectCellMoves(move.Player);
         if (cellMoves.Any(c => c.MoveType == MoveType.Place && c.Cell.Position == move.Position))
         {
             //TODO: Should there be checking for additional conditions? Like for bridge.
@@ -59,8 +53,9 @@ public class MoveValidator
         return false;
     }
 
-    private bool ValidateRemoveMove(RemoveMove move, List<CellMove> cellMoves)
+    private bool ValidateRemoveMove(RemoveMove move)
     {
+        var cellMoves = _cellMovesSelector.SelectCellMoves(move.Player);
         if (cellMoves.Any(c => c.MoveType == MoveType.Remove && c.Cell.Position == move.Position))
         {
             //TODO: Should validator take player's a.p into account? 
@@ -70,8 +65,9 @@ public class MoveValidator
         return false;
     }
 
-    private bool ValidateUpgradeMove(UpgradeMove move, List<CellMove> cellMoves)
+    private bool ValidateUpgradeMove(UpgradeMove move)
     {
+        var cellMoves = _cellMovesSelector.SelectCellMoves(move.Player);
         if (cellMoves.Any(c => c.MoveType == MoveType.Upgrade && c.Cell.Position == move.Position))
         {
             return true;
@@ -79,12 +75,15 @@ public class MoveValidator
         return false;
     }
 
-    private bool ValidateCaptureMove(CaptureMove move, List<CellMove> cellMoves)
+    private bool ValidateCaptureMove(CaptureMove move)
     {
+        var cellMoves = _cellMovesSelector.SelectCellMoves(move.Player);
         if (cellMoves.Any(c => c.MoveType == MoveType.Capture && c.Cell.Position == move.Position))
         {
             return true;
         }
         return false;
     }
+
+
 }

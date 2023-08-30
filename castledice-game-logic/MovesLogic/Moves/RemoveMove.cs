@@ -13,4 +13,9 @@ public class RemoveMove : AbstractMove
     {
         _replacement = replacement;
     }
+
+    public override bool Accept(IMoveVisitor visitor)
+    {
+        return visitor.VisitRemoveMove(this);
+    }
 }

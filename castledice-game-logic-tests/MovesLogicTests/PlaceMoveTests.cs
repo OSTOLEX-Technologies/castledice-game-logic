@@ -1,4 +1,5 @@
-﻿using castledice_game_logic.Math;
+﻿using castledice_game_logic_tests.Mocks;
+using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
 using static castledice_game_logic_tests.ObjectCreationUtility;
 
@@ -17,5 +18,18 @@ public class PlaceMoveTests
         var actualContent = move.Content;
         
         Assert.Same(content, actualContent);
+    }
+
+    [Fact]
+    public void Accept_ShouldCallVisitMethod_ForPlaceMove()
+    {
+        var move = new PlaceMoveBuilder().Build();
+        var moveVisitor = new MoveVisitorMock();
+        var expectedType = VisitMethodType.Place;
+        
+        move.Accept(moveVisitor);
+        var actualType = moveVisitor.CalledMethod;
+        
+        Assert.Equal(expectedType, actualType);
     }
 }

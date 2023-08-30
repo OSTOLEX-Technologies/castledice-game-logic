@@ -9,4 +9,9 @@ public class TestMove : AbstractMove
     public TestMove(Player player, Vector2Int position) : base(player, position)
     {
     }
+
+    public override bool Accept(IMoveVisitor visitor)
+    {
+        throw new NotImplementedException();
+    }
 }

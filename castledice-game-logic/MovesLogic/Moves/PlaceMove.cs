@@ -13,4 +13,9 @@ public class PlaceMove : AbstractMove
     {
         _content = content;
     }
+
+    public override bool Accept(IMoveVisitor visitor)
+    {
+        return visitor.VisitPlaceMove(this);
+    }
 }
