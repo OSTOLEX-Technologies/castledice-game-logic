@@ -1,4 +1,5 @@
 ﻿using castledice_game_logic.GameObjects;
+using castledice_game_logic.TurnsLogic;
 
 namespace castledice_game_logic.MovesLogic;
 
@@ -8,16 +9,22 @@ public class MoveValidator : IMoveVisitor
 {
     private Board _board;
     private CellMovesSelector _cellMovesSelector;
+    private PlayerTurnsSwitcher _turns;
 
-    public MoveValidator(Board board)
+    public MoveValidator(Board board, PlayerTurnsSwitcher turns)
     {
         _board = board;
         _cellMovesSelector = new CellMovesSelector(board);
+        _turns = turns;
     }
 
     public bool ValidateMove(AbstractMove move)
     {
         if (!_board.HasCell(move.Position))
+        {
+            return false;
+        }
+        if (move.Player != _turns.GetCurrent())
         {
             return false;
         }
