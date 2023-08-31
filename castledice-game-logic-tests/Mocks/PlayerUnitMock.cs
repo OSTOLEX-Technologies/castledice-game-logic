@@ -3,7 +3,7 @@ using castledice_game_logic.GameObjects;
 
 namespace castledice_game_logic_tests.Mocks;
 
-public class PlayerUnitMock : Content, IPlayerOwned, IRemovable, IPlaceBlocking
+public class PlayerUnitMock : Content, IPlayerOwned, IReplaceable, IPlaceBlocking
 {
     public Player Owner;
     public int RemoveCost;
@@ -14,17 +14,17 @@ public class PlayerUnitMock : Content, IPlayerOwned, IRemovable, IPlaceBlocking
         return Owner;
     }
 
-    public int GetRemoveCost(int replacementCost)
+    public int GetReplaceCost(int replacementCost)
     {
         return RemoveCost + replacementCost - 1;
     }
 
-    public int GetMinimalRemoveCost()
+    public int GetMinimalReplaceCost()
     {
         return RemoveCost;
     }
 
-    public bool TryRemove(Player remover, int replacementCost)
+    public bool Replace(Player remover, int replacementCost)
     {
         throw new NotImplementedException();
     }

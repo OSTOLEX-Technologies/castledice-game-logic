@@ -9,11 +9,11 @@ public class UpgradeMoveTests
     {
         var move = new UpgradeMoveBuilder().Build();
         var moveVisitor = new MoveVisitorMock();
-        var expectedType = VisitMethodType.Upgrade;
+        var expectedMethodType = VisitMethodType.Upgrade;
         
         move.Accept(moveVisitor);
-        var actualType = moveVisitor.CalledMethod;
+        var actualMethodType = moveVisitor.CalledMethodType;
         
-        Assert.Equal(expectedType, actualType);
+        Assert.Equal(expectedMethodType, actualMethodType);
     }
 }

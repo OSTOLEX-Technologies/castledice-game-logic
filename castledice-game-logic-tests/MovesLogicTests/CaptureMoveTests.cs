@@ -9,11 +9,11 @@ public class CaptureMoveTests
     {
         var move = new CaptureMoveBuilder().Build();
         var moveVisitor = new MoveVisitorMock();
-        var expectedType = VisitMethodType.Capture;
+        var expectedMethodType = VisitMethodType.Capture;
         
         move.Accept(moveVisitor);
-        var actualType = moveVisitor.CalledMethod;
+        var actualMethodType = moveVisitor.CalledMethodType;
         
-        Assert.Equal(expectedType, actualType);
+        Assert.Equal(expectedMethodType, actualMethodType);
     }
 }

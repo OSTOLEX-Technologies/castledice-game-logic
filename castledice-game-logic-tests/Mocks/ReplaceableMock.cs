@@ -3,23 +3,23 @@ using castledice_game_logic.GameObjects;
 
 namespace castledice_game_logic_tests.Mocks;
 
-public class RemovableMock : Content, IRemovable, IPlayerOwned
+public class ReplaceableMock : Content, IReplaceable, IPlayerOwned
 {
     public int RemoveCost;
     public bool CanBeRemoved;
     public Player Owner;
     
-    public int GetRemoveCost(int replacementCost)
+    public int GetReplaceCost(int replacementCost)
     {
         return RemoveCost + replacementCost - 1;
     }
 
-    public int GetMinimalRemoveCost()
+    public int GetMinimalReplaceCost()
     {
         return RemoveCost;
     }
 
-    public bool TryRemove(Player remover, int replacementCost)
+    public bool Replace(Player remover, int replacementCost)
     {
         throw new NotImplementedException();
     }

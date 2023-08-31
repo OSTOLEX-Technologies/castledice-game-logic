@@ -9,7 +9,7 @@ public class Castle : Content, ICapturable, IUpgradeable, IPlayerOwned, IPlaceBl
         _player = player;
     }
 
-    public bool TryCapture(Player capturer)
+    public bool Capture(Player capturer)
     {
         throw new NotImplementedException();
     }
@@ -25,7 +25,7 @@ public class Castle : Content, ICapturable, IUpgradeable, IPlayerOwned, IPlaceBl
         return 2;
     }
 
-    public bool TryUpgrade(Player upgrader)
+    public bool Upgrade(Player upgrader)
     {
         throw new NotImplementedException();
     }

@@ -9,7 +9,7 @@ public class ActionPointsConditionTests
     [Fact]
     public void ShouldSwitchTurn_ShouldReturnFalse_IfCurrentPlayerHasActionPoints()
     {
-        var player = GetPlayer(1, 1);
+        var player = GetPlayer(actionPoints: 1);
         var currentPlayerProviderMock = new Mock<ICurrentPlayerProvider>();
         currentPlayerProviderMock.Setup(provider => provider.GetCurrentPlayer()).Returns(player);
         var currentPlayerProvider = currentPlayerProviderMock.Object;
@@ -21,7 +21,7 @@ public class ActionPointsConditionTests
     [Fact]
     public void ShouldSwitchTurn_ShouldReturnTrue_IfCurrentPlayerHasNoActionPoints()
     {
-        var player = GetPlayer(0, 1);
+        var player = GetPlayer(actionPoints: 0);
         var currentPlayerProviderMock = new Mock<ICurrentPlayerProvider>();
         currentPlayerProviderMock.Setup(provider => provider.GetCurrentPlayer()).Returns(player);
         var currentPlayerProvider = currentPlayerProviderMock.Object;

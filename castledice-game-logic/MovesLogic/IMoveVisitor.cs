@@ -3,7 +3,7 @@
 public interface IMoveVisitor
 {
     bool VisitPlaceMove(PlaceMove move);
-    bool VisitRemoveMove(RemoveMove move);
+    bool VisitReplaceMove(ReplaceMove move);
     bool VisitUpgradeMove(UpgradeMove move);
     bool VisitCaptureMove(CaptureMove move);
 }

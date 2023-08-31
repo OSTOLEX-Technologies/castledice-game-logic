@@ -5,7 +5,7 @@ using castledice_game_logic.MovesLogic;
 namespace castledice_game_logic_tests;
 using static ObjectCreationUtility;
 
-public class RemoveMoveTests
+public class ReplaceMoveTests
 {
     [Fact]
     public void ReplacementProperty_ShouldReturnContent_GivenInConstructor()
@@ -13,7 +13,7 @@ public class RemoveMoveTests
         var content = GetPlaceable();
         var player = GetPlayer();
         var position = new Vector2Int(0, 0);
-        var move = new RemoveMove(player, position, content);
+        var move = new ReplaceMove(player, position, content);
 
         var actualContent = move.Replacement;
         
@@ -21,15 +21,15 @@ public class RemoveMoveTests
     }
 
     [Fact]
-    public void Accept_ShouldCallVisitMethod_ForRemoveMove()
+    public void Accept_ShouldCallVisitMethod_ForReplaceMove()
     {
-        var move = new RemoveMoveBuilder().Build();
+        var move = new ReplaceMoveBuilder().Build();
         var moveVisitor = new MoveVisitorMock();
-        var expectedType = VisitMethodType.Remove;
+        var expectedMethodType = VisitMethodType.Replace;
         
         move.Accept(moveVisitor);
-        var actualType = moveVisitor.CalledMethod;
+        var actualMethodType = moveVisitor.CalledMethodType;
         
-        Assert.Equal(expectedType, actualType);
+        Assert.Equal(expectedMethodType, actualMethodType);
     }
 }

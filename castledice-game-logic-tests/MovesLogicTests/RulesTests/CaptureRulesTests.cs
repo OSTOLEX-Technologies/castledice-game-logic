@@ -46,7 +46,7 @@ public class CaptureRulesTests
     {
         var player = GetPlayer();
         var enemy = GetPlayer();
-        var enemyCapturable = new CapturableMock(enemy);
+        var enemyCapturable = new CapturableMock(){Owner = enemy};
         var board = GetFullNByNBoard(2);
         board[1, 1].AddContent(enemyCapturable);
         var position = new Vector2Int(1, 1);
@@ -60,7 +60,7 @@ public class CaptureRulesTests
         var player = GetPlayer();
         var enemy = GetPlayer();
         var playerUnit = new PlayerUnitMock(){Owner = player};
-        var enemyCapturable = new CapturableMock(enemy);
+        var enemyCapturable = new CapturableMock(){Owner = enemy};
         var board = GetFullNByNBoard(2);
         board[1, 1].AddContent(enemyCapturable);
         board[1, 0].AddContent(playerUnit);
@@ -73,7 +73,7 @@ public class CaptureRulesTests
     public void CanCaptureOnCell_ShouldReturnFalse_IfCapturingOwnContent()
     {
         var player = GetPlayer();
-        var capturable = new CapturableMock(player);
+        var capturable = new CapturableMock(){Owner = player};
         var board = GetFullNByNBoard(2);
         board[1, 1].AddContent(capturable);
         var position = new Vector2Int(1, 1);
@@ -86,7 +86,7 @@ public class CaptureRulesTests
     {
         var player = GetPlayer();
         var enemy = GetPlayer();
-        var enemyCapturable = new CapturableMock(enemy);
+        var enemyCapturable = new CapturableMock(){Owner = enemy};
         var board = GetFullNByNBoard(2);
         board[1, 1].AddContent(enemyCapturable);
         var position = new Vector2Int(1, 1);

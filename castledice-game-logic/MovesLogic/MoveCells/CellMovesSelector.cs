@@ -97,6 +97,6 @@ public class CellMovesSelector
 
     private bool CanRemoveOnCell(Cell cell, Player player)
     {
-        return RemoveRules.CanRemoveOnCellIgnoreNeighbours(_board, cell.Position, player);
+        return ReplaceRules.CanReplaceOnCellIgnoreNeighbours(_board, cell.Position, player);
     }
 }

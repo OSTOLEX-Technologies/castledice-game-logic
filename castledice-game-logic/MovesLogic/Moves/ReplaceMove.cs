@@ -3,19 +3,19 @@ using castledice_game_logic.Math;
 
 namespace castledice_game_logic.MovesLogic;
 
-public class RemoveMove : AbstractMove
+public class ReplaceMove : AbstractMove
 {
     private IPlaceable _replacement;
 
     public IPlaceable Replacement => _replacement;
     
-    public RemoveMove(Player player, Vector2Int position, IPlaceable replacement) : base(player, position)
+    public ReplaceMove(Player player, Vector2Int position, IPlaceable replacement) : base(player, position)
     {
         _replacement = replacement;
     }
 
     public override bool Accept(IMoveVisitor visitor)
     {
-        return visitor.VisitRemoveMove(this);
+        return visitor.VisitReplaceMove(this);
     }
 }

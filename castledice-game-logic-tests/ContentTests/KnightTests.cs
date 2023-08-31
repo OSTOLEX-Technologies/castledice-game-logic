@@ -10,7 +10,7 @@ public class KnightTests
     {
         var knight = new Knight(GetPlayer());
         
-        Assert.True(knight is IRemovable);
+        Assert.True(knight is IReplaceable);
     }
 
     [Fact]

@@ -34,7 +34,7 @@ public class MoveValidator : IMoveVisitor
         return ValidatePlaceMove(move);
     }
 
-    public bool VisitRemoveMove(RemoveMove move)
+    public bool VisitReplaceMove(ReplaceMove move)
     {
         return ValidateRemoveMove(move);
     }
@@ -60,13 +60,13 @@ public class MoveValidator : IMoveVisitor
         return placeCost <= playerActionPoints && placeable.CanBePlacedOn(cell);
     }
 
-    private bool ValidateRemoveMove(RemoveMove move)
+    private bool ValidateRemoveMove(ReplaceMove move)
     {
         var cellMoves = _cellMovesSelector.SelectCellMoves(move.Player);
         if (!cellMoves.Any(c => c.MoveType == MoveType.Remove && c.Cell.Position == move.Position)) return false;
         var cell = _board[move.Position];
-        var removable = cell.GetContent().FirstOrDefault(c => c is IRemovable) as IRemovable;
-        var removeCost = removable.GetRemoveCost(move.Replacement.GetPlacementCost());
+        var removable = cell.GetContent().FirstOrDefault(c => c is IReplaceable) as IReplaceable;
+        var removeCost = removable.GetReplaceCost(move.Replacement.GetPlacementCost());
         var playerActionPoints = move.Player.ActionPoints.Amount;
         return removeCost <= playerActionPoints;
     }

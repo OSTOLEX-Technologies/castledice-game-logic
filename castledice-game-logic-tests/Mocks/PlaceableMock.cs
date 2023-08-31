@@ -6,6 +6,7 @@ namespace castledice_game_logic_tests.Mocks;
 public class PlaceableMock : Content, IPlaceable
 {
     public int Cost;
+    public bool CanPlaceOn = true;
     
     public int GetPlacementCost()
     {
@@ -14,6 +15,6 @@ public class PlaceableMock : Content, IPlaceable
 
     public bool CanBePlacedOn(Cell cell)
     {
-        return true;
+        return CanPlaceOn;
     }
 }

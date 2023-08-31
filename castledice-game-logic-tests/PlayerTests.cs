@@ -26,6 +26,6 @@ public class PlayerTests
 
         var actualId = player.Id;
         
-        Assert.Equal(actualId, actualId);
+        Assert.Equal(expectedId, actualId);
     }
 }
