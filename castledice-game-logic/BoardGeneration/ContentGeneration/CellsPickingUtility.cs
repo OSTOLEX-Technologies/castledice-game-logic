@@ -138,7 +138,7 @@ public class CellsPickingUtility
         {
             throw new InvalidOperationException("No available cells left!");
         }
-        int cellNumber = _randomNumberGenerator.Range(1, availableCellsCount + 1);
+        int cellNumber = _randomNumberGenerator.GetRandom(1, availableCellsCount + 1);
         var pickedCellPosition = GetCellPositionByNumber(cellNumber);
         _lastPickedCellPosition = pickedCellPosition;
         _cellPicked = true;

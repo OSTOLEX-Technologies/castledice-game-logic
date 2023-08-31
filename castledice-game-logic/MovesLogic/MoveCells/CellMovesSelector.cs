@@ -1,4 +1,5 @@
 ﻿using castledice_game_logic.GameObjects;
+using castledice_game_logic.MovesLogic.Rules;
 
 namespace castledice_game_logic.MovesLogic;
 
@@ -11,24 +12,25 @@ public class CellMovesSelector
         _board = board;
     }
 
-    public List<CellMove> SelectMoveCells(Player player)
+    public List<CellMove> SelectCellMoves(Player player)
     {
         List<CellMove> selectedCells = new List<CellMove>();
         foreach (var cell in _board)
         {
-            if (CellContentOwnedByPlayer(cell, player) && CellContentIsUpgradeable(cell))
+            if (CellContentOwnedByPlayer(cell, player))
             {
-                selectedCells.Add(new CellMove(cell, MoveType.Upgrade));
+                if (CanUpgradeOnCell(cell, player))
+                {
+                    selectedCells.Add(new CellMove(cell, MoveType.Upgrade));
+                }
             }
             else if (HasNeighbourOwnedByPlayer(cell, player))
             {
-                
-                if (CellContentIsCapturable(cell))
+                if (CanCaptureOnCell(cell, player))
                 {
                     selectedCells.Add(new CellMove(cell, MoveType.Capture));
-
                 }
-                else if(CellContentIsRemovable(cell))
+                else if(CanRemoveOnCell(cell, player))
                 { 
                     selectedCells.Add(new CellMove(cell, MoveType.Remove));
                 }
@@ -45,48 +47,6 @@ public class CellMovesSelector
     {
         return cell.HasContent(c => ContentBelongsToPlayer(c, player));
     }
-
-
-    private bool CellContentIsUpgradeable(Cell cell)
-    {
-        return cell.HasContent(ContentCanBeUpgraded);
-    }
-
-    private bool ContentCanBeUpgraded(Content content)
-    {
-        if (content is IUpgradeable)
-        {
-            var upgradeable = content as IUpgradeable;
-            return upgradeable.CanBeUpgraded();
-        }
-
-        return false;
-    }
-
-    
-    private bool HasNeighbourOwnedByPlayer(Cell cell, Player player)
-    {
-        var cellPosition = cell.Position;
-        for (int i = cellPosition.X - 1; i <= cellPosition.X + 1; i++)
-        {
-            for (int j = cellPosition.Y - 1; j <= cellPosition.Y + 1; j++)
-            {
-                if (cellPosition.X == i && cellPosition.Y == j)
-                {
-                    continue;
-                }
-                if (_board.HasCell(i, j))
-                {
-                    var neighbour = _board[i, j];
-                    if (neighbour.HasContent(c => ContentBelongsToPlayer(c, player)))
-                    {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
     
     private bool ContentBelongsToPlayer(Content content, Player player)
     {
@@ -99,7 +59,16 @@ public class CellMovesSelector
         return false;
     }
 
-
+    private bool CanUpgradeOnCell(Cell cell, Player player)
+    {
+        return UpgradeRules.CanUpgradeOnCell(cell, player);
+    }
+    
+    private bool HasNeighbourOwnedByPlayer(Cell cell, Player player)
+    {
+        return CellNeighboursChecker.HasNeighbourOwnedByPlayer(_board, cell.Position, player);
+    }
+    
     private bool CanPlaceOnCell(Cell cell, Player player)
     {
         return !cell.HasContent(c => ContentBelongsToOtherPlayer(c, player) || ContentIsObstacle(c));
@@ -121,24 +90,13 @@ public class CellMovesSelector
         return content is Tree;
     }
 
-    private bool CellContentIsCapturable(Cell cell)
+    private bool CanCaptureOnCell(Cell cell, Player player)
     {
-        return cell.HasContent(c => c is ICapturable);
+        return CaptureRules.CanCaptureOnCellIgnoreNeighbours(_board, cell.Position, player);
     }
 
-    private bool CellContentIsRemovable(Cell cell)
+    private bool CanRemoveOnCell(Cell cell, Player player)
     {
-        return cell.HasContent(ContentCanBeRemoved);
-    }
-
-    private bool ContentCanBeRemoved(Content content)
-    {
-        if (content is IRemovable)
-        {
-            var removable = content as IRemovable;
-            return removable.CanBeRemoved();
-        }
-
-        return false;
+        return RemoveRules.CanRemoveOnCellIgnoreNeighbours(_board, cell.Position, player);
     }
 }

@@ -75,7 +75,7 @@ public class CellTests
     public void HasContent_ShouldReturnTrue_IfSomeContentOnCellMeetsGivenCondition()
     {
         var cell = GetCell();
-        var castle = new CastleGO(new Player());
+        var castle = new CastleGO(GetPlayer());
         cell.AddContent(castle);
         Func<Content, bool> predicate = o => o is CastleGO;
         

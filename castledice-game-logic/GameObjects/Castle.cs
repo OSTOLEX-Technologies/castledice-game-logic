@@ -1,6 +1,6 @@
 ﻿namespace castledice_game_logic.GameObjects;
 
-public class Castle : Content, ICapturable, IUpgradeable, IPlayerOwned
+public class Castle : Content, ICapturable, IUpgradeable, IPlayerOwned, IPlaceBlocking
 {
     private Player _player;
     
@@ -19,9 +19,10 @@ public class Castle : Content, ICapturable, IUpgradeable, IPlayerOwned
         return true;
     }
 
+    //TODO: Write implementation with configs
     public int GetUpgradeCost()
     {
-        throw new NotImplementedException();
+        return 2;
     }
 
     public bool TryUpgrade(Player upgrader)

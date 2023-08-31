@@ -2,5 +2,5 @@
 
 public interface IRandomNumberGenerator
 {
-    int Range(int minInclusive, int maxExclusive);
+    int GetRandom(int minInclusive, int maxExclusive);
 }

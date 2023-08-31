@@ -1,9 +1,12 @@
 ﻿using castledice_game_logic;
+using castledice_game_logic_tests.Mocks;
+using castledice_game_logic.ActionPointsLogic;
 using castledice_game_logic.BoardGeneration.CellsGeneration;
 using castledice_game_logic.BoardGeneration.ContentGeneration;
 using castledice_game_logic.GameConfiguration;
 using castledice_game_logic.GameObjects;
 using castledice_game_logic.Math;
+using castledice_game_logic.MovesLogic;
 
 namespace castledice_game_logic_tests;
 
@@ -63,9 +66,33 @@ public static class ObjectCreationUtility
         return boardConfig;
     }
     
+    
+    /// <summary>
+    /// Returns player object with 6 action points.
+    /// </summary>
+    /// <returns></returns>
     public static Player GetPlayer()
     {
-        return new Player();
+        return GetPlayer(6);
+    }
+
+    /// <summary>
+    /// Returns player object with given amount of action points.
+    /// </summary>
+    /// <returns></returns>
+    public static Player GetPlayer(int actionPoints)
+    {
+        return GetPlayer(actionPoints, 0);
+    }
+
+    public static Player GetPlayer(int actionPoints, int id)
+    {
+        var playerActionPoints = new PlayerActionPoints
+        {
+            Amount = actionPoints,
+        };
+        var playerId = id;
+        return new Player(playerActionPoints, playerId);
     }
 
     
@@ -75,7 +102,7 @@ public static class ObjectCreationUtility
     /// <returns></returns>
     public static Content GetCellContent()
     {
-        return new Tree();
+        return new ObstacleMock();
     }
 
     
@@ -86,5 +113,56 @@ public static class ObjectCreationUtility
     public static Content GetObstacle()
     {
         return new Tree();
+    }
+
+    public static IPlaceable GetPlaceable()
+    {
+        return new PlaceableMock();
+    }
+    
+    public class PlaceMoveBuilder
+    {
+        public Player Player = GetPlayer();
+        public Vector2Int Position = new Vector2Int(0, 0);
+        public IPlaceable Content = GetPlaceable();
+        
+        public PlaceMove Build()
+        {
+            return new PlaceMove(Player, Position, Content);
+        }
+    }
+    
+    public class RemoveMoveBuilder
+    {
+        public Player Player = GetPlayer();
+        public Vector2Int Position = new Vector2Int(0, 0);
+        public IPlaceable Replacement = GetPlaceable();
+        
+        public RemoveMove Build()
+        {
+            return new RemoveMove(Player, Position, Replacement);
+        }
+    }
+
+    public class UpgradeMoveBuilder
+    {
+        public Player Player = GetPlayer();
+        public Vector2Int Position = new Vector2Int(0, 0);
+        
+        public UpgradeMove Build()
+        {
+            return new UpgradeMove(Player, Position);
+        }
+    }
+    
+    public class CaptureMoveBuilder
+    {
+        public Player Player = GetPlayer();
+        public Vector2Int Position = new Vector2Int(0, 0);
+        
+        public CaptureMove Build()
+        {
+            return new CaptureMove(Player, Position);
+        }
     }
 }
