@@ -3,19 +3,17 @@ using castledice_game_logic.TurnsLogic;
 
 namespace castledice_game_logic.MovesLogic;
 
-
-//TODO: Moves validator should take into account the current player turn
 public class MoveValidator : IMoveVisitor
 {
     private Board _board;
     private CellMovesSelector _cellMovesSelector;
-    private PlayerTurnsSwitcher _turns;
+    private ICurrentPlayerProvider _currentPlayerProvider;
 
-    public MoveValidator(Board board, PlayerTurnsSwitcher turns)
+    public MoveValidator(Board board, ICurrentPlayerProvider currentPlayerProvider)
     {
         _board = board;
         _cellMovesSelector = new CellMovesSelector(board);
-        _turns = turns;
+        _currentPlayerProvider = currentPlayerProvider;
     }
 
     public bool ValidateMove(AbstractMove move)
@@ -24,7 +22,7 @@ public class MoveValidator : IMoveVisitor
         {
             return false;
         }
-        if (move.Player != _turns.GetCurrent())
+        if (move.Player != _currentPlayerProvider.GetCurrentPlayer())
         {
             return false;
         }

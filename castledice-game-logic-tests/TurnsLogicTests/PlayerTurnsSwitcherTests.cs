@@ -8,12 +8,19 @@ using static ObjectCreationUtility;
 public class PlayerTurnsSwitcherTests
 {
     [Fact]
+    public void PlayerTurnSwitcher_ShouldImplementICurrentPlayerProvider()
+    {
+        var swithcer = new PlayerTurnsSwitcher(new List<Player>());
+        Assert.True(swithcer is ICurrentPlayerProvider);
+    }
+    
+    [Fact]
     public void GetCurrent_ShouldReturnFirstPlayerFromList_IfSwitchTurnNotCalled()
     {
         var playersList = new List<Player>() { GetPlayer() };
         var turnSwitcher = new PlayerTurnsSwitcher(playersList);
 
-        var actualPlayer = turnSwitcher.GetCurrent();
+        var actualPlayer = turnSwitcher.GetCurrentPlayer();
         var expectedPlayer = playersList[0];
         
         Assert.Same(expectedPlayer, actualPlayer);
@@ -26,7 +33,7 @@ public class PlayerTurnsSwitcherTests
         var turnSwitcher = new PlayerTurnsSwitcher(playersList);
         
         turnSwitcher.SwitchTurn();
-        var actualPlayer = turnSwitcher.GetCurrent();
+        var actualPlayer = turnSwitcher.GetCurrentPlayer();
         var expectedPlayer = playersList[1];
         
         Assert.Same(expectedPlayer, actualPlayer);
@@ -47,7 +54,7 @@ public class PlayerTurnsSwitcherTests
         for (int i = 0; i < playersList.Count; i++)
         {
             var expectedCurrent = playersList[i];
-            var actualCurrent = turnsSwitcher.GetCurrent();
+            var actualCurrent = turnsSwitcher.GetCurrentPlayer();
             Assert.Same(expectedCurrent, actualCurrent);
             turnsSwitcher.SwitchTurn();
         }
@@ -70,7 +77,7 @@ public class PlayerTurnsSwitcherTests
             turnsSwitcher.SwitchTurn();
         }
 
-        var actualPlayer = turnsSwitcher.GetCurrent();
+        var actualPlayer = turnsSwitcher.GetCurrentPlayer();
         var expectedPlayer = playersList[0];
         
         Assert.Same(expectedPlayer, actualPlayer);

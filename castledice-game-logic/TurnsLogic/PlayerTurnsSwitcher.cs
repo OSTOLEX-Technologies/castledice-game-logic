@@ -1,6 +1,6 @@
 ﻿namespace castledice_game_logic.TurnsLogic;
 
-public class PlayerTurnsSwitcher
+public class PlayerTurnsSwitcher : ICurrentPlayerProvider
 {
     private List<Player> _players;
     private int _current = 0;
@@ -10,7 +10,7 @@ public class PlayerTurnsSwitcher
         _players = players;
     }
 
-    public Player GetCurrent()
+    public Player GetCurrentPlayer()
     {
         return _players[_current];
     }
