@@ -14,6 +14,11 @@ public class Castle : Content, ICapturable, IUpgradeable, IPlayerOwned, IPlaceBl
         throw new NotImplementedException();
     }
 
+    public bool CanBeCaptured(Player capturer)
+    {
+        return true;
+    }
+
     public bool CanBeUpgraded()
     {
         return true;

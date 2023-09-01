@@ -3,4 +3,6 @@
 public interface ICapturable
 {
     void Capture(Player capturer);
+
+    bool CanBeCaptured(Player capturer);
 }

@@ -366,28 +366,7 @@ public class MoveValidatorTests
         
         Assert.False(validator.ValidateMove(move));
     }
-
-    [Fact]
-    //Capture move is valid if it satisfies following conditions:
-    //Cell contains capturable object and this object belongs to enemy
-    //At least one cell neighbour has player unit on it
-    public void ValidateMove_ShouldReturnTrue_IfValidCaptureMove()
-    {
-        var player = GetPlayer();
-        var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
-        var enemy = GetPlayer();
-        var board = GetFullNByNBoard(10);
-        var enemyCapturable = new CapturableMock(){Owner = enemy};
-        var playerKnight = new PlayerUnitMock(){Owner = player};
-        board[9, 9].AddContent(enemyCapturable);
-        board[8, 8].AddContent(playerKnight);
-        var movePosition = new Vector2Int(9, 9);
-        var move = new CaptureMove(player, movePosition);
-        var validator = new MoveValidator(board, turnsSwitcher);
-        
-        Assert.True(validator.ValidateMove(move));
-    }
-
+    
     [Fact]
     public void ValidateMove_ShouldReturnFalse_IfCaptureMoveOnEnemyCapturableObjectFarFromPlayerUnits()
     {
@@ -404,6 +383,46 @@ public class MoveValidatorTests
         var validator = new MoveValidator(board, turnsSwitcher);
         
         Assert.False(validator.ValidateMove(move));
+    }
+
+    [Fact]
+    public void ValidateMove_ShouldReturnFalse_IfCaptureMoveOnCapturableThatCannotBeCaptured()
+    {
+        var player = GetPlayer();
+        var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
+        var enemy = GetPlayer();
+        var board = GetFullNByNBoard(10);
+        var enemyCapturable = new CapturableMock(){Owner = enemy, CanCapture = false};
+        var playerKnight = new PlayerUnitMock(){Owner = player};
+        board[9, 9].AddContent(enemyCapturable);
+        board[8, 8].AddContent(playerKnight);
+        var movePosition = new Vector2Int(9, 9);
+        var move = new CaptureMove(player, movePosition);
+        var validator = new MoveValidator(board, turnsSwitcher);
+        
+        Assert.False(validator.ValidateMove(move));
+    }
+
+    [Fact]
+    //Capture move is valid if it satisfies following conditions:
+    //Cell contains capturable object and this object belongs to enemy
+    //At least one cell neighbour has player unit on it
+    //Player can capture the capturable object
+    public void ValidateMove_ShouldReturnTrue_IfValidCaptureMove()
+    {
+        var player = GetPlayer();
+        var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
+        var enemy = GetPlayer();
+        var board = GetFullNByNBoard(10);
+        var enemyCapturable = new CapturableMock(){Owner = enemy};
+        var playerKnight = new PlayerUnitMock(){Owner = player};
+        board[9, 9].AddContent(enemyCapturable);
+        board[8, 8].AddContent(playerKnight);
+        var movePosition = new Vector2Int(9, 9);
+        var move = new CaptureMove(player, movePosition);
+        var validator = new MoveValidator(board, turnsSwitcher);
+        
+        Assert.True(validator.ValidateMove(move));
     }
 
     [Fact]

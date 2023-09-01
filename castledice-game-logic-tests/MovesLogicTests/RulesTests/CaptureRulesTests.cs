@@ -82,6 +82,21 @@ public class CaptureRulesTests
     }
 
     [Fact]
+    public void CanCaptureOnCell_ShouldReturnFalse_IfContentCannotBeCapturedByPlayer()
+    {
+        var player = GetPlayer();
+        var enemy = GetPlayer();
+        var playerUnit = new PlayerUnitMock() { Owner = player };
+        var capturable = new CapturableMock() { Owner = enemy, CanCapture = false };
+        var board = GetFullNByNBoard(2);
+        board[0, 0].AddContent(playerUnit);
+        board[1, 1].AddContent(capturable);
+        var position = new Vector2Int(1, 1);
+        
+        Assert.False(CaptureRules.CanCaptureOnCell(board, position, player));
+    }
+
+    [Fact]
     public void CanCaptureOnCellIgnoreNeighbours_ShouldReturnTrue_IfEnemyCapturableOnCell()
     {
         var player = GetPlayer();
