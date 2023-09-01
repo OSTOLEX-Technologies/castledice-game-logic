@@ -37,12 +37,12 @@ public static class ReplaceRules
         }
         if (content is IReplaceable)
         {
-            var removable = content as IReplaceable;
-            if (removable.CanBeReplaced())
+            var replaceable = content as IReplaceable;
+            if (replaceable.CanBeReplaced())
             {
-                int removeCost = removable.GetMinimalReplaceCost();
+                int replaceCost = replaceable.GetMinimalReplaceCost();
                 int playerActionPoints = player.ActionPoints.Amount;
-                return removeCost <= playerActionPoints;
+                return replaceCost <= playerActionPoints;
             }
         }
         return false;

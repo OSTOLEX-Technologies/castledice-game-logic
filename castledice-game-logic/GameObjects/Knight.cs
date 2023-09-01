@@ -27,7 +27,7 @@ public class Knight : Content, IPlayerOwned, IUpgradeable, IReplaceable, IPlaceB
         return 2;
     }
 
-    public bool Upgrade(Player upgrader)
+    public void Upgrade(Player upgrader)
     {
         throw new NotImplementedException();
     }
@@ -42,7 +42,7 @@ public class Knight : Content, IPlayerOwned, IUpgradeable, IReplaceable, IPlaceB
         return _health;
     }
 
-    public bool Replace(Player remover, int replacementCost)
+    public void Replace(Player remover, int replacementCost)
     {
         throw new NotImplementedException();
     }

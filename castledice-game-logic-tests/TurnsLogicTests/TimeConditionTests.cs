@@ -1,4 +1,5 @@
-﻿using castledice_game_logic.Time;
+﻿using castledice_game_logic_tests.Mocks;
+using castledice_game_logic.Time;
 using castledice_game_logic.TurnsLogic;
 using Moq;
 
@@ -39,5 +40,22 @@ public class TimeConditionTests
         var timeCondition = new TimeCondition(timer);
 
         Assert.False(timeCondition.ShouldSwitchTurn());
+    }
+
+    [Fact]
+    public void ShouldSwitchTurn_ShouldResetInnerTimer_IfReturnedTrue()
+    {
+        var timer = new TickTimerMock();
+        var turnTime = 10;
+        timer.SetDuration(10);
+        var timeCondition = new TimeCondition(timer);
+        timeCondition.Start();
+        
+        timer.Tick(18);
+        Assert.True(timeCondition.ShouldSwitchTurn());
+        timer.Tick(5);
+        Assert.False(timeCondition.ShouldSwitchTurn());
+        timer.Tick(6);
+        Assert.True(timeCondition.ShouldSwitchTurn());
     }
 }

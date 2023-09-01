@@ -14,8 +14,8 @@ public class TimeCondition : ITurnSwitchCondition
 
     public void Start()
     {
-        _isStarted = true;
         _timer.Start();
+        _isStarted = true;
     }
 
     public bool ShouldSwitchTurn()
@@ -24,6 +24,13 @@ public class TimeCondition : ITurnSwitchCondition
         {
             return false;
         }
-        return _timer.IsElapsed();
+
+        if (_timer.IsElapsed())
+        {
+            _timer.Reset();
+            return true;
+        }
+
+        return false;
     }
 }

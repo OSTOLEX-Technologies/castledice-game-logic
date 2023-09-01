@@ -19,7 +19,7 @@ public class ActionPointsGiver
 
     public GiveActionPointsAction GiveActionPoints()
     {
-        int number = _numberGenerator.GetRandom(_minAmount, _maxAmount);
+        int number = _numberGenerator.GetRandom(_minAmount, _maxAmount + 1);
         return new GiveActionPointsAction(_player, number);
     }
 }

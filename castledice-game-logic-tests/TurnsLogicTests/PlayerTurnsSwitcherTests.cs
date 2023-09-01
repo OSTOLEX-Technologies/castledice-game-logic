@@ -10,14 +10,14 @@ public class PlayerTurnsSwitcherTests
     [Fact]
     public void PlayerTurnSwitcher_ShouldImplementICurrentPlayerProvider()
     {
-        var swithcer = new PlayerTurnsSwitcher(new List<Player>());
-        Assert.True(swithcer is ICurrentPlayerProvider);
+        var switcher = new PlayerTurnsSwitcher(new List<Player>());
+        Assert.True(switcher is ICurrentPlayerProvider);
     }
     
     [Fact]
     public void GetCurrent_ShouldReturnFirstPlayerFromList_IfSwitchTurnNotCalled()
     {
-        var playersList = new List<Player>() { GetPlayer() };
+        var playersList = new List<Player>() { GetPlayer(), GetPlayer() };
         var turnSwitcher = new PlayerTurnsSwitcher(playersList);
 
         var actualPlayer = turnSwitcher.GetCurrentPlayer();

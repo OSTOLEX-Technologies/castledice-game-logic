@@ -19,7 +19,7 @@ public class UpgradeableMock : Content, IUpgradeable, IPlayerOwned
         return UpgradeCost;
     }
 
-    public bool Upgrade(Player upgrader)
+    public void Upgrade(Player upgrader)
     {
         throw new NotImplementedException();
     }

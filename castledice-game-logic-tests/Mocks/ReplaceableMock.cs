@@ -19,7 +19,7 @@ public class ReplaceableMock : Content, IReplaceable, IPlayerOwned
         return RemoveCost;
     }
 
-    public bool Replace(Player remover, int replacementCost)
+    public void Replace(Player remover, int replacementCost)
     {
         throw new NotImplementedException();
     }

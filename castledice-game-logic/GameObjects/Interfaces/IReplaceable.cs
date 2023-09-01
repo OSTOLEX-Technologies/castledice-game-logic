@@ -15,5 +15,5 @@ public interface IReplaceable
     /// <returns></returns>
     int GetMinimalReplaceCost();
     
-    bool Replace(Player remover, int replacementCost);
+    void Replace(Player remover, int replacementCost);
 }

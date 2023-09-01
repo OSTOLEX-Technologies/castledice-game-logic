@@ -4,8 +4,8 @@ public class RandomNumberGenerator : IRandomNumberGenerator
 {
     private Random _rnd = new Random();
     
-    public int GetRandom(int minInclusive, int maxInclusive)
+    public int GetRandom(int minInclusive, int maxExclusive)
     {
-        return _rnd.Next(minInclusive, maxInclusive + 1);
+        return _rnd.Next(minInclusive, maxExclusive);
     }
 }

@@ -6,7 +6,7 @@ using castledice_game_logic.MovesLogic.Rules;
 namespace castledice_game_logic_tests.RulesTests;
 using static ObjectCreationUtility;
 
-public class RemoveRulesTests
+public class ReplaceRulesTests
 {
     [Fact]
     public void CanReplaceOnCell_ShouldReturnFalse_IfPositionIsNegative()
@@ -34,7 +34,7 @@ public class RemoveRulesTests
     }
     
     [Fact]
-    public void CanReplaceOnCell_ShouldReturnFalse_IfNothingToRemove()
+    public void CanReplaceOnCell_ShouldReturnFalse_IfNothingToReplace()
     {
         var board = GetFullNByNBoard(5);
         var player = GetPlayer();
@@ -50,9 +50,9 @@ public class RemoveRulesTests
     {
         var board = GetFullNByNBoard(5);
         var player = GetPlayer();
-        var removable = new ReplaceableMock();
+        var replaceable = new ReplaceableMock();
         var position = new Vector2Int(1, 1);
-        board[1, 1].AddContent(removable);
+        board[1, 1].AddContent(replaceable);
         
         Assert.False(ReplaceRules.CanReplaceOnCell(board, position, player));
     }
@@ -62,13 +62,13 @@ public class RemoveRulesTests
     {
         var board = GetFullNByNBoard(2);
         var player = GetPlayer(actionPoints: 3);
-        var removable = new ReplaceableMock()
+        var replaceable = new ReplaceableMock()
         {
             RemoveCost = 5
         };
         var playerUnit = new PlayerUnitMock(){Owner = player};
         board[0, 0].AddContent(playerUnit);
-        board[1, 1].AddContent(removable);
+        board[1, 1].AddContent(replaceable);
         var position = new Vector2Int(1, 1);
         
         Assert.False(ReplaceRules.CanReplaceOnCell(board, position, player));
@@ -81,35 +81,35 @@ public class RemoveRulesTests
     //Object must not belong to player
     //There must be player units in nearby cells
     //Player must have enough action points
-    public void CanReplaceOnCell_ShouldReturnTrue_IfValidToRemove()
+    public void CanReplaceOnCell_ShouldReturnTrue_IfValidToReplace()
     {
         var board = GetFullNByNBoard(2);
         var player = GetPlayer(actionPoints: 6);
-        var removable = new ReplaceableMock()
+        var replaceable = new ReplaceableMock()
         {
             RemoveCost = 3
         };
         var playerUnit = new PlayerUnitMock(){Owner = player};
         board[0, 0].AddContent(playerUnit);
-        board[1, 1].AddContent(removable);
+        board[1, 1].AddContent(replaceable);
         var position = new Vector2Int(1, 1);
         
         Assert.True(ReplaceRules.CanReplaceOnCell(board, position, player));
     }
 
     [Fact]
-    public void CanReplaceOnCell_ShouldReturnFalse_IfRemovableBelongsToPlayer()
+    public void CanReplaceOnCell_ShouldReturnFalse_IfReplaceableBelongsToPlayer()
     {
         var board = GetFullNByNBoard(2);
         var player = GetPlayer();
-        var removable = new ReplaceableMock()
+        var replaceable = new ReplaceableMock()
         {
             RemoveCost = 3,
             Owner = player
         };
         var playerUnit = new PlayerUnitMock(){Owner = player};
         board[0, 0].AddContent(playerUnit);
-        board[1, 1].AddContent(removable);
+        board[1, 1].AddContent(replaceable);
         var position = new Vector2Int(1, 1);
         
         Assert.False(ReplaceRules.CanReplaceOnCell(board, position, player));
@@ -124,11 +124,11 @@ public class RemoveRulesTests
     {
         var board = GetFullNByNBoard(2);
         var player = GetPlayer(actionPoints: 6);
-        var removable = new ReplaceableMock()
+        var replaceable = new ReplaceableMock()
         {
             RemoveCost = 3
         };
-        board[1, 1].AddContent(removable);
+        board[1, 1].AddContent(replaceable);
         var position = new Vector2Int(1, 1);
         
         Assert.True(ReplaceRules.CanReplaceOnCellIgnoreNeighbours(board, position, player));

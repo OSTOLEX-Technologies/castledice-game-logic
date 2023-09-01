@@ -7,9 +7,8 @@ public class CapturableMock : Content, ICapturable, IPlayerOwned
 {
     public Player Owner;
         
-    public bool Capture(Player capturer)
+    public void Capture(Player capturer)
     {
-        return false;
     }
 
     public Player GetOwner()
