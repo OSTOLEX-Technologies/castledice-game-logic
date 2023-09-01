@@ -63,7 +63,7 @@ public class MoveValidator : IMoveVisitor
     private bool ValidateReplaceMove(ReplaceMove move)
     {
         var cellMoves = _cellMovesSelector.SelectCellMoves(move.Player);
-        if (!cellMoves.Any(c => c.MoveType == MoveType.Remove && c.Cell.Position == move.Position)) return false;
+        if (!cellMoves.Any(c => c.MoveType == MoveType.Replace && c.Cell.Position == move.Position)) return false;
         var cell = _board[move.Position];
         var replaceable = cell.GetContent().FirstOrDefault(c => c is IReplaceable) as IReplaceable;
         if (replaceable == null)
