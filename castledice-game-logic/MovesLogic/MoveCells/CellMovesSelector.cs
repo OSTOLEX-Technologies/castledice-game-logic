@@ -32,7 +32,7 @@ public class CellMovesSelector
                 }
                 else if(CanRemoveOnCell(cell, player))
                 { 
-                    selectedCells.Add(new CellMove(cell, MoveType.Remove));
+                    selectedCells.Add(new CellMove(cell, MoveType.Replace));
                 }
                 else if (CanPlaceOnCell(cell, player))
                 {
@@ -97,6 +97,6 @@ public class CellMovesSelector
 
     private bool CanRemoveOnCell(Cell cell, Player player)
     {
-        return RemoveRules.CanRemoveOnCellIgnoreNeighbours(_board, cell.Position, player);
+        return ReplaceRules.CanReplaceOnCellIgnoreNeighbours(_board, cell.Position, player);
     }
 }

@@ -10,14 +10,14 @@ public class PlaceMoveTests
     [Fact]
     public void ContentProperty_ShouldReturnContent_GivenInConstructor()
     {
-        var content = GetPlaceable();
+        var expectedContent = GetPlaceable();
         var player = GetPlayer();
         var position = new Vector2Int(0, 0);
-        var move = new PlaceMove(player, position, content);
+        var move = new PlaceMove(player, position, expectedContent);
 
         var actualContent = move.ContentToPlace;
         
-        Assert.Same(content, actualContent);
+        Assert.Same(expectedContent, actualContent);
     }
 
     [Fact]
@@ -25,11 +25,11 @@ public class PlaceMoveTests
     {
         var move = new PlaceMoveBuilder().Build();
         var moveVisitor = new MoveVisitorMock();
-        var expectedType = VisitMethodType.Place;
+        var expectedMethodType = VisitMethodType.Place;
         
         move.Accept(moveVisitor);
-        var actualType = moveVisitor.CalledMethod;
+        var actualMethodType = moveVisitor.CalledMethodType;
         
-        Assert.Equal(expectedType, actualType);
+        Assert.Equal(expectedMethodType, actualMethodType);
     }
 }

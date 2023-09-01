@@ -36,7 +36,8 @@ public static class CaptureRules
         }
         if (content is ICapturable)
         {
-            return true;
+            var capturable = content as ICapturable;
+            return capturable.CanBeCaptured(player);
         }
         return false;
     }

@@ -1,23 +1,28 @@
 ﻿using castledice_game_logic.GameObjects;
+using castledice_game_logic.TurnsLogic;
 
 namespace castledice_game_logic.MovesLogic;
 
-
-//TODO: Moves validator should take into account the current player turn
 public class MoveValidator : IMoveVisitor
 {
     private Board _board;
     private CellMovesSelector _cellMovesSelector;
+    private ICurrentPlayerProvider _currentPlayerProvider;
 
-    public MoveValidator(Board board)
+    public MoveValidator(Board board, ICurrentPlayerProvider currentPlayerProvider)
     {
         _board = board;
         _cellMovesSelector = new CellMovesSelector(board);
+        _currentPlayerProvider = currentPlayerProvider;
     }
 
     public bool ValidateMove(AbstractMove move)
     {
         if (!_board.HasCell(move.Position))
+        {
+            return false;
+        }
+        if (move.Player != _currentPlayerProvider.GetCurrentPlayer())
         {
             return false;
         }
@@ -29,9 +34,9 @@ public class MoveValidator : IMoveVisitor
         return ValidatePlaceMove(move);
     }
 
-    public bool VisitRemoveMove(RemoveMove move)
+    public bool VisitReplaceMove(ReplaceMove move)
     {
-        return ValidateRemoveMove(move);
+        return ValidateReplaceMove(move);
     }
 
     public bool VisitUpgradeMove(UpgradeMove move)
@@ -55,13 +60,17 @@ public class MoveValidator : IMoveVisitor
         return placeCost <= playerActionPoints && placeable.CanBePlacedOn(cell);
     }
 
-    private bool ValidateRemoveMove(RemoveMove move)
+    private bool ValidateReplaceMove(ReplaceMove move)
     {
         var cellMoves = _cellMovesSelector.SelectCellMoves(move.Player);
-        if (!cellMoves.Any(c => c.MoveType == MoveType.Remove && c.Cell.Position == move.Position)) return false;
+        if (!cellMoves.Any(c => c.MoveType == MoveType.Replace && c.Cell.Position == move.Position)) return false;
         var cell = _board[move.Position];
-        var removable = cell.GetContent().FirstOrDefault(c => c is IRemovable) as IRemovable;
-        var removeCost = removable.GetRemoveCost(move.Replacement.GetPlacementCost());
+        var replaceable = cell.GetContent().FirstOrDefault(c => c is IReplaceable) as IReplaceable;
+        if (replaceable == null)
+        {
+            throw new NullReferenceException("CellMoveSelector malfunction! Cell for replace move, approved by CellMovesSelector, has no replaceable on it!");
+        }
+        var removeCost = replaceable.GetReplaceCost(move.Replacement.GetPlacementCost());
         var playerActionPoints = move.Player.ActionPoints.Amount;
         return removeCost <= playerActionPoints;
     }

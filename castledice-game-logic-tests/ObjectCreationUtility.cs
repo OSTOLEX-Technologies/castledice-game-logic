@@ -66,26 +66,7 @@ public static class ObjectCreationUtility
         return boardConfig;
     }
     
-    
-    /// <summary>
-    /// Returns player object with 6 action points.
-    /// </summary>
-    /// <returns></returns>
-    public static Player GetPlayer()
-    {
-        return GetPlayer(6);
-    }
-
-    /// <summary>
-    /// Returns player object with given amount of action points.
-    /// </summary>
-    /// <returns></returns>
-    public static Player GetPlayer(int actionPoints)
-    {
-        return GetPlayer(actionPoints, 0);
-    }
-
-    public static Player GetPlayer(int actionPoints, int id)
+    public static Player GetPlayer(int id = 0, int actionPoints = 6)
     {
         var playerActionPoints = new PlayerActionPoints
         {
@@ -119,11 +100,16 @@ public static class ObjectCreationUtility
     {
         return new PlaceableMock();
     }
-    
-    public class PlaceMoveBuilder
+
+    public abstract class AbstractMoveBuilder
     {
         public Player Player = GetPlayer();
         public Vector2Int Position = new Vector2Int(0, 0);
+    }
+    
+    public class PlaceMoveBuilder : AbstractMoveBuilder
+    {
+
         public IPlaceable Content = GetPlaceable();
         
         public PlaceMove Build()
@@ -132,34 +118,26 @@ public static class ObjectCreationUtility
         }
     }
     
-    public class RemoveMoveBuilder
+    public class ReplaceMoveBuilder : AbstractMoveBuilder
     {
-        public Player Player = GetPlayer();
-        public Vector2Int Position = new Vector2Int(0, 0);
         public IPlaceable Replacement = GetPlaceable();
         
-        public RemoveMove Build()
+        public ReplaceMove Build()
         {
-            return new RemoveMove(Player, Position, Replacement);
+            return new ReplaceMove(Player, Position, Replacement);
         }
     }
 
-    public class UpgradeMoveBuilder
+    public class UpgradeMoveBuilder : AbstractMoveBuilder
     {
-        public Player Player = GetPlayer();
-        public Vector2Int Position = new Vector2Int(0, 0);
-        
         public UpgradeMove Build()
         {
             return new UpgradeMove(Player, Position);
         }
     }
-    
-    public class CaptureMoveBuilder
+
+    public class CaptureMoveBuilder : AbstractMoveBuilder
     {
-        public Player Player = GetPlayer();
-        public Vector2Int Position = new Vector2Int(0, 0);
-        
         public CaptureMove Build()
         {
             return new CaptureMove(Player, Position);

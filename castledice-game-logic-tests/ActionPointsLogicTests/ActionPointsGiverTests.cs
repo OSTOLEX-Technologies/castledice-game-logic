@@ -10,7 +10,7 @@ public class ActionPointsGiverTests
     [Fact]
     public void GiveActionPoints_ShouldReturnActionWithPlayer_GivenInConstructor()
     {
-        int minAmount = 0;
+        int minAmount = 1;
         int maxAmount = 6;
         var player = GetPlayer();
         var randomizerMock = new Mock<IRandomNumberGenerator>();
@@ -26,12 +26,12 @@ public class ActionPointsGiverTests
     [Fact]
     public void GiveActionPoints_ShouldUseRandomizer_GivenInConstructor()
     {
-        int minAmount = 0;
+        int minAmount = 1;
         int maxAmount = 6;
         var player = GetPlayer();
         int expectedAmount = 6;
         var randomizerMock = new Mock<IRandomNumberGenerator>();
-        randomizerMock.Setup(r => r.GetRandom(minAmount, maxAmount)).Returns(expectedAmount);
+        randomizerMock.Setup(r => r.GetRandom(It.IsAny<int>(), It.IsAny<int>())).Returns(expectedAmount);
         var randomizer = randomizerMock.Object;
         var giver = new ActionPointsGiver(randomizer, player, minAmount, maxAmount);
 

@@ -3,11 +3,11 @@ using castledice_game_logic.Math;
 
 namespace castledice_game_logic.MovesLogic.Rules;
 
-public static class RemoveRules
+public static class ReplaceRules
 {
-    public static bool CanRemoveOnCell(Board board, Vector2Int position, Player player)
+    public static bool CanReplaceOnCell(Board board, Vector2Int position, Player player)
     {
-        if (!CanRemoveOnCellIgnoreNeighbours(board, position, player))
+        if (!CanReplaceOnCellIgnoreNeighbours(board, position, player))
         {
             return false;
         }
@@ -15,7 +15,7 @@ public static class RemoveRules
         return CellNeighboursChecker.HasNeighbourOwnedByPlayer(board, position, player);
     }
 
-    public static bool CanRemoveOnCellIgnoreNeighbours(Board board, Vector2Int position, Player player)
+    public static bool CanReplaceOnCellIgnoreNeighbours(Board board, Vector2Int position, Player player)
     {
         if (!board.HasCell(position))
         {
@@ -35,14 +35,14 @@ public static class RemoveRules
                 return false;
             }
         }
-        if (content is IRemovable)
+        if (content is IReplaceable)
         {
-            var removable = content as IRemovable;
-            if (removable.CanBeRemoved())
+            var replaceable = content as IReplaceable;
+            if (replaceable.CanBeReplaced())
             {
-                int removeCost = removable.GetMinimalRemoveCost();
+                int replaceCost = replaceable.GetMinimalReplaceCost();
                 int playerActionPoints = player.ActionPoints.Amount;
-                return removeCost <= playerActionPoints;
+                return replaceCost <= playerActionPoints;
             }
         }
         return false;

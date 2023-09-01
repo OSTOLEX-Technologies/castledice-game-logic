@@ -6,35 +6,35 @@ public enum VisitMethodType
 {
     Place,
     Upgrade,
-    Remove,
+    Replace,
     Capture
 }
 
 public class MoveVisitorMock : IMoveVisitor
 {
-    public VisitMethodType CalledMethod { get; private set; }
+    public VisitMethodType CalledMethodType { get; private set; }
     
     public bool VisitPlaceMove(PlaceMove move)
     {
-        CalledMethod = VisitMethodType.Place;
+        CalledMethodType = VisitMethodType.Place;
         return true;
     }
 
-    public bool VisitRemoveMove(RemoveMove move)
+    public bool VisitReplaceMove(ReplaceMove move)
     {
-        CalledMethod = VisitMethodType.Remove;
+        CalledMethodType = VisitMethodType.Replace;
         return true;
     }
 
     public bool VisitUpgradeMove(UpgradeMove move)
     {
-        CalledMethod = VisitMethodType.Upgrade;
+        CalledMethodType = VisitMethodType.Upgrade;
         return true;
     }
 
     public bool VisitCaptureMove(CaptureMove move)
     {
-        CalledMethod = VisitMethodType.Capture;
+        CalledMethodType = VisitMethodType.Capture;
         return true;
     }
 }

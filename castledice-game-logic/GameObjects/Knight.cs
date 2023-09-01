@@ -1,6 +1,6 @@
 ﻿namespace castledice_game_logic.GameObjects;
 
-public class Knight : Content, IPlayerOwned, IUpgradeable, IRemovable, IPlaceBlocking
+public class Knight : Content, IPlayerOwned, IUpgradeable, IReplaceable, IPlaceBlocking
 {
     private Player _player;
     private int _health;
@@ -27,22 +27,22 @@ public class Knight : Content, IPlayerOwned, IUpgradeable, IRemovable, IPlaceBlo
         return 2;
     }
 
-    public bool TryUpgrade(Player upgrader)
+    public void Upgrade(Player upgrader)
     {
         throw new NotImplementedException();
     }
 
-    public int GetRemoveCost(int replacementCost)
+    public int GetReplaceCost(int replacementCost)
     {
         return _health + replacementCost - 1;
     }
 
-    public int GetMinimalRemoveCost()
+    public int GetMinimalReplaceCost()
     {
         return _health;
     }
 
-    public bool TryRemove(Player remover, int replacementCost)
+    public void Replace(Player remover, int replacementCost)
     {
         throw new NotImplementedException();
     }

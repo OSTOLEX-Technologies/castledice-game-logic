@@ -2,5 +2,7 @@
 
 public interface ICapturable
 {
-    bool TryCapture(Player capturer);
+    void Capture(Player capturer);
+
+    bool CanBeCaptured(Player capturer);
 }

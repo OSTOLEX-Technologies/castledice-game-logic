@@ -35,7 +35,7 @@ public class GiveActionPointsActionTests
     }
     
     [Fact]
-    public void GetSnapshot_ShouldReturnGiveActionPointsActionSnapshot()
+    public void GetSnapshot_ShouldReturnGiveActionPointsSnapshot()
     {
         var player = GetPlayer();
         var ap = 6;
@@ -52,7 +52,7 @@ public class GiveActionPointsActionTests
         int playerActionPoints = 4;
         int id = 3;
         int actionPointsToGive = 2;
-        var player = GetPlayer(playerActionPoints, id);
+        var player = GetPlayer(actionPoints: playerActionPoints, id: id);
         var action = new GiveActionPointsAction(player, actionPointsToGive);
 
         var snapshot = action.GetSnapshot();

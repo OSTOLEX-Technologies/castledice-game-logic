@@ -19,6 +19,23 @@ public class PlayerActionPointsTests
     }
 
     [Fact]
+    public void DecreaseActionPoints_ShouldThrowInvalidOperationException_IfDecreasingBelowZero()
+    {
+        var actionPoints = new PlayerActionPoints();
+        actionPoints.Amount = 3;
+
+        Assert.Throws<InvalidOperationException>(() => actionPoints.DecreaseActionPoints(5));
+    }
+
+    [Fact]
+    public void AmountProperty_ShouldThrowArgumentException_IfTryingToSetAmountLessThanZero()
+    {
+        var actionPoints = new PlayerActionPoints();
+
+        Assert.Throws<ArgumentException>(() => actionPoints.Amount = -1);
+    }
+
+    [Fact]
     public void IncreaseActionPoints_ShouldIncreaseActionPointsAmount_ByGivenNumber()
     {
         var actionPoints = new PlayerActionPoints();

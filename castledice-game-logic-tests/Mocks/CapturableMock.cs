@@ -5,20 +5,20 @@ namespace castledice_game_logic_tests.Mocks;
 
 public class CapturableMock : Content, ICapturable, IPlayerOwned
 {
-    private Player _owner;
-
-    public CapturableMock(Player owner)
-    {
-        _owner = owner;
-    }
+    public Player Owner;
+    public bool CanCapture = true;
         
-    public bool TryCapture(Player capturer)
+    public void Capture(Player capturer)
     {
-        return false;
+    }
+
+    public bool CanBeCaptured(Player capturer)
+    {
+        return CanCapture;
     }
 
     public Player GetOwner()
     {
-        return _owner;
+        return Owner;
     }
 }
