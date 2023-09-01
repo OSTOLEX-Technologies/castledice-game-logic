@@ -2,6 +2,7 @@
 
 namespace castledice_game_logic.MovesLogic;
 
+//TODO: Ask if it is a good idea to make sub applier classes like UpgradeMoveApplier or PlaceMoveApplier to not validate SRP principle.
 public class MoveApplier : IMoveVisitor
 {
     private Board _board;
