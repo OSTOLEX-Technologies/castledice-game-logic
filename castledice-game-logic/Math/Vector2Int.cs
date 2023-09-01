@@ -21,6 +21,11 @@ public struct Vector2Int
         return first.X != second.X || first.Y != second.Y;
     }
 
+    public static implicit operator Vector2Int((int, int) tuple)
+    {
+        return new Vector2Int(tuple.Item1, tuple.Item2);
+    }
+
     public override string ToString()
     {
         return $"({X}, {Y})";

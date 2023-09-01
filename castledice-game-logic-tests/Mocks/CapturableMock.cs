@@ -10,6 +10,7 @@ public class CapturableMock : Content, ICapturable, IPlayerOwned
         
     public void Capture(Player capturer)
     {
+        Owner = capturer;
     }
 
     public bool CanBeCaptured(Player capturer)

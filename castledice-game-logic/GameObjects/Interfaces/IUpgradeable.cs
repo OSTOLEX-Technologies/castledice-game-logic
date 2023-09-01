@@ -6,5 +6,5 @@ public interface IUpgradeable
 
     int GetUpgradeCost();
     
-    void Upgrade(Player upgrader);
+    void Upgrade();
 }

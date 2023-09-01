@@ -8,6 +8,7 @@ public class UpgradeableMock : Content, IUpgradeable, IPlayerOwned
     public bool Upgradeable = true;
     public int UpgradeCost = 1;
     public Player Owner;
+    public int Level;
         
     public bool CanBeUpgraded()
     {
@@ -19,9 +20,9 @@ public class UpgradeableMock : Content, IUpgradeable, IPlayerOwned
         return UpgradeCost;
     }
 
-    public void Upgrade(Player upgrader)
+    public void Upgrade()
     {
-        throw new NotImplementedException();
+        Level++;
     }
 
     public Player GetOwner()

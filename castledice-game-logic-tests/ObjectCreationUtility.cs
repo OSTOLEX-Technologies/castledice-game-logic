@@ -1,4 +1,5 @@
-﻿using castledice_game_logic;
+﻿using System.Net.NetworkInformation;
+using castledice_game_logic;
 using castledice_game_logic_tests.Mocks;
 using castledice_game_logic.ActionPointsLogic;
 using castledice_game_logic.BoardGeneration.CellsGeneration;
@@ -141,6 +142,14 @@ public static class ObjectCreationUtility
         public CaptureMove Build()
         {
             return new CaptureMove(Player, Position);
+        }
+    }
+
+    public class TestMoveBuilder : AbstractMoveBuilder
+    {
+        public TestMove Build()
+        {
+            return new TestMove(Player, Position);
         }
     }
 }

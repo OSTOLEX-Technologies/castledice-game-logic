@@ -27,7 +27,7 @@ public class Knight : Content, IPlayerOwned, IUpgradeable, IReplaceable, IPlaceB
         return 2;
     }
 
-    public void Upgrade(Player upgrader)
+    public void Upgrade()
     {
         throw new NotImplementedException();
     }

@@ -41,7 +41,7 @@ public class PlayerUnitMock : Content, IPlayerOwned, IReplaceable, IPlaceBlockin
         return UpgradeCost;
     }
 
-    public void Upgrade(Player upgrader)
+    public void Upgrade()
     {
         
     }
