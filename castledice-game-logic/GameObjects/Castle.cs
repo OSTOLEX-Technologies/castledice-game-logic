@@ -30,7 +30,7 @@ public class Castle : Content, ICapturable, IUpgradeable, IPlayerOwned, IPlaceBl
         return 2;
     }
 
-    public void Upgrade(Player upgrader)
+    public void Upgrade()
     {
         throw new NotImplementedException();
     }

@@ -2,7 +2,7 @@
 
 public class PlayerActionPoints
 {
-    public int _amount;
+    private int _amount;
     
     public int Amount
     {
