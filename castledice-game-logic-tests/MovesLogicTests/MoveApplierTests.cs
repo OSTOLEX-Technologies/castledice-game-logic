@@ -42,11 +42,10 @@ public class MoveApplierTests
             var replaceable = new ReplaceableMock() { RemoveCost = 3 };
             var player = GetPlayer(actionPoints: 6);
             var replacement = new PlaceableMock() { Cost = 2 };
-            var position = new Vector2Int(0, 0);
-            board[position].AddContent(replaceable);
+            board[0, 0].AddContent(replaceable);
             var move = new ReplaceMoveBuilder()
                 {
-                    Player = player, Replacement = replacement, Position = position
+                    Player = player, Replacement = replacement, Position = (0, 0)
                 }.Build();
             int expectedActionPoints = 2;
 
@@ -148,7 +147,7 @@ public class MoveApplierTests
     }
 
     [Fact]
-    public void ApplyMove_ShouldThrowArgumentException_IfReplaceMoveReplaceableIsNotContent()
+    public void ApplyMove_ShouldThrowArgumentException_IfReplaceMoveReplacementIsNotContent()
     {
         var board = GetFullNByNBoard(2);
         var replaceable = new ReplaceableMock();

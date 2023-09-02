@@ -32,7 +32,7 @@ public class CellMovesSelector
                 }
                 else if(CanRemoveOnCell(cell, player))
                 { 
-                    selectedCells.Add(new CellMove(cell, MoveType.Remove));
+                    selectedCells.Add(new CellMove(cell, MoveType.Replace));
                 }
                 else if (CanPlaceOnCell(cell, player))
                 {

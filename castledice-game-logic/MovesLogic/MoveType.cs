@@ -4,6 +4,6 @@ public enum MoveType
 {
     Place,
     Upgrade,
-    Remove,
+    Replace,
     Capture
 }

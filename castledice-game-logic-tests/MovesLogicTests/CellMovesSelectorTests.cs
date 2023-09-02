@@ -108,7 +108,7 @@ public class CellMovesSelectorTests
             List<CellMove> expectedCells = new List<CellMove>()
             {
                 new CellMove(board[0, 0], MoveType.Upgrade),
-                new CellMove(board[1, 1], MoveType.Remove),
+                new CellMove(board[1, 1], MoveType.Replace),
                 new CellMove(board[0, 1], MoveType.Place),
                 new CellMove(board[1, 0], MoveType.Place),
             };
@@ -206,7 +206,7 @@ public class CellMovesSelectorTests
                 new CellMove(board[0, 1], MoveType.Place),
                 new CellMove(board[0, 2], MoveType.Place),
                 new CellMove(board[1, 0], MoveType.Place),
-                new CellMove(board[1, 3], MoveType.Remove),
+                new CellMove(board[1, 3], MoveType.Replace),
                 new CellMove(board[2, 0], MoveType.Place),
                 new CellMove(board[2, 1], MoveType.Place),
                 new CellMove(board[2, 3], MoveType.Place),
