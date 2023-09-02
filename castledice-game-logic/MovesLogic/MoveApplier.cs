@@ -24,7 +24,7 @@ public class MoveApplier : IMoveVisitor
     public bool VisitPlaceMove(PlaceMove move)
     {
         ApplyPlaceMove(move);
-        return false;
+        return true;
     }
 
     private void ApplyPlaceMove(PlaceMove move)
@@ -44,7 +44,7 @@ public class MoveApplier : IMoveVisitor
     public bool VisitReplaceMove(ReplaceMove move)
     {
         ApplyReplaceMove(move);
-        return false;
+        return true;
     }
 
     private void ApplyReplaceMove(ReplaceMove move)
@@ -74,7 +74,7 @@ public class MoveApplier : IMoveVisitor
     public bool VisitUpgradeMove(UpgradeMove move)
     {
         ApplyUpgradeMove(move);
-        return false;
+        return true;
     }
 
     private void ApplyUpgradeMove(UpgradeMove move)
@@ -96,7 +96,7 @@ public class MoveApplier : IMoveVisitor
     public bool VisitCaptureMove(CaptureMove move)
     {
         ApplyCaptureMove(move);
-        return false;
+        return true;
     }
 
     private void ApplyCaptureMove(CaptureMove move)
