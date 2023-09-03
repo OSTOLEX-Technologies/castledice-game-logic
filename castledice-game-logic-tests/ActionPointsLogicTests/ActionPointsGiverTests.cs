@@ -14,9 +14,9 @@ public class ActionPointsGiverTests
         int maxAmount = 6;
         var player = GetPlayer();
         var randomizerMock = new Mock<IRandomNumberGenerator>();
-        randomizerMock.Setup(r => r.GetRandom(minAmount, maxAmount)).Returns(6);
+        randomizerMock.Setup(r => r.GetNextRandom()).Returns(6);
         var randomizer = randomizerMock.Object;
-        var giver = new ActionPointsGiver(randomizer, player, minAmount, maxAmount);
+        var giver = new ActionPointsGiver(randomizer, player);
 
         var action = giver.GiveActionPoints();
         
@@ -31,9 +31,9 @@ public class ActionPointsGiverTests
         var player = GetPlayer();
         int expectedAmount = 6;
         var randomizerMock = new Mock<IRandomNumberGenerator>();
-        randomizerMock.Setup(r => r.GetRandom(It.IsAny<int>(), It.IsAny<int>())).Returns(expectedAmount);
+        randomizerMock.Setup(r => r.GetNextRandom()).Returns(expectedAmount);
         var randomizer = randomizerMock.Object;
-        var giver = new ActionPointsGiver(randomizer, player, minAmount, maxAmount);
+        var giver = new ActionPointsGiver(randomizer, player);
 
         var action = giver.GiveActionPoints();
         
