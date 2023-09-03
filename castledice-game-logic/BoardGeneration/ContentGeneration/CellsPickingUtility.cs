@@ -18,20 +18,20 @@ public class CellsPickingUtility
     private Board _board;
     private bool[,] _availabilityMatrix;
     private Vector2Int _lastPickedCellPosition;
-    private IRandomNumberGenerator _randomNumberGenerator;
+    private IRangeRandomNumberGenerator _rangeRandomNumberGenerator;
     private bool _cellPicked;
 
     public CellsPickingUtility(Board board)
     {
         _board = board;
         _availabilityMatrix = new bool[_board.GetLength(0), _board.GetLength(1)];
-        _randomNumberGenerator = new RandomNumberGenerator();
+        _rangeRandomNumberGenerator = new RangeRandomNumberGenerator();
         IncludeExistingCells();
     }
 
-    public CellsPickingUtility(Board board, IRandomNumberGenerator generator) : this(board)
+    public CellsPickingUtility(Board board, IRangeRandomNumberGenerator generator) : this(board)
     {
-        _randomNumberGenerator = generator;
+        _rangeRandomNumberGenerator = generator;
     }
 
     private void IncludeExistingCells()
@@ -138,7 +138,7 @@ public class CellsPickingUtility
         {
             throw new InvalidOperationException("No available cells left!");
         }
-        int cellNumber = _randomNumberGenerator.GetRandom(1, availableCellsCount + 1);
+        int cellNumber = _rangeRandomNumberGenerator.GetRandom(1, availableCellsCount + 1);
         var pickedCellPosition = GetCellPositionByNumber(cellNumber);
         _lastPickedCellPosition = pickedCellPosition;
         _cellPicked = true;

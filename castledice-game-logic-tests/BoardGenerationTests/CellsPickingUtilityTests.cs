@@ -392,7 +392,7 @@ public class CellsPickingUtilityTests
     public void ExcludeAroundPicked_ShouldSetCorrespondingCellsInMatrixToFalse_InGivenRadius()
     {
         var board = GetFullNByNBoard(3);
-        var randomGenerator = new Mock<IRandomNumberGenerator>();
+        var randomGenerator = new Mock<IRangeRandomNumberGenerator>();
         randomGenerator.Setup(rnd => rnd.GetRandom(1, 10)).Returns(5);
         var cellsPicker = new CellsPickingUtility(board, randomGenerator.Object);
         var expectedMatrix = new bool[,]
