@@ -9,6 +9,17 @@ namespace castledice_game_logic_tests;
 public class CellTests
 {
     [Fact]
+    public void PositionProperty_ShouldHaveCoordinates_GivenInConstructor()
+    {
+        var cell = new Cell(1, 3);
+        Vector2Int expectedPosition = (1, 3);
+
+        var actualPosition = cell.Position;
+        
+        Assert.Equal(expectedPosition, actualPosition);
+    }
+    
+    [Fact]
     public void PositionProperty_ShouldReturnPosition_GivenInConstructor()
     {
         var position = new Vector2Int(0, 1);

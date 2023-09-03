@@ -1,6 +1,6 @@
 ﻿namespace castledice_game_logic.GameObjects;
 
-public class Knight : Content, IPlayerOwned, IUpgradeable, IReplaceable, IPlaceBlocking
+public class Knight : Content, IPlayerOwned, IUpgradeable, IReplaceable, IPlaceBlocking, IPlaceable
 {
     private Player _player;
     private int _health;
@@ -46,4 +46,16 @@ public class Knight : Content, IPlayerOwned, IUpgradeable, IReplaceable, IPlaceB
     {
         throw new NotImplementedException();
     }
+
+    public int GetPlacementCost()
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool CanBePlacedOn(Cell cell)
+    {
+        throw new NotImplementedException();
+    }
+
+    public PlacementType PlacementType { get; }
 }

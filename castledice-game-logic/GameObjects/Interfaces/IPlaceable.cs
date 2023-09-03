@@ -4,4 +4,5 @@ public interface IPlaceable
 {
     int GetPlacementCost();
     bool CanBePlacedOn(Cell cell);
+    PlacementType PlacementType { get; }
 }

@@ -7,6 +7,7 @@ public class PlaceableMock : Content, IPlaceable
 {
     public int Cost;
     public bool CanPlaceOn = true;
+    public PlacementType PlacementTypeToReturn;
     
     public int GetPlacementCost()
     {
@@ -16,5 +17,13 @@ public class PlaceableMock : Content, IPlaceable
     public bool CanBePlacedOn(Cell cell)
     {
         return CanPlaceOn;
+    }
+
+    public PlacementType PlacementType
+    {
+        get
+        {
+            return PlacementTypeToReturn;
+        }
     }
 }
