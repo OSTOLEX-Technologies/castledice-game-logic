@@ -13,21 +13,23 @@ public class UpgradeMoveSnapshotTests
         {
             yield return new object[]
             {
+                1,
                 new UpgradeMoveBuilder()
                 {
                     Player = GetPlayer(id: 3257),
                     Position = (3, 2)
                 }.Build(),
-                "{\"MoveType\":\"Upgrade\",\"ActionType\":\"Move\",\"PlayerId\":3257,\"Position\":{\"X\":3,\"Y\":2}}"
+                "{\"MoveType\":\"Upgrade\",\"ActionType\":\"Move\",\"PlayerId\":3257,\"Position\":{\"X\":3,\"Y\":2},\"MoveCost\":1}"
             };
             yield return new object[]
             {
+                3,
                 new UpgradeMoveBuilder()
                 {
                     Player = GetPlayer(id: 1505),
                     Position = (2, 8)
                 }.Build(),
-                "{\"MoveType\":\"Upgrade\",\"ActionType\":\"Move\",\"PlayerId\":1505,\"Position\":{\"X\":2,\"Y\":8}}"
+                "{\"MoveType\":\"Upgrade\",\"ActionType\":\"Move\",\"PlayerId\":1505,\"Position\":{\"X\":2,\"Y\":8},\"MoveCost\":3}"
             };
         }
 
@@ -41,7 +43,7 @@ public class UpgradeMoveSnapshotTests
     public void MoveTypeProperty_ShouldAlwaysReturnUpgradeMove()
     {
         var move = new UpgradeMoveBuilder().Build();
-        var snapshot = new UpgradeMoveSnapshot(move);
+        var snapshot = new UpgradeMoveSnapshot(move, 0);
         var expectedMoveType = MoveType.Upgrade;
 
         var actualMoveType = snapshot.MoveType;
@@ -51,9 +53,9 @@ public class UpgradeMoveSnapshotTests
 
     [Theory]
     [ClassData(typeof(GetJsonTestCases))]
-    public void GetJson_ShouldReturnJson_WithAppropriateData(UpgradeMove move, string expectedJson)
+    public void GetJson_ShouldReturnJson_WithAppropriateData(int moveCost, UpgradeMove move, string expectedJson)
     {
-        var snapshot = new UpgradeMoveSnapshot(move);
+        var snapshot = new UpgradeMoveSnapshot(move, moveCost);
 
         var actualJson = snapshot.GetJson();
         

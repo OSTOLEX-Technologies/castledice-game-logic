@@ -15,6 +15,7 @@ public class ReplaceMoveSnapshotTests
         {
             yield return new object[]
             {
+                1,
                 new ReplaceMoveBuilder()
                 {
                     Replacement = new PlaceableMock()
@@ -24,10 +25,11 @@ public class ReplaceMoveSnapshotTests
                     Player = GetPlayer(id: 2283),
                     Position = (5, 15)
                 }.Build(),
-                "{\"ReplacementType\":\"Knight\",\"MoveType\":\"Replace\",\"ActionType\":\"Move\",\"PlayerId\":2283,\"Position\":{\"X\":5,\"Y\":15}}"
+                "{\"ReplacementType\":\"Knight\",\"MoveType\":\"Replace\",\"ActionType\":\"Move\",\"PlayerId\":2283,\"Position\":{\"X\":5,\"Y\":15},\"MoveCost\":1}"
             };
             yield return new object[]
             {
+                2,
                 new ReplaceMoveBuilder()
                 {
                     Replacement = new PlaceableMock()
@@ -37,7 +39,7 @@ public class ReplaceMoveSnapshotTests
                     Player = GetPlayer(id: 1111),
                     Position = (1, 1)
                 }.Build(),
-                "{\"ReplacementType\":\"HeavyKnight\",\"MoveType\":\"Replace\",\"ActionType\":\"Move\",\"PlayerId\":1111,\"Position\":{\"X\":1,\"Y\":1}}"
+                "{\"ReplacementType\":\"HeavyKnight\",\"MoveType\":\"Replace\",\"ActionType\":\"Move\",\"PlayerId\":1111,\"Position\":{\"X\":1,\"Y\":1},\"MoveCost\":2}"
             };
         }
 
@@ -51,7 +53,7 @@ public class ReplaceMoveSnapshotTests
     public void MoveTypeProperty_ShouldAlwaysReturnReplaceMove()
     {
         var move = new ReplaceMoveBuilder().Build();
-        var snapshot = new ReplaceMoveSnapshot(move);
+        var snapshot = new ReplaceMoveSnapshot(move, 0);
         var expectedMoveType = MoveType.Replace;
 
         var actualMoveType = snapshot.MoveType;
@@ -65,7 +67,7 @@ public class ReplaceMoveSnapshotTests
         var expectedPlacementType = PlacementType.Knight;
         var placement = new PlaceableMock() { PlacementTypeToReturn = expectedPlacementType };
         var move = new ReplaceMoveBuilder() { Replacement = placement }.Build();
-        var snapshot = new ReplaceMoveSnapshot(move);
+        var snapshot = new ReplaceMoveSnapshot(move, 0);
 
         var actualPlacementType = snapshot.ReplacementType;
         
@@ -74,9 +76,9 @@ public class ReplaceMoveSnapshotTests
     
     [Theory]
     [ClassData(typeof(GetJsonTestCases))]
-    public void GetJson_ShouldReturnJson_WithAppropriateData(ReplaceMove move, string expectedJson)
+    public void GetJson_ShouldReturnJson_WithAppropriateData(int moveCost, ReplaceMove move, string expectedJson)
     {
-        var snapshot = new ReplaceMoveSnapshot(move);
+        var snapshot = new ReplaceMoveSnapshot(move, moveCost);
 
         var actualJson = snapshot.GetJson();
         

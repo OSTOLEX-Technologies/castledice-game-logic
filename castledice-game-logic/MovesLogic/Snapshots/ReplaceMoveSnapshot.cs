@@ -9,12 +9,12 @@ public class ReplaceMoveSnapshot : AbstractMoveSnapshot
     [JsonConverter(typeof(StringEnumConverter))]
     public PlacementType ReplacementType { get; }
     
-    public ReplaceMoveSnapshot(ReplaceMove move) : base(move)
+    public override MoveType MoveType => MoveType.Replace;
+    
+    public ReplaceMoveSnapshot(ReplaceMove move, int moveCost) : base(move, moveCost)
     {
         ReplacementType = move.Replacement.PlacementType;
     }
-
-    public override MoveType MoveType => MoveType.Replace;
     
     public override string GetJson()
     {

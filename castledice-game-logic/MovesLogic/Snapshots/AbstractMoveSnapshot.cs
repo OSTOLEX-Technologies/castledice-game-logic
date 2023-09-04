@@ -10,6 +10,7 @@ public abstract class AbstractMoveSnapshot : IActionSnapshot
     protected ActionType _actionType = ActionType.Move;
     protected int _playerId;
     protected Vector2Int _position;
+    protected int _moveCost;
 
     [JsonConverter(typeof(StringEnumConverter))] 
 
@@ -23,19 +24,20 @@ public abstract class AbstractMoveSnapshot : IActionSnapshot
 
     public abstract MoveType MoveType { get; }
     
-    //public abstract int MoveCost { get; }
+    public  int MoveCost => _moveCost;
 
-    protected AbstractMoveSnapshot(AbstractMove move)
+    protected AbstractMoveSnapshot(AbstractMove move, int moveCost)
     {
         _playerId = move.Player.Id;
         _position = move.Position;
+        _moveCost = moveCost;
     }
 
     public abstract string GetJson();
 
     protected bool Equals(AbstractMoveSnapshot other)
     {
-        return _actionType == other._actionType && _playerId == other._playerId && _position.Equals(other._position) && MoveType == other.MoveType;
+        return _actionType == other._actionType && _playerId == other._playerId && _position.Equals(other._position) && MoveType == other.MoveType && MoveCost == other.MoveCost;
     }
 
     public override bool Equals(object? obj)
@@ -48,6 +50,6 @@ public abstract class AbstractMoveSnapshot : IActionSnapshot
 
     public override int GetHashCode()
     {
-        return HashCode.Combine((int)_actionType, _playerId, _position, (int)MoveType);
+        return HashCode.Combine((int)_actionType, _playerId, _position, (int)MoveType, MoveCost);
     }
 }

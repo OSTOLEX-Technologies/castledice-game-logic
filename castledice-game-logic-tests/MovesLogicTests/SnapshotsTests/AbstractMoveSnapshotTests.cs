@@ -10,7 +10,7 @@ public class AbstractMoveSnapshotTests
     public void ActionTypeProperty_ShouldAlwaysBeEqualToMove()
     {
         var move = new TestMoveBuilder().Build();
-        var snapshot = new TestMoveSnapshot(move);
+        var snapshot = new TestMoveSnapshot(move, 0);
         var expectedActionType = ActionType.Move;
         
         var actualActionType = snapshot.ActionType;
@@ -23,7 +23,7 @@ public class AbstractMoveSnapshotTests
     {
         var player = GetPlayer(id: 1234);
         var move = new TestMoveBuilder(){Player = player}.Build();
-        var snapshot = new TestMoveSnapshot(move);
+        var snapshot = new TestMoveSnapshot(move, 0);
         var expectedId = move.Player.Id;
 
         var actualId = snapshot.PlayerId;
@@ -36,10 +36,22 @@ public class AbstractMoveSnapshotTests
     {
         Vector2Int expectedPosition = (1, 3);
         var move = new TestMoveBuilder() { Position = expectedPosition }.Build();
-        var snapshot = new TestMoveSnapshot(move);
+        var snapshot = new TestMoveSnapshot(move, 0);
 
         var actualPosition = snapshot.Position;
         
         Assert.Equal(expectedPosition, actualPosition);
+    }
+
+    [Fact]
+    public void MoveCostProperty_ShouldReturnCost_GivenInConstructor()
+    {
+        var move = new TestMoveBuilder().Build();
+        var expectedCost = 5;
+        var snapshot = new TestMoveSnapshot(move, expectedCost);
+
+        var actualCost = snapshot.MoveCost;
+        
+        Assert.Equal(expectedCost, actualCost);
     }
 }

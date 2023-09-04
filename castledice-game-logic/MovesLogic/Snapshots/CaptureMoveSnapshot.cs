@@ -6,8 +6,8 @@ namespace castledice_game_logic.MovesLogic.Snapshots;
 public class CaptureMoveSnapshot : AbstractMoveSnapshot
 {
     public override MoveType MoveType => MoveType.Capture;
-    
-    public CaptureMoveSnapshot(CaptureMove move) : base(move)
+
+    public CaptureMoveSnapshot(CaptureMove move, int moveCost) : base(move, moveCost)
     {
     }
     
