@@ -13,23 +13,21 @@ public class CaptureMoveTests
         {
             yield return new object[]
             {
-                4,
                 new CaptureMoveBuilder()
                 {
                     Player = GetPlayer(id: 1234),
                     Position = (1, 2)
                 }.Build(),
-                "{\"MoveType\":\"Capture\",\"ActionType\":\"Move\",\"PlayerId\":1234,\"Position\":{\"X\":1,\"Y\":2},\"MoveCost\":4}"
+                "{\"MoveType\":\"Capture\",\"ActionType\":\"Move\",\"PlayerId\":1234,\"Position\":{\"X\":1,\"Y\":2}}"
             };
             yield return new object[]
             {
-                3,
                 new CaptureMoveBuilder()
                 {
                     Player = GetPlayer(id: 100),
                     Position = (3, 5)
                 }.Build(),
-                "{\"MoveType\":\"Capture\",\"ActionType\":\"Move\",\"PlayerId\":100,\"Position\":{\"X\":3,\"Y\":5},\"MoveCost\":3}"
+                "{\"MoveType\":\"Capture\",\"ActionType\":\"Move\",\"PlayerId\":100,\"Position\":{\"X\":3,\"Y\":5}}"
             };
         }
 
@@ -43,7 +41,7 @@ public class CaptureMoveTests
     public void MoveTypeProperty_ShouldAlwaysBeEqualToCapture()
     {
         var move = new CaptureMoveBuilder().Build();
-        var snapshot = new CaptureMoveSnapshot(move, 0);
+        var snapshot = new CaptureMoveSnapshot(move);
         var expectedMoveType = MoveType.Capture;
         
         var actualMoveType = snapshot.MoveType;
@@ -53,9 +51,9 @@ public class CaptureMoveTests
     
     [Theory]
     [ClassData(typeof(GetJsonTestCases))]
-    public void GetJson_ShouldReturnJson_WithAppropriateData(int moveCost, CaptureMove move, string expectedJson)
+    public void GetJson_ShouldReturnJson_WithAppropriateData(CaptureMove move, string expectedJson)
     {
-        var snapshot = new CaptureMoveSnapshot(move, moveCost);
+        var snapshot = new CaptureMoveSnapshot(move);
 
         var actualJson = snapshot.GetJson();
         

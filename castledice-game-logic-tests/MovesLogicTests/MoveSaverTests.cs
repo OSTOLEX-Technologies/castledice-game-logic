@@ -2,7 +2,6 @@
 using castledice_game_logic;
 using castledice_game_logic_tests.Mocks;
 using castledice_game_logic.GameObjects;
-using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
 using castledice_game_logic.MovesLogic.Snapshots;
 
@@ -28,74 +27,57 @@ public class MoveSaverTests
 
         private static object[] PlaceMoveCase()
         {
-            var board = GetFullNByNBoard(2);
-            int moveCost = 3;
             var move = new PlaceMoveBuilder()
             {
                 Player = GetPlayer(id: 1234),
-                Position = (1, 1),
-                Content = new PlaceableMock() { PlacementTypeToReturn = PlacementType.Knight, Cost = moveCost}
+                Position = (1, 2),
+                Content = new PlaceableMock() { PlacementTypeToReturn = PlacementType.Knight }
             }.Build();
-            var snapshot = new PlaceMoveSnapshot(move, moveCost);
-            return new object[] { board, move, snapshot };
+            var snapshot = new PlaceMoveSnapshot(move);
+            return new object[] { move, snapshot };
         }
 
         private static object[] ReplaceMoveCase()
         {
-            int moveCost = 4;
-            var board = GetFullNByNBoard(3);
-            var position = new Vector2Int(2, 1);
-            var replaceable = new ReplaceableMock() { RemoveCost = 3 };
-            board[position].AddContent(replaceable);
             var move = new ReplaceMoveBuilder()
             {
                 Player = GetPlayer(id: 2345),
-                Position = position,
-                Replacement = new PlaceableMock() { PlacementTypeToReturn = PlacementType.HeavyKnight, Cost = 2}
+                Position = (3, 4),
+                Replacement = new PlaceableMock() { PlacementTypeToReturn = PlacementType.HeavyKnight }
             }.Build();
-            var snapshot = new ReplaceMoveSnapshot(move, moveCost);
-            return new object[] { board, move, snapshot };
+            var snapshot = new ReplaceMoveSnapshot(move);
+            return new object[] { move, snapshot };
         }
 
         private static object[] UpgradeMoveCase()
         {
-            int moveCost = 3;
-            var board = GetFullNByNBoard(3);
-            var upgradeable = new UpgradeableMock() { UpgradeCost = moveCost };
-            var position = new Vector2Int(2, 2);
-            board[position].AddContent(upgradeable);
             var move = new UpgradeMoveBuilder()
             {
                 Player = GetPlayer(id: 3456),
-                Position = position,
+                Position = (5, 6),
             }.Build();
-            var snapshot = new UpgradeMoveSnapshot(move, moveCost);
-            return new object[] { board, move, snapshot };
+            var snapshot = new UpgradeMoveSnapshot(move);
+            return new object[] { move, snapshot };
         }
 
         private static object[] CaptureMoveCase()
         {
-            int moveCost = 3;
-            var board = GetFullNByNBoard(3);
-            var capturable = new CapturableMock() { GetCaptureCostFunc = (p) => moveCost };
-            var position = new Vector2Int(1, 2);
-            board[position].AddContent(capturable);
             var move = new CaptureMoveBuilder()
             {
                 Player = GetPlayer(id: 4567),
-                Position = position,
+                Position = (7, 8),
             }.Build();
-            var snapshot = new CaptureMoveSnapshot(move, moveCost);
-            return new object[] { board, move, snapshot };
+            var snapshot = new CaptureMoveSnapshot(move);
+            return new object[] { move, snapshot };
         }
     }
     
     [Theory]
     [ClassData(typeof(SaveMoveTestCases))]
-    public void SaveMove_ShouldAddSnapshotToHistory(Board board, AbstractMove move, AbstractMoveSnapshot expectedSnapshot)
+    public void SaveMove_ShouldAddSnapshotToHistory(AbstractMove move, AbstractMoveSnapshot expectedSnapshot)
     {
         var history = new ActionsHistory();
-        var saver = new MoveSaver(history, board);
+        var saver = new MoveSaver(history);
         
         saver.SaveMove(move);
 

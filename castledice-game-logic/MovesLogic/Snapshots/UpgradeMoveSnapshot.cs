@@ -5,12 +5,12 @@ namespace castledice_game_logic.MovesLogic.Snapshots;
 [Serializable]
 public class UpgradeMoveSnapshot : AbstractMoveSnapshot
 {
-    public override MoveType MoveType => MoveType.Upgrade;
-    
-    public UpgradeMoveSnapshot(UpgradeMove move, int moveCost) : base(move, moveCost)
+    public UpgradeMoveSnapshot(UpgradeMove move) : base(move)
     {
     }
-
+    
+    public override MoveType MoveType => MoveType.Upgrade;
+    
     public override string GetJson()
     {
         return JsonConvert.SerializeObject(this);

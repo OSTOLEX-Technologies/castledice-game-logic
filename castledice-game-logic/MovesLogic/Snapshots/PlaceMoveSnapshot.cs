@@ -10,13 +10,13 @@ public class PlaceMoveSnapshot : AbstractMoveSnapshot
     [JsonConverter(typeof(StringEnumConverter))]
     public PlacementType PlacementType { get; }
     
-    public override MoveType MoveType => MoveType.Place;
-    
-    public PlaceMoveSnapshot(PlaceMove move, int moveCost) : base(move, moveCost)
+    public PlaceMoveSnapshot(PlaceMove move) : base(move)
     {
         PlacementType = move.ContentToPlace.PlacementType;
     }
-    
+
+    public override MoveType MoveType => MoveType.Place;
+
     public override string GetJson()
     {
         return JsonConvert.SerializeObject(this);
