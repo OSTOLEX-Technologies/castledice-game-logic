@@ -22,6 +22,8 @@ public abstract class AbstractMoveSnapshot : IActionSnapshot
     [JsonConverter(typeof(StringEnumConverter))] 
 
     public abstract MoveType MoveType { get; }
+    
+    //public abstract int MoveCost { get; }
 
     protected AbstractMoveSnapshot(AbstractMove move)
     {

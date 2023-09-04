@@ -1,4 +1,5 @@
 ﻿using castledice_game_logic.GameObjects;
+using castledice_game_logic.MovesLogic.Rules;
 
 namespace castledice_game_logic.MovesLogic;
 
@@ -65,7 +66,7 @@ public class MoveApplier : IMoveVisitor
             throw new ArgumentException("Cannot apply replace move! Cell has no IReplaceable objects!");
         }
 
-        int replaceCost = replaceable.GetReplaceCost(replacement.GetPlacementCost());
+        int replaceCost = ReplaceRules.GetReplaceCost(_board, move.Position, move.Replacement);
         player.ActionPoints.DecreaseActionPoints(replaceCost);
 
         cell.RemoveContent(replaceable as Content);

@@ -1,4 +1,5 @@
 ﻿using castledice_game_logic.GameObjects;
+using castledice_game_logic.MovesLogic.Rules;
 using castledice_game_logic.TurnsLogic;
 
 namespace castledice_game_logic.MovesLogic;
@@ -64,15 +65,9 @@ public class MoveValidator : IMoveVisitor
     {
         var cellMoves = _cellMovesSelector.SelectCellMoves(move.Player);
         if (!cellMoves.Any(c => c.MoveType == MoveType.Replace && c.Cell.Position == move.Position)) return false;
-        var cell = _board[move.Position];
-        var replaceable = cell.GetContent().FirstOrDefault(c => c is IReplaceable) as IReplaceable;
-        if (replaceable == null)
-        {
-            throw new NullReferenceException("CellMoveSelector malfunction! Cell for replace move, approved by CellMovesSelector, has no replaceable on it!");
-        }
-        var removeCost = replaceable.GetReplaceCost(move.Replacement.GetPlacementCost());
+        var replaceCost = ReplaceRules.GetReplaceCost(_board, move.Position, move.Replacement);
         var playerActionPoints = move.Player.ActionPoints.Amount;
-        return removeCost <= playerActionPoints;
+        return replaceCost <= playerActionPoints;
     }
 
     private bool ValidateUpgradeMove(UpgradeMove move)

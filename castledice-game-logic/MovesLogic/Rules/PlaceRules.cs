@@ -35,4 +35,9 @@ public static class PlaceRules
         }
         return false;
     }
+
+    public static int GetPlaceCost(IPlaceable placeable)
+    {
+        return placeable.GetPlacementCost();
+    }
 }

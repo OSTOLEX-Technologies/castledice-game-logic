@@ -7,6 +7,7 @@ public class CapturableMock : Content, ICapturable, IPlayerOwned
 {
     public Player Owner;
     public bool CanCapture = true;
+    public Func<Player, int> GetCaptureCostFunc;
         
     public void Capture(Player capturer)
     {
@@ -16,6 +17,11 @@ public class CapturableMock : Content, ICapturable, IPlayerOwned
     public bool CanBeCaptured(Player capturer)
     {
         return CanCapture;
+    }
+
+    public int GetCaptureCost(Player capturer)
+    {
+        return GetCaptureCostFunc(capturer);
     }
 
     public Player GetOwner()

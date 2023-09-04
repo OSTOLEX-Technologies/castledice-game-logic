@@ -1,5 +1,7 @@
-﻿using castledice_game_logic;
+﻿using System.Collections;
+using castledice_game_logic;
 using castledice_game_logic_tests.Mocks;
+using castledice_game_logic.GameObjects;
 using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic.Rules;
 
@@ -8,6 +10,35 @@ using static ObjectCreationUtility;
 
 public class ReplaceRulesTests
 {
+    private class GetReplaceCostTestCases : IEnumerable<object[]>
+    {
+        public IEnumerator<object[]> GetEnumerator()
+        {
+            yield return GetCase(replaceableRemoveCost: 3, placeablePlaceCost: 1, expectedCost: 3);
+            yield return GetCase(replaceableRemoveCost: 4, placeablePlaceCost: 2, expectedCost: 5);
+            yield return GetCase(replaceableRemoveCost: 2, placeablePlaceCost: 2, expectedCost: 3);
+            yield return GetCase(replaceableRemoveCost: 3, placeablePlaceCost: 3, expectedCost: 5);
+            yield return GetCase(replaceableRemoveCost: 1, placeablePlaceCost: 1, expectedCost: 1);
+            yield return GetCase(replaceableRemoveCost: 6, placeablePlaceCost: 1, expectedCost: 6);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        private static object[] GetCase(int replaceableRemoveCost, int placeablePlaceCost, int expectedCost)
+        {
+            var board = GetFullNByNBoard(2);
+            var position = new Vector2Int(0, 0);
+            var replaceable = new ReplaceableMock() { RemoveCost = replaceableRemoveCost };
+            var placeable = new PlaceableMock() { Cost = placeablePlaceCost };
+            board[position].AddContent(replaceable);
+
+            return new object[] { board, position, placeable, expectedCost };
+        }
+    }
+    
     [Fact]
     public void CanReplaceOnCell_ShouldReturnFalse_IfPositionIsNegative()
     {
@@ -132,5 +163,39 @@ public class ReplaceRulesTests
         var position = new Vector2Int(1, 1);
         
         Assert.True(ReplaceRules.CanReplaceOnCellIgnoreNeighbours(board, position, player));
+    }
+
+    [Theory]
+    [InlineData(-1, -1)]
+    [InlineData(10, 10)]
+    [InlineData(0, 1)]
+    public void GetReplaceCost_ShouldThrowArgumentException_IfNoCellOnGivenPosition(int x, int y)
+    {
+        var position = new Vector2Int(x, y);
+        var board = new Board(CellType.Square);
+        var replacement = new PlaceableMock();
+        board.AddCell(0, 0);
+        board.AddCell(1, 1);
+
+        Assert.Throws<ArgumentException>(()=>ReplaceRules.GetReplaceCost(board, position, replacement));
+    }
+
+    [Fact]
+    public void GetReplaceCost_ShouldThrowArgumentException_IfNoReplaceableOnCell()
+    {
+        var board = GetFullNByNBoard(2);
+        var replacement = new PlaceableMock();
+        var position = new Vector2Int(0, 0);
+        
+        Assert.Throws<ArgumentException>(()=>ReplaceRules.GetReplaceCost(board, position, replacement));
+    }
+    
+    [Theory]
+    [ClassData(typeof(GetReplaceCostTestCases))]
+    public void GetReplaceCost_ShouldReturnReplaceCost_IfReplaceableOnPosition(Board board, Vector2Int position, IPlaceable replacement, int expectedCost)
+    {
+        var actualCost = ReplaceRules.GetReplaceCost(board, position, replacement);
+        
+        Assert.Equal(expectedCost, actualCost);
     }
 }

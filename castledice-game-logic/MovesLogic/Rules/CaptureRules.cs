@@ -41,4 +41,26 @@ public static class CaptureRules
         }
         return false;
     }
+
+    public static int GetCaptureCost(Board board, Vector2Int position, Player player)
+    {
+        if (!board.HasCell(position))
+        {
+            throw new ArgumentException("No cell on position: " + position);
+        }
+        var capturable = GetCapturableOnPosition(board, position);
+        return capturable.GetCaptureCost(player);
+    }
+
+    private static ICapturable GetCapturableOnPosition(Board board, Vector2Int position)
+    {
+        var cell = board[position];
+        var capturable = cell.GetContent().FirstOrDefault(c => c is ICapturable) as ICapturable;
+        if (capturable == null)
+        {
+            throw new ArgumentException("No capturable on position: " + position);
+        }
+        return capturable;
+    }
+    
 }

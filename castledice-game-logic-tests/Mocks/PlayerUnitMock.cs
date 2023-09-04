@@ -16,12 +16,7 @@ public class PlayerUnitMock : Content, IPlayerOwned, IReplaceable, IPlaceBlockin
         return Owner;
     }
 
-    public int GetReplaceCost(int replacementCost)
-    {
-        return RemoveCost + replacementCost - 1;
-    }
-
-    public int GetMinimalReplaceCost()
+    public int GetReplaceCost()
     {
         return RemoveCost;
     }

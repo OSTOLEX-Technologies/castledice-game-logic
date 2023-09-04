@@ -5,11 +5,11 @@ namespace castledice_game_logic.MovesLogic.Snapshots;
 [Serializable]
 public class CaptureMoveSnapshot : AbstractMoveSnapshot
 {
+    public override MoveType MoveType => MoveType.Capture;
+    
     public CaptureMoveSnapshot(CaptureMove move) : base(move)
     {
     }
-    
-    public override MoveType MoveType => MoveType.Capture;
     
     public override string GetJson()
     {
