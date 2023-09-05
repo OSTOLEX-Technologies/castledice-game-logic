@@ -70,7 +70,7 @@ public class PlaceMoveSnapshotTests
 
         var actualPlacementType = snapshot.PlacementType;
         
-        Assert.Equal(expectedPlacementType,actualPlacementType);
+        Assert.Equal(expectedPlacementType, actualPlacementType);
     }
 
     [Theory]
@@ -81,6 +81,6 @@ public class PlaceMoveSnapshotTests
 
         var actualJson = snapshot.GetJson();
         
-        Assert.Equal(expectedJson,actualJson);
+        Assert.Equal(expectedJson,  actualJson);
     }
 }
