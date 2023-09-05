@@ -37,11 +37,6 @@ public class Knight : Content, IPlayerOwned, IUpgradeable, IReplaceable, IPlaceB
         return 1;
     }
 
-    public void Replace(Player remover, int replacementCost)
-    {
-        throw new NotImplementedException();
-    }
-
     public int GetPlacementCost()
     {
         throw new NotImplementedException();
