@@ -1,4 +1,5 @@
-﻿using castledice_game_logic;
+﻿using System.Collections;
+using castledice_game_logic;
 using castledice_game_logic_tests.Mocks;
 using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic.Rules;
@@ -8,6 +9,48 @@ using static ObjectCreationUtility;
 
 public class CaptureRulesTests
 {
+    private  class GetCaptureCostTestCases : IEnumerable<object[]>
+    {
+        public IEnumerator<object[]> GetEnumerator()
+        {
+            yield return CostIsPlayerActionPointsCase(1);
+            yield return CostIsPlayerActionPointsCase(4);
+            yield return CostIsConstantValueCase(2);
+            yield return CostIsConstantValueCase(3);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        private static object[] CostIsPlayerActionPointsCase(int playerActionPoints)
+        {
+            var board = GetFullNByNBoard(2);
+            var player = GetPlayer(actionPoints: playerActionPoints);
+            Func<Player, int> getCostFunction = (p) => p.ActionPoints.Amount;
+            var capturable = new CapturableMock() { GetCaptureCostFunc = getCostFunction };
+            var position = new Vector2Int(1, 1);
+            board[position].AddContent(capturable);
+            int expectedCost = capturable.GetCaptureCost(player);
+
+            return new object[] { board, position, player, expectedCost };
+        }
+
+        private static object[] CostIsConstantValueCase(int costValue)
+        {
+            var board = GetFullNByNBoard(2);
+            var player = GetPlayer();
+            Func<Player, int> getCostFunction = (p) => costValue;
+            var capturable = new CapturableMock() { GetCaptureCostFunc = getCostFunction };
+            var position = new Vector2Int(1, 1);
+            board[position].AddContent(capturable);
+            int expectedCost = costValue;
+
+            return new object[] { board, position, player, expectedCost };
+        }
+    }
+    
     [Fact]
     public void CanCaptureOnCell_ShouldReturnFalse_IfNegativePositionGiven()
     {
@@ -107,5 +150,39 @@ public class CaptureRulesTests
         var position = new Vector2Int(1, 1);
         
         Assert.True(CaptureRules.CanCaptureOnCellIgnoreNeighbours(board, position, player));
+    }
+
+    [Theory]
+    [InlineData(-1, -1)]
+    [InlineData(10, 10)]
+    [InlineData(0, 1)]
+    public void GetCaptureCost_ShouldThrowArgumentException_IfNoCellOnPosition(int x, int y)
+    {
+        var position = new Vector2Int(x, y);
+        var board = new Board(CellType.Square);
+        var player = GetPlayer();
+        board.AddCell(0, 0);
+        board.AddCell(1, 1);
+
+        Assert.Throws<ArgumentException>(() => CaptureRules.GetCaptureCost(board, position, player));
+    }
+
+    [Fact]
+    public void GetCaptureCost_ShouldThrowArgumentException_IfNoCapturableOnPosition()
+    {
+        var board = GetFullNByNBoard(2);
+        var position = new Vector2Int(1, 1);
+        var player = GetPlayer();
+
+        Assert.Throws<ArgumentException>(() => CaptureRules.GetCaptureCost(board, position, player));
+    }
+
+    [Theory]
+    [ClassData(typeof(GetCaptureCostTestCases))]
+    public void GetCaptureCost_ShouldReturnCost_FromGetCaptureCostMethodOfCapturableObject(Board board, Vector2Int position, Player player, int expectedCost)
+    {
+        var actualCost = CaptureRules.GetCaptureCost(board, position, player);
+        
+        Assert.Equal(expectedCost, actualCost);
     }
 }

@@ -19,6 +19,11 @@ public class Castle : Content, ICapturable, IUpgradeable, IPlayerOwned, IPlaceBl
         return true;
     }
 
+    public int GetCaptureCost(Player capturer)
+    {
+        return capturer.ActionPoints.Amount;
+    }
+
     public bool CanBeUpgraded()
     {
         return true;

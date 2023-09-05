@@ -1,5 +1,7 @@
-﻿using castledice_game_logic;
+﻿using System.Collections;
+using castledice_game_logic;
 using castledice_game_logic_tests.Mocks;
+using castledice_game_logic.GameObjects;
 using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic.Rules;
 
@@ -8,6 +10,30 @@ using static ObjectCreationUtility;
 
 public class PlaceRulesTests
 {
+    private class GetPlaceCostTestCases : IEnumerable<object[]>
+    {
+        public IEnumerator<object[]> GetEnumerator()
+        {
+            yield return new object[]
+            {
+                new PlaceableMock(){Cost = 1}
+            };
+            yield return new object[]
+            {
+                new PlaceableMock(){Cost = 2}
+            };
+            yield return new object[]
+            {
+                new PlaceableMock(){Cost = 3}
+            };
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+    }
+    
     [Fact]
     public void CanPlaceOnCell_ShouldReturnFalse_IfCellPositionIsNegative()
     {
@@ -104,5 +130,15 @@ public class PlaceRulesTests
         var position = new Vector2Int(0, 0);
         
         Assert.True(PlaceRules.CanPlaceOnCellIgnoreNeighbours(board, position, player));
+    }
+
+    [Theory]
+    [ClassData(typeof(GetPlaceCostTestCases))]
+    public void GetPlaceCost_ShouldReturnPlaceCost_OfGivenPlaceable(IPlaceable placeable)
+    {
+        var expectedCost = placeable.GetPlacementCost();
+        var actualCost = PlaceRules.GetPlaceCost(placeable);
+        
+        Assert.Equal(expectedCost, actualCost);
     }
 }

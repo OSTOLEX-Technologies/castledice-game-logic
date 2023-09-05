@@ -7,13 +7,11 @@ public interface IReplaceable
         return true;
     }
 
-    int GetReplaceCost(int replacementCost);
-    
     /// <summary>
-    /// Returns remove cost that can be obtained by passing minimal possible replacement cost in GetReplaceCost method.
+    /// Returns replace cost that doesn't take into account replacement cost.
     /// </summary>
     /// <returns></returns>
-    int GetMinimalReplaceCost();
+    int GetReplaceCost();
     
     void Replace(Player remover, int replacementCost);
 }

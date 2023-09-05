@@ -8,13 +8,8 @@ public class ReplaceableMock : Content, IReplaceable, IPlayerOwned
     public int RemoveCost;
     public bool CanBeRemoved;
     public Player Owner;
-    
-    public int GetReplaceCost(int replacementCost)
-    {
-        return RemoveCost + replacementCost - 1;
-    }
 
-    public int GetMinimalReplaceCost()
+    public int GetReplaceCost()
     {
         return RemoveCost;
     }
