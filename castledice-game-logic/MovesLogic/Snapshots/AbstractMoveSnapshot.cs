@@ -23,8 +23,6 @@ public abstract class AbstractMoveSnapshot : IActionSnapshot
 
     public abstract MoveType MoveType { get; }
     
-    //public abstract int MoveCost { get; }
-
     protected AbstractMoveSnapshot(AbstractMove move)
     {
         _playerId = move.Player.Id;
