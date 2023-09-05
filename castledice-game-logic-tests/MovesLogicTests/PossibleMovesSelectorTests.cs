@@ -172,7 +172,7 @@ public class PossibleMovesSelectorTests
                     { PlacementType.Knight, knight }
                 } 
             };
-            var enemyReplaceable = new ReplaceableMock() { RemoveCost = 1 };
+            var enemyReplaceable = new ReplaceableMock() { ReplaceCost = 1 };
             var expectedList = new List<AbstractMove>()
             {
                 new ReplaceMove(player, position, knight)
@@ -205,7 +205,7 @@ public class PossibleMovesSelectorTests
                     { PlacementType.Bridge, bridge },
                 } 
             };
-            var enemyReplaceable = new ReplaceableMock(){RemoveCost = 1};
+            var enemyReplaceable = new ReplaceableMock(){ReplaceCost = 1};
             var expectedList = new List<AbstractMove>()
             {
                 new ReplaceMove(player, position, knight),
@@ -227,7 +227,7 @@ public class PossibleMovesSelectorTests
                     PlacementType.Bridge
                 }
             };
-            var enemyReplaceable = new ReplaceableMock() {RemoveCost = 5};
+            var enemyReplaceable = new ReplaceableMock() {ReplaceCost = 5};
             var factory = new PlaceableMocksFactory();
             var expectedList = new List<AbstractMove>();
             return new object[]{player, enemyReplaceable, listProvider, factory, position, expectedList};
@@ -246,7 +246,7 @@ public class PossibleMovesSelectorTests
                     PlacementType.Bridge
                 }
             };
-            var enemyReplaceable = new ReplaceableMock() { RemoveCost = 1 };
+            var enemyReplaceable = new ReplaceableMock() { ReplaceCost = 1 };
             var knight = new PlaceableMock(){ PlacementTypeToReturn = PlacementType.Knight};
             var heavyKnight = new PlaceableMock(){ PlacementTypeToReturn = PlacementType.HeavyKnight};
             var bridge = new PlaceableMock() { PlacementTypeToReturn = PlacementType.Bridge };
@@ -282,7 +282,7 @@ public class PossibleMovesSelectorTests
             };
             var knight = new PlaceableMock(){ PlacementTypeToReturn = PlacementType.Knight, Cost = 1};
             var heavyKnight = new PlaceableMock(){ PlacementTypeToReturn = PlacementType.HeavyKnight, Cost = 3};
-            var enemyReplaceable = new ReplaceableMock() { RemoveCost = 3 };
+            var enemyReplaceable = new ReplaceableMock() { ReplaceCost = 3 };
             var factory = new PlaceableMocksFactory()
             { 
                 TypeAndPlaceableToReturn = new Dictionary<PlacementType, IPlaceable>()

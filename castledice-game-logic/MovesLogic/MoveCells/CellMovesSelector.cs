@@ -17,30 +17,40 @@ public class CellMovesSelector
         List<CellMove> selectedCells = new List<CellMove>();
         foreach (var cell in _board)
         {
-            if (CellContentOwnedByPlayer(cell, player))
+            var cellMove = GetCellMoveForCell(player, cell);
+            if (cellMove.MoveType != MoveType.None)
             {
-                if (CanUpgradeOnCell(cell, player))
-                {
-                    selectedCells.Add(new CellMove(cell, MoveType.Upgrade));
-                }
-            }
-            else if (HasNeighbourOwnedByPlayer(cell, player))
-            {
-                if (CanCaptureOnCell(cell, player))
-                {
-                    selectedCells.Add(new CellMove(cell, MoveType.Capture));
-                }
-                else if(CanRemoveOnCell(cell, player))
-                { 
-                    selectedCells.Add(new CellMove(cell, MoveType.Replace));
-                }
-                else if (CanPlaceOnCell(cell, player))
-                {
-                    selectedCells.Add(new CellMove(cell, MoveType.Place));
-                }
+                selectedCells.Add(cellMove);
             }
         }
         return selectedCells;
+    }
+
+    public CellMove GetCellMoveForCell(Player player, Cell cell)
+    {
+        if (CellContentOwnedByPlayer(cell, player))
+        {
+            if (CanUpgradeOnCell(cell, player))
+            {
+                return new CellMove(cell, MoveType.Upgrade);
+            }
+        }
+        else if (HasNeighbourOwnedByPlayer(cell, player))
+        {
+            if (CanCaptureOnCell(cell, player))
+            {
+                return new CellMove(cell, MoveType.Capture);
+            }
+            if(CanRemoveOnCell(cell, player))
+            { 
+                return new CellMove(cell, MoveType.Replace);
+            }
+            if (CanPlaceOnCell(cell, player))
+            {
+                return new CellMove(cell, MoveType.Place);
+            }
+        }
+        return new CellMove(cell, MoveType.None);
     }
 
     private bool CellContentOwnedByPlayer(Cell cell, Player player)

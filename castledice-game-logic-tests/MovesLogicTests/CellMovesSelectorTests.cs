@@ -2,6 +2,7 @@
 using castledice_game_logic;
 using castledice_game_logic_tests.Mocks;
 using castledice_game_logic.GameObjects;
+using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
 using CastleGO = castledice_game_logic.GameObjects.Castle;
 using static castledice_game_logic_tests.ObjectCreationUtility;
@@ -241,6 +242,145 @@ public class CellMovesSelectorTests
             return new object[] { board, player, expectedCells };
         }
     }
+
+    private class NoMovePossibleTestCases : IEnumerable<object[]>
+    {
+        public IEnumerator<object[]> GetEnumerator()
+        {
+            yield return CellTooFarFromPlayerUnitsCase();
+            yield return CellWithObstacleCase();
+            yield return CapturableCannotBeCapturedCase();
+            yield return CapturableIsTooExpensiveCase();
+            yield return CannotCaptureOwnCapturableCase();
+            yield return UpgradeableCannotBeUpgradedCase();
+            yield return UpgradeableIsTooExpensiveCase();
+            yield return ReplaceableCannotBeRepalcedCase();
+            yield return ReplaceableIsTooExpensiveCase();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        private static object[] CellTooFarFromPlayerUnitsCase()
+        {
+            var board = GetFullNByNBoard(3);
+            var player = GetPlayer();
+            var playerUnit = new PlayerUnitMock(){Owner = player};
+            board[0, 0].AddContent(playerUnit);
+            var cellPosition = new Vector2Int(2, 2);
+
+            return new object[] { board, player, cellPosition };
+        }
+
+        private static object[] CellWithObstacleCase()
+        {
+            var board = GetFullNByNBoard(3);
+            var player = GetPlayer();
+            var playerUnit = new PlayerUnitMock(){Owner = player};
+            var cellPosition = new Vector2Int(1, 1);
+            var obstacle = GetObstacle();
+            board[0, 0].AddContent(playerUnit);
+            board[cellPosition].AddContent(obstacle);
+
+            return new object[] { board, player, cellPosition };
+        }
+
+        private static object[] CapturableCannotBeCapturedCase()
+        {
+            var board = GetFullNByNBoard(3);
+            var player = GetPlayer();
+            var playerUnit = new PlayerUnitMock(){Owner = player};
+            var cellPosition = new Vector2Int(1, 1);
+            var capturable = new CapturableMock(){CanCapture = false};
+            board[0, 0].AddContent(playerUnit);
+            board[cellPosition].AddContent(capturable);
+
+            return new object[] { board, player, cellPosition };
+        }
+
+        private static object[] CapturableIsTooExpensiveCase()
+        {
+            var board = GetFullNByNBoard(3);
+            var player = GetPlayer(actionPoints: 2);
+            var playerUnit = new PlayerUnitMock(){Owner = player};
+            var cellPosition = new Vector2Int(1, 1);
+            var capturable = new CapturableMock(){GetCaptureCostFunc = (p) => 6};
+            board[0, 0].AddContent(playerUnit);
+            board[cellPosition].AddContent(capturable);
+
+            return new object[] { board, player, cellPosition };
+        }
+        
+        private static object[] CannotCaptureOwnCapturableCase()
+        {
+            var board = GetFullNByNBoard(3);
+            var player = GetPlayer(actionPoints: 2);
+            var enemyPlayer = GetPlayer();
+            var playerUnit = new PlayerUnitMock(){Owner = player};
+            var cellPosition = new Vector2Int(1, 1);
+            var capturable = new CapturableMock() { Owner = player };
+            board[0, 0].AddContent(playerUnit);
+            board[cellPosition].AddContent(capturable);
+
+            return new object[] { board, player, cellPosition };
+        }
+
+        private static object[] UpgradeableCannotBeUpgradedCase()
+        {
+            var board = GetFullNByNBoard(3);
+            var player = GetPlayer();
+            var playerUnit = new PlayerUnitMock(){Owner = player};
+            var cellPosition = new Vector2Int(1, 1);
+            var upgradeable = new UpgradeableMock(){Owner = player, Upgradeable = false};
+            board[0, 0].AddContent(playerUnit);
+            board[cellPosition].AddContent(upgradeable);
+
+            return new object[] { board, player, cellPosition };
+        }
+        
+        private static object[] UpgradeableIsTooExpensiveCase()
+        {
+            var board = GetFullNByNBoard(3);
+            var player = GetPlayer(actionPoints: 2);
+            var playerUnit = new PlayerUnitMock(){Owner = player};
+            var cellPosition = new Vector2Int(1, 1);
+            var upgradeable = new UpgradeableMock(){Owner = player, UpgradeCost = 6};
+            board[0, 0].AddContent(playerUnit);
+            board[cellPosition].AddContent(upgradeable);
+
+            return new object[] { board, player, cellPosition };
+        }
+
+        private static object[] ReplaceableCannotBeRepalcedCase()
+        {
+            var board = GetFullNByNBoard(3);
+            var player = GetPlayer();
+            var enemyPlayer = GetPlayer();
+            var playerUnit = new PlayerUnitMock(){Owner = player};
+            var cellPosition = new Vector2Int(1, 1);
+            var replaceable = new ReplaceableMock() { Owner = enemyPlayer, CanReplace = false };
+            board[0, 0].AddContent(playerUnit);
+            board[cellPosition].AddContent(replaceable);
+
+            return new object[] { board, player, cellPosition };
+        }
+        
+        private static object[] ReplaceableIsTooExpensiveCase()
+        {
+            var board = GetFullNByNBoard(3);
+            var player = GetPlayer(actionPoints: 2);
+            var enemyPlayer = GetPlayer();
+            var playerUnit = new PlayerUnitMock(){Owner = player};
+            var cellPosition = new Vector2Int(1, 1);
+            var replaceable = new ReplaceableMock() { Owner = enemyPlayer, ReplaceCost = 6};
+            board[0, 0].AddContent(playerUnit);
+            board[cellPosition].AddContent(replaceable);
+
+            return new object[] { board, player, cellPosition };
+        }
+    }
     
     
     [Theory]
@@ -256,5 +396,84 @@ public class CellMovesSelectorTests
         {
             Assert.Contains(expectedCell, actualCells);
         }
+    }
+
+    [Theory]
+    [ClassData(typeof(NoMovePossibleTestCases))]
+    public void GetCellMove_ShouldReturnCellMoveWithNoneType_IfNoMovePossibleOnCell(Board board, Player player,
+        Vector2Int cellPosition)
+    {
+        var cell = board[cellPosition];
+        var cellMovesSelector = new CellMovesSelector(board);
+        
+        var cellMove = cellMovesSelector.GetCellMoveForCell(player, cell);
+        
+        Assert.Equal(MoveType.None, cellMove.MoveType);
+    }
+    
+    [Fact]
+    public void GetCellMove_ShouldReturnCellMoveWithUpgradeType_IfUpgradePossibleOnCell()
+    {
+        var board = GetFullNByNBoard(3);
+        var player = GetPlayer(actionPoints: 6);
+        var playerUnit = new UpgradeableMock(){Owner = player, UpgradeCost = 1};
+        board[0, 0].AddContent(playerUnit);
+        var cell = board[0, 0];
+        var cellMovesSelector = new CellMovesSelector(board);
+        
+        var cellMove = cellMovesSelector.GetCellMoveForCell(player, cell);
+        
+        Assert.Equal(MoveType.Upgrade, cellMove.MoveType);
+    }
+    
+    [Fact]
+    public void GetCellMove_ShouldReturnCellMoveWithPlaceType_IfPlacePossibleOnCell()
+    {
+        var board = GetFullNByNBoard(3);
+        var player = GetPlayer(actionPoints: 6);
+        var playerUnit = new PlayerUnitMock(){Owner = player};
+        board[0, 0].AddContent(playerUnit);
+        var cell = board[0, 1];
+        var cellMovesSelector = new CellMovesSelector(board);
+        
+        var cellMove = cellMovesSelector.GetCellMoveForCell(player, cell);
+        
+        Assert.Equal(MoveType.Place, cellMove.MoveType);
+    }
+    
+    [Fact]
+    public void GetCellMove_ShouldReturnCellMoveWithCaptureType_IfCapturePossibleOnCell()
+    {
+        var board = GetFullNByNBoard(3);
+        var player = GetPlayer(actionPoints: 6);
+        var playerUnit = new PlayerUnitMock(){Owner = player};
+        var enemyPlayer = GetPlayer();
+        var enemyCapturable = new CapturableMock(){Owner = enemyPlayer, CanCapture = true, GetCaptureCostFunc = (p) => 1};
+        board[0, 0].AddContent(playerUnit);
+        board[0, 1].AddContent(enemyCapturable);
+        var cell = board[0, 1];
+        var cellMovesSelector = new CellMovesSelector(board);
+        
+        var cellMove = cellMovesSelector.GetCellMoveForCell(player, cell);
+        
+        Assert.Equal(MoveType.Capture, cellMove.MoveType);
+    }
+    
+    [Fact]
+    public void GetCellMove_ShouldReturnCellMoveWithReplaceType_IfReplacePossibleOnCell()
+    {
+        var board = GetFullNByNBoard(3);
+        var player = GetPlayer(actionPoints: 6);
+        var playerUnit = new PlayerUnitMock(){Owner = player};
+        var enemyPlayer = GetPlayer();
+        var enemyUnit = new ReplaceableMock(){Owner = enemyPlayer, ReplaceCost = 2};
+        board[0, 0].AddContent(playerUnit);
+        board[0, 1].AddContent(enemyUnit);
+        var cell = board[0, 1];
+        var cellMovesSelector = new CellMovesSelector(board);
+        
+        var cellMove = cellMovesSelector.GetCellMoveForCell(player, cell);
+        
+        Assert.Equal(MoveType.Replace, cellMove.MoveType);
     }
 }

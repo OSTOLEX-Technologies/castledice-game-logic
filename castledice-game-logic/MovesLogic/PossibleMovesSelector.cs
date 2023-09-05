@@ -26,13 +26,13 @@ public class PossibleMovesSelector
         }
         
         var cellMovesSelector = new CellMovesSelector(_board);
-        var cellMoves = cellMovesSelector.SelectCellMoves(player);
-        var cellMove = cellMoves.FirstOrDefault(c => c.Cell.Position == position);
-        if (cellMove == null)
+        var cell = _board[position];
+        var cellMove = cellMovesSelector.GetCellMoveForCell(player, cell);
+        
+        if (cellMove.MoveType == MoveType.None)
         {
             return new List<AbstractMove>();
         }
-
         if (cellMove.MoveType == MoveType.Upgrade)
         {
             return GetUpgradeMoves(player, cellMove.Cell);

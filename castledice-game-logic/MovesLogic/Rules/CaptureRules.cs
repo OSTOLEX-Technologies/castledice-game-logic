@@ -37,7 +37,10 @@ public static class CaptureRules
         if (content is ICapturable)
         {
             var capturable = content as ICapturable;
-            return capturable.CanBeCaptured(player);
+            int captureCost = capturable.GetCaptureCost(player);
+            bool canCapture = capturable.CanBeCaptured(player);
+            bool canAfford = captureCost <= player.ActionPoints.Amount;
+            return canCapture && canAfford;
         }
         return false;
     }

@@ -39,7 +39,7 @@ public class MoveApplierTests
         private static object[] ReplaceMoveCase()
         {
             var board = GetFullNByNBoard(2);
-            var replaceable = new ReplaceableMock() { RemoveCost = 3 };
+            var replaceable = new ReplaceableMock() { ReplaceCost = 3 };
             var player = GetPlayer(actionPoints: 6);
             var replacement = new PlaceableMock() { Cost = 2 };
             board[0, 0].AddContent(replaceable);
