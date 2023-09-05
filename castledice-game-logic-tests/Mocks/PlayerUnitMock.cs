@@ -21,11 +21,6 @@ public class PlayerUnitMock : Content, IPlayerOwned, IReplaceable, IPlaceBlockin
         return RemoveCost;
     }
 
-    public void Replace(Player remover, int replacementCost)
-    {
-        throw new NotImplementedException();
-    }
-
     public bool CanBeUpgraded()
     {
         return CanUpgrade;

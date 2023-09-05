@@ -6,5 +6,6 @@
 public enum PlacementType
 {
     Knight,
-    HeavyKnight
+    HeavyKnight,
+    Bridge
 }

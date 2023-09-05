@@ -18,4 +18,22 @@ public class ReplaceMove : AbstractMove
     {
         return visitor.VisitReplaceMove(this);
     }
+
+    protected bool Equals(ReplaceMove other)
+    {
+        return base.Equals(other) && _replacement.Equals(other._replacement);
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (ReferenceEquals(null, obj)) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != this.GetType()) return false;
+        return Equals((ReplaceMove)obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(base.GetHashCode(), _replacement);
+    }
 }

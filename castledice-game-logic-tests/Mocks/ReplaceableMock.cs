@@ -6,7 +6,7 @@ namespace castledice_game_logic_tests.Mocks;
 public class ReplaceableMock : Content, IReplaceable, IPlayerOwned
 {
     public int RemoveCost;
-    public bool CanBeRemoved;
+    public bool CanReplace = true;
     public Player Owner;
 
     public int GetReplaceCost()
@@ -14,11 +14,11 @@ public class ReplaceableMock : Content, IReplaceable, IPlayerOwned
         return RemoveCost;
     }
 
-    public void Replace(Player remover, int replacementCost)
+    public bool CanBeReplaced()
     {
-        throw new NotImplementedException();
+        return CanReplace;
     }
-
+    
     public Player GetOwner()
     {
         return Owner;
