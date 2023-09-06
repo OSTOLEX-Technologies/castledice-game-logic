@@ -19,11 +19,5 @@ public class PlaceableMock : Content, IPlaceable
         return CanPlaceOn;
     }
 
-    public PlacementType PlacementType
-    {
-        get
-        {
-            return PlacementTypeToReturn;
-        }
-    }
+    public PlacementType PlacementType => PlacementTypeToReturn;
 }

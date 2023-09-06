@@ -18,4 +18,22 @@ public class PlaceMove : AbstractMove
     {
         return visitor.VisitPlaceMove(this);
     }
+
+    protected bool Equals(PlaceMove other)
+    {
+        return base.Equals(other) && _contentToPlace.Equals(other._contentToPlace);
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (ReferenceEquals(null, obj)) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != this.GetType()) return false;
+        return Equals((PlaceMove)obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(base.GetHashCode(), _contentToPlace);
+    }
 }

@@ -12,4 +12,17 @@ public class UpgradeMove : AbstractMove
     {
         return visitor.VisitUpgradeMove(this);
     }
+
+    public override bool Equals(object? obj)
+    {
+        if (ReferenceEquals(null, obj)) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != this.GetType()) return false;
+        return Equals((UpgradeMove)obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
 }

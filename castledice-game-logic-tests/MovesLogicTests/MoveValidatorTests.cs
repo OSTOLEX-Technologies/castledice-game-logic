@@ -240,7 +240,7 @@ public class MoveValidatorTests
         var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
         var board = GetFullNByNBoard(10);
         var playerUnit = new PlayerUnitMock(){Owner = player};
-        var replaceable = new ReplaceableMock() { RemoveCost = 2 };
+        var replaceable = new ReplaceableMock() { ReplaceCost = 2 };
         var replacement = new PlaceableMock() { Cost = 3 };
         board[0, 0].AddContent(playerUnit);
         board[1, 1].AddContent(replaceable);

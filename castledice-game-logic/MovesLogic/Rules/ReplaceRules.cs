@@ -48,6 +48,8 @@ public static class ReplaceRules
         return false;
     }
 
+    
+    //TODO: Should GetReplaceCost also check if it is possible to place replacement on cell?
     public static int GetReplaceCost(Board board, Vector2Int position, IPlaceable replacement)
     {
         if (!board.HasCell(position))

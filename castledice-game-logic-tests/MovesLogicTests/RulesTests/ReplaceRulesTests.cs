@@ -31,7 +31,7 @@ public class ReplaceRulesTests
         {
             var board = GetFullNByNBoard(2);
             var position = new Vector2Int(0, 0);
-            var replaceable = new ReplaceableMock() { RemoveCost = replaceableRemoveCost };
+            var replaceable = new ReplaceableMock() { ReplaceCost = replaceableRemoveCost };
             var placeable = new PlaceableMock() { Cost = placeablePlaceCost };
             board[position].AddContent(replaceable);
 
@@ -95,7 +95,7 @@ public class ReplaceRulesTests
         var player = GetPlayer(actionPoints: 3);
         var replaceable = new ReplaceableMock()
         {
-            RemoveCost = 5
+            ReplaceCost = 5
         };
         var playerUnit = new PlayerUnitMock(){Owner = player};
         board[0, 0].AddContent(playerUnit);
@@ -118,7 +118,7 @@ public class ReplaceRulesTests
         var player = GetPlayer(actionPoints: 6);
         var replaceable = new ReplaceableMock()
         {
-            RemoveCost = 3
+            ReplaceCost = 3
         };
         var playerUnit = new PlayerUnitMock(){Owner = player};
         board[0, 0].AddContent(playerUnit);
@@ -135,7 +135,7 @@ public class ReplaceRulesTests
         var player = GetPlayer();
         var replaceable = new ReplaceableMock()
         {
-            RemoveCost = 3,
+            ReplaceCost = 3,
             Owner = player
         };
         var playerUnit = new PlayerUnitMock(){Owner = player};
@@ -157,7 +157,7 @@ public class ReplaceRulesTests
         var player = GetPlayer(actionPoints: 6);
         var replaceable = new ReplaceableMock()
         {
-            RemoveCost = 3
+            ReplaceCost = 3
         };
         board[1, 1].AddContent(replaceable);
         var position = new Vector2Int(1, 1);

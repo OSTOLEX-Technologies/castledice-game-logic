@@ -6,6 +6,7 @@ using castledice_game_logic.BoardGeneration.CellsGeneration;
 using castledice_game_logic.BoardGeneration.ContentGeneration;
 using castledice_game_logic.GameConfiguration;
 using castledice_game_logic.GameObjects;
+using castledice_game_logic.GameObjects.Factories;
 using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
 
@@ -150,6 +151,21 @@ public static class ObjectCreationUtility
         public TestMove Build()
         {
             return new TestMove(Player, Position);
+        }
+    }
+
+    public class PossibleMovesSelectorBuilder
+    {
+        public Board Board = GetFullNByNBoard(3);
+        public IPlaceablesFactory PlaceablesFactory = new PlaceableMocksFactory();
+        public IPlacementListProvider PlacementListProvider = new PlacementListProviderMock()
+        {
+            ListToReturn = new List<PlacementType>() { PlacementType.Knight , PlacementType.HeavyKnight}
+        };
+
+        public PossibleMovesSelector Build()
+        {
+            return new PossibleMovesSelector(Board, PlaceablesFactory, PlacementListProvider);
         }
     }
 }

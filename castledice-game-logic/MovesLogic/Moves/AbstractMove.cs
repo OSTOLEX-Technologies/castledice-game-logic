@@ -18,4 +18,21 @@ public abstract class AbstractMove
 
     public abstract bool Accept(IMoveVisitor visitor);
 
+    protected bool Equals(AbstractMove other)
+    {
+        return _player.Equals(other._player) && _position.Equals(other._position);
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (ReferenceEquals(null, obj)) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != this.GetType()) return false;
+        return Equals((AbstractMove)obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(_player, _position);
+    }
 }
