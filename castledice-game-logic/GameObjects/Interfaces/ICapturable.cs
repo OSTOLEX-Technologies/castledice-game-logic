@@ -7,4 +7,6 @@ public interface ICapturable
     bool CanBeCaptured(Player capturer);
 
     int GetCaptureCost(Player capturer);
+
+    void Free();
 }

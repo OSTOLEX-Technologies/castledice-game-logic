@@ -1,5 +1,4 @@
-﻿using System.Net.NetworkInformation;
-using castledice_game_logic;
+﻿using castledice_game_logic;
 using castledice_game_logic_tests.Mocks;
 using castledice_game_logic.ActionPointsLogic;
 using castledice_game_logic.BoardGeneration.CellsGeneration;
@@ -9,11 +8,17 @@ using castledice_game_logic.GameObjects;
 using castledice_game_logic.GameObjects.Factories;
 using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
+using CastleGO = castledice_game_logic.GameObjects.Castle;
 
 namespace castledice_game_logic_tests;
 
 public static class ObjectCreationUtility
 {
+    public static CastleGO GetCastle(Player player)
+    {
+        return new CastleGO(player);
+    }
+    
     public static Board GetFullNByNBoard(int size)
     {
         var board = new Board(CellType.Square);

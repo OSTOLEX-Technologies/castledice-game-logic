@@ -24,6 +24,11 @@ public class Castle : Content, ICapturable, IUpgradeable, IPlayerOwned, IPlaceBl
         return capturer.ActionPoints.Amount;
     }
 
+    public void Free()
+    {
+        _player = new NullPlayer();
+    }
+
     public bool CanBeUpgraded()
     {
         return true;
