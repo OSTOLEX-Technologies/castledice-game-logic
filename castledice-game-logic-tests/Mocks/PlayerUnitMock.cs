@@ -7,7 +7,6 @@ public class PlayerUnitMock : Content, IPlayerOwned, IReplaceable, IPlaceBlockin
 {
     public Player Owner;
     public int RemoveCost;
-    public bool CanBeRemoved;
     public bool CanUpgrade = true;
     public int UpgradeCost;
     

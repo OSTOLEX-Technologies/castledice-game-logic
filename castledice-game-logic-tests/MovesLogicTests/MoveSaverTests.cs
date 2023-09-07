@@ -18,6 +18,7 @@ public class MoveSaverTests
             yield return ReplaceMoveCase();
             yield return UpgradeMoveCase();
             yield return CaptureMoveCase();
+            yield return RemoveMoveCase();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -68,6 +69,17 @@ public class MoveSaverTests
                 Position = (7, 8),
             }.Build();
             var snapshot = new CaptureMoveSnapshot(move);
+            return new object[] { move, snapshot };
+        }
+
+        private static object[] RemoveMoveCase()
+        {
+            var move = new RemoveMoveBuilder()
+            {
+                Player = GetPlayer(id: 12345),
+                Position = (2, 3),
+            }.Build();
+            var snapshot = new RemoveMoveSnapshot(move);
             return new object[] { move, snapshot };
         }
     }

@@ -1,5 +1,4 @@
-﻿using castledice_game_logic.GameObjects;
-using castledice_game_logic.MovesLogic.Rules;
+﻿using castledice_game_logic.MovesLogic.Rules;
 using castledice_game_logic.TurnsLogic;
 
 namespace castledice_game_logic.MovesLogic;
@@ -50,12 +49,17 @@ public class MoveValidator : IMoveVisitor
         return ValidateCaptureMove(move);
     }
 
+    public bool VisitRemoveMove(RemoveMove move)
+    {
+        return ValidateRemoveMove(move);
+    }
+
     private bool ValidatePlaceMove(PlaceMove move)
     {
-        var cellMoves = _cellMovesSelector.SelectCellMoves(move.Player);
-        if (!cellMoves.Any(c => c.MoveType == MoveType.Place && c.Cell.Position == move.Position)) return false;
-        var placeable = move.ContentToPlace;
         var cell = _board[move.Position];
+        var cellMove = _cellMovesSelector.GetCellMoveForCell(move.Player, cell);
+        if (cellMove.MoveType != MoveType.Place) return false;
+        var placeable = move.ContentToPlace;
         var placeCost = placeable.GetPlacementCost();
         var playerActionPoints = move.Player.ActionPoints.Amount;
         return placeCost <= playerActionPoints && placeable.CanBePlacedOn(cell);
@@ -63,8 +67,9 @@ public class MoveValidator : IMoveVisitor
 
     private bool ValidateReplaceMove(ReplaceMove move)
     {
-        var cellMoves = _cellMovesSelector.SelectCellMoves(move.Player);
-        if (!cellMoves.Any(c => c.MoveType == MoveType.Replace && c.Cell.Position == move.Position)) return false;
+        var cell = _board[move.Position];
+        var cellMove = _cellMovesSelector.GetCellMoveForCell(move.Player, cell);
+        if (cellMove.MoveType != MoveType.Replace) return false;
         var replaceCost = ReplaceRules.GetReplaceCost(_board, move.Position, move.Replacement);
         var playerActionPoints = move.Player.ActionPoints.Amount;
         return replaceCost <= playerActionPoints;
@@ -72,13 +77,22 @@ public class MoveValidator : IMoveVisitor
 
     private bool ValidateUpgradeMove(UpgradeMove move)
     {
-        var cellMoves = _cellMovesSelector.SelectCellMoves(move.Player);
-        return cellMoves.Any(c => c.MoveType == MoveType.Upgrade && c.Cell.Position == move.Position);
+        var cell = _board[move.Position];
+        var cellMove = _cellMovesSelector.GetCellMoveForCell(move.Player, cell);
+        return cellMove.MoveType == MoveType.Upgrade;
     }
 
     private bool ValidateCaptureMove(CaptureMove move)
     {
-        var cellMoves = _cellMovesSelector.SelectCellMoves(move.Player);
-        return cellMoves.Any(c => c.MoveType == MoveType.Capture && c.Cell.Position == move.Position);
+        var cell = _board[move.Position];
+        var cellMove = _cellMovesSelector.GetCellMoveForCell(move.Player, cell);
+        return cellMove.MoveType == MoveType.Capture;
+    }
+
+    private bool ValidateRemoveMove(RemoveMove move)
+    {
+        var cell = _board[move.Position];
+        var cellMove = _cellMovesSelector.GetCellMoveForCell(move.Player, cell);
+        return cellMove.MoveType == MoveType.Remove;
     }
 }

@@ -100,7 +100,7 @@ public class MoveApplier : IMoveVisitor
         ApplyCaptureMove(move);
         return true;
     }
-
+    
     private void ApplyCaptureMove(CaptureMove move)
     {
         var player = move.Player;
@@ -111,5 +111,25 @@ public class MoveApplier : IMoveVisitor
             throw new ArgumentException("Cannot apply capture move! Cell has no ICapturable objects!");
         }
         capturable.Capture(player);
+    }
+    
+    public bool VisitRemoveMove(RemoveMove move)
+    {
+        ApplyRemoveMove(move);
+        return true;
+    }
+
+    private void ApplyRemoveMove(RemoveMove move)
+    {
+        var player = move.Player;
+        var cell = _board[move.Position];
+        var removable = cell.GetContent().FirstOrDefault(c => c is IRemovable) as IRemovable;
+        if (removable == null)
+        {
+            throw new ArgumentException("Cannot apply remove move! Cell has no IRemovable objects!");
+        }
+        int removeCost = removable.GetRemoveCost();
+        player.ActionPoints.DecreaseActionPoints(removeCost);
+        cell.RemoveContent(removable as Content);
     }
 }

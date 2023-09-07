@@ -3,7 +3,7 @@ using castledice_game_logic.GameObjects;
 
 namespace castledice_game_logic_tests.Mocks;
 
-public class CapturableMock : Content, ICapturable, IPlayerOwned
+public class CapturableMock : Content, ICapturable, IPlayerOwned, IPlaceBlocking
 {
     public Player Owner;
     public bool CanCapture = true;

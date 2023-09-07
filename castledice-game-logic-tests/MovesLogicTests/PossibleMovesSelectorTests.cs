@@ -440,24 +440,6 @@ public class PossibleMovesSelectorTests
             Assert.Contains(actualMove, expectedList);
         }
     }
-
-    [Fact]
-    public void GetPossibleMoves_ShouldReturnEmptyList_IfReplaceableOnPositionCannotBeReplaced()
-    {
-        var board = GetFullNByNBoard(2);
-        var player = GetPlayer(actionPoints: 6);
-        var enemy = GetPlayer();
-        var position = new Vector2Int(1, 1);
-        var playerUnit = new PlayerUnitMock() { Owner = player };
-        var replaceable = new ReplaceableMock() { Owner = enemy, CanReplace = false};
-        board[0, 0].AddContent(playerUnit);
-        board[position].AddContent(replaceable);
-        var possibleMovesSelector = new PossibleMovesSelectorBuilder() { Board = board }.Build();
-
-        var actualList = possibleMovesSelector.GetPossibleMoves(player, position);
-        
-        Assert.Empty(actualList);
-    }
     
     [Theory]
     [ClassData(typeof(GetPossibleReplaceMovesTestCases))]
@@ -481,5 +463,57 @@ public class PossibleMovesSelectorTests
         {
             Assert.Contains(actualMove, expectedList);
         }
+    }
+
+    [Fact]
+    public void GetPossibleMoves_ShouldReturnEmptyList_IfRemovableOnPositionCannotBeRemoved()
+    {
+        var board = GetFullNByNBoard(2);
+        var player = GetPlayer(actionPoints: 6);
+        var playerUnit = new PlayerUnitMock() { Owner = player};
+        var removable = new RemovableMock() { CanRemove = false };
+        var position = new Vector2Int(1, 1);
+        board[0, 0].AddContent(playerUnit);
+        board[position].AddContent(removable);
+        var possibleMovesSelector = new PossibleMovesSelectorBuilder() { Board = board }.Build();
+        
+        var actualList = possibleMovesSelector.GetPossibleMoves(player, position);
+        
+        Assert.Empty(actualList);
+    }
+
+    [Fact]
+    public void GetPossibleMoves_ShouldReturnEmptyList_IfTooExpensiveRemovableOnPosition()
+    {
+        var board = GetFullNByNBoard(2);
+        var player = GetPlayer(actionPoints: 2);
+        var playerUnit = new PlayerUnitMock() { Owner = player};
+        var removable = new RemovableMock() { CanRemove = true, RemoveCost = 5};
+        var position = new Vector2Int(1, 1);
+        board[0, 0].AddContent(playerUnit);
+        board[position].AddContent(removable);
+        var possibleMovesSelector = new PossibleMovesSelectorBuilder() { Board = board }.Build();
+        
+        var actualList = possibleMovesSelector.GetPossibleMoves(player, position);
+        
+        Assert.Empty(actualList);
+    }
+
+    [Fact]
+    public void GetPossibleMoves_ShouldReturnListWithRemoveMove_IfRemoveIsPossibleOnPosition()
+    {
+        var board = GetFullNByNBoard(2);
+        var player = GetPlayer(actionPoints: 6);
+        var playerUnit = new PlayerUnitMock() { Owner = player};
+        var removable = new RemovableMock() { CanRemove = true, RemoveCost = 2};
+        var position = new Vector2Int(1, 1);
+        board[0, 0].AddContent(playerUnit);
+        board[position].AddContent(removable);
+        var possibleMovesSelector = new PossibleMovesSelectorBuilder() { Board = board }.Build();
+        
+        var actualList = possibleMovesSelector.GetPossibleMoves(player, position);
+        
+        Assert.Single(actualList);
+        Assert.IsType<RemoveMove>(actualList[0]);
     }
 }

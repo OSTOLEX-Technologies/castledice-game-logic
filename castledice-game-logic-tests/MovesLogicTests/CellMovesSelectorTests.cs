@@ -1,17 +1,15 @@
 ﻿using System.Collections;
 using castledice_game_logic;
 using castledice_game_logic_tests.Mocks;
-using castledice_game_logic.GameObjects;
 using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
-using CastleGO = castledice_game_logic.GameObjects.Castle;
 using static castledice_game_logic_tests.ObjectCreationUtility;
 
 namespace castledice_game_logic_tests;
 
 public class CellMovesSelectorTests
 {
-    public class SelectMoveCellWithoutTypeTestCases : IEnumerable<object[]>
+    private class SelectCellMovesTestCases : IEnumerable<object[]>
     {
         private readonly List<object[]> _data = new List<object[]>()
         {
@@ -23,7 +21,8 @@ public class CellMovesSelectorTests
             UnitAndEnemyCapturableThatCannotBeCapturedCase(),
             TwoUnitsAndObstacleCase(),
             TwoUnitsObstacleAndEnemyUnitCase(),
-            ThreeUnitsCase()
+            ThreeUnitsCase(),
+            UnitAndRemovableCase()
         };
         
         public IEnumerator<object[]> GetEnumerator()
@@ -241,6 +240,24 @@ public class CellMovesSelectorTests
             };
             return new object[] { board, player, expectedCells };
         }
+
+        private static object[] UnitAndRemovableCase()
+        {
+            var player = GetPlayer();
+            var unit = new PlayerUnitMock() { Owner = player };
+            var board = GetFullNByNBoard(3);
+            var removable = new RemovableMock();
+            board[0, 0].AddContent(unit);
+            board[1, 1].AddContent(removable);
+            List<CellMove> expectedCells = new List<CellMove>()
+            {
+                new CellMove(board[0, 0], MoveType.Upgrade),
+                new CellMove(board[1, 1], MoveType.Remove),
+                new CellMove(board[0, 1], MoveType.Place),
+                new CellMove(board[1, 0], MoveType.Place),
+            };
+            return new object[] { board, player, expectedCells };
+        }
     }
 
     private class NoMovePossibleTestCases : IEnumerable<object[]>
@@ -254,8 +271,9 @@ public class CellMovesSelectorTests
             yield return CannotCaptureOwnCapturableCase();
             yield return UpgradeableCannotBeUpgradedCase();
             yield return UpgradeableIsTooExpensiveCase();
-            yield return ReplaceableCannotBeRepalcedCase();
             yield return ReplaceableIsTooExpensiveCase();
+            yield return RemovableCannotBeRemovedCase();
+            yield return RemovableIsTooExpensiveCase();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -352,20 +370,6 @@ public class CellMovesSelectorTests
 
             return new object[] { board, player, cellPosition };
         }
-
-        private static object[] ReplaceableCannotBeRepalcedCase()
-        {
-            var board = GetFullNByNBoard(3);
-            var player = GetPlayer();
-            var enemyPlayer = GetPlayer();
-            var playerUnit = new PlayerUnitMock(){Owner = player};
-            var cellPosition = new Vector2Int(1, 1);
-            var replaceable = new ReplaceableMock() { Owner = enemyPlayer, CanReplace = false };
-            board[0, 0].AddContent(playerUnit);
-            board[cellPosition].AddContent(replaceable);
-
-            return new object[] { board, player, cellPosition };
-        }
         
         private static object[] ReplaceableIsTooExpensiveCase()
         {
@@ -380,11 +384,37 @@ public class CellMovesSelectorTests
 
             return new object[] { board, player, cellPosition };
         }
+
+        private static object[] RemovableCannotBeRemovedCase()
+        {
+            var board = GetFullNByNBoard(3);
+            var player = GetPlayer(actionPoints: 6); 
+            var playerUnit = new PlayerUnitMock(){Owner = player};
+            var cellPosition = new Vector2Int(1, 1);
+            var removable = new RemovableMock(){CanRemove = false};
+            board[0, 0].AddContent(playerUnit);
+            board[cellPosition].AddContent(removable);
+
+            return new object[] { board, player, cellPosition };
+        }
+
+        private static object[] RemovableIsTooExpensiveCase()
+        {
+            var board = GetFullNByNBoard(3);
+            var player = GetPlayer(actionPoints: 2); 
+            var playerUnit = new PlayerUnitMock(){Owner = player};
+            var cellPosition = new Vector2Int(1, 1);
+            var removable = new RemovableMock(){CanRemove = true, RemoveCost = 5};
+            board[0, 0].AddContent(playerUnit);
+            board[cellPosition].AddContent(removable);
+
+            return new object[] { board, player, cellPosition };
+        }
     }
     
     
     [Theory]
-    [ClassData(typeof(SelectMoveCellWithoutTypeTestCases))]
+    [ClassData(typeof(SelectCellMovesTestCases))]
     public void SelectMoveCells_ShouldReturnListWithMoveCells_WithCorrespondingCellsAndMoveTypes(Board board, Player player, List<CellMove> expectedCells)
     {
         var cellsSelector = new CellMovesSelector(board);
@@ -475,5 +505,22 @@ public class CellMovesSelectorTests
         var cellMove = cellMovesSelector.GetCellMoveForCell(player, cell);
         
         Assert.Equal(MoveType.Replace, cellMove.MoveType);
+    }
+
+    [Fact]
+    public void GetCellMove_ShouldReturnCellMoveWithRemoveType_IfRemovePossibleOnCell()
+    {
+        var board = GetFullNByNBoard(3);
+        var player = GetPlayer(actionPoints: 6);
+        var playerUnit = new PlayerUnitMock(){Owner = player};
+        var removable = new RemovableMock() { RemoveCost = 2, CanRemove = true };
+        board[0, 0].AddContent(playerUnit);
+        board[0, 1].AddContent(removable);
+        var cell = board[0, 1];
+        var cellMovesSelector = new CellMovesSelector(board);
+        
+        var cellMove = cellMovesSelector.GetCellMoveForCell(player, cell);
+        
+        Assert.Equal(MoveType.Remove, cellMove.MoveType);
     }
 }

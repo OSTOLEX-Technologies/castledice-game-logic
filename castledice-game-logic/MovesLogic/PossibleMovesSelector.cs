@@ -49,6 +49,10 @@ public class PossibleMovesSelector
         {
             return GetReplaceMoves(player, cellMove.Cell);
         }
+        if (cellMove.MoveType == MoveType.Remove)
+        {
+            return GetRemoveMoves(player, cellMove.Cell);
+        }
         throw new InvalidOperationException("Unfamiliar move type: " + cellMove.MoveType);
     }
 
@@ -104,6 +108,18 @@ public class PossibleMovesSelector
                 var move = new ReplaceMove(player, cell.Position, placeable);
                 moves.Add(move);
             }
+        }
+        return moves;
+    }
+
+    private List<AbstractMove> GetRemoveMoves(Player player, Cell cell)
+    {
+        var moves = new List<AbstractMove>();
+        var removeCost = RemoveRules.GetRemoveCost(_board, cell.Position);
+        if (removeCost <= player.ActionPoints.Amount)
+        {
+            var removeMove = new RemoveMove(player, cell.Position);
+            moves.Add(removeMove);
         }
         return moves;
     }

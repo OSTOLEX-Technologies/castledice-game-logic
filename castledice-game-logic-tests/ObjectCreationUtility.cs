@@ -100,7 +100,7 @@ public static class ObjectCreationUtility
     /// <returns></returns>
     public static Content GetObstacle()
     {
-        return new Tree();
+        return new ObstacleMock();
     }
 
     public static IPlaceable GetPlaceable()
@@ -132,6 +132,14 @@ public static class ObjectCreationUtility
         public ReplaceMove Build()
         {
             return new ReplaceMove(Player, Position, Replacement);
+        }
+    }
+
+    public class RemoveMoveBuilder : AbstractMoveBuilder
+    {
+        public RemoveMove Build()
+        {
+            return new RemoveMove(Player, Position);
         }
     }
 
