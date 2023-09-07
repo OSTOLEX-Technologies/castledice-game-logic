@@ -15,6 +15,8 @@ public class UnitBranchesCutterTests
             yield return OneCastleCase();
             yield return TwoCastlesCase();
             yield return NoCastleCase();
+            yield return TwoCastlesConnectedCase();
+            yield return EnemyUnitsCase();
             yield return RealisticCase();
         }
 
@@ -96,6 +98,82 @@ public class UnitBranchesCutterTests
                 board[position].AddContent(new PlayerUnitMock(){Owner = player});
             }
 
+            return new object[] {player, board, unitsMustStay, unitsMustDisappear };
+        }
+
+        private static object[] TwoCastlesConnectedCase()
+        {
+            var player = GetPlayer();
+            var firstCastle = GetCastle(player);
+            var secondCastle = GetCastle(player);
+            var board = GetFullNByNBoard(5);
+            board[0, 0].AddContent(firstCastle);
+            board[0, 4].AddContent(secondCastle);
+            var unitsMustStay = new List<Vector2Int>()
+            {
+                (1, 1),
+                (2, 1),
+                (1, 3),
+                (2, 3),
+                (2, 2)
+            };
+            var unitsMustDisappear = new List<Vector2Int>()
+            {
+                (4, 1),
+                (4, 2),
+                (4, 3)
+            };
+            foreach (var position in new List<Vector2Int>(unitsMustStay).Concat(unitsMustDisappear))
+            {
+                board[position].AddContent(new PlayerUnitMock(){Owner = player});
+            }
+
+            return new object[] {player, board, unitsMustStay, unitsMustDisappear };
+        }
+
+        //Enemy units should not be removed when cutting player units.
+        private static object[] EnemyUnitsCase()
+        {
+            var board = GetFullNByNBoard(10);
+            var player = GetPlayer();
+            var enemy = GetPlayer();
+            var playerCastle = GetCastle(player);
+            var enemyCastle = GetCastle(enemy);
+            board[0, 0].AddContent(playerCastle);
+            board[9, 9].AddContent(enemyCastle);
+            var unitsMustStay = new List<Vector2Int>()
+            {
+                (1, 1),
+                (2, 1),
+                (3, 2),
+                (3, 3),
+                (2, 4)
+            };
+            var enemyUnits = new List<Vector2Int>()
+            {
+                (0, 5),
+                (1, 6),
+                (2, 6),
+                (3, 6),
+                (4, 5),
+            };
+            var unitsMustDisappear = new List<Vector2Int>()
+            {
+
+                (5, 4),
+                (8, 8),
+                (8, 9),
+                (9, 8)
+            };
+            foreach (var position in enemyUnits)
+            {
+                board[position].AddContent(new PlayerUnitMock(){Owner = enemy});
+            }
+            foreach (var position in new List<Vector2Int>(unitsMustStay).Concat(unitsMustDisappear))
+            {
+                board[position].AddContent(new PlayerUnitMock(){Owner = player});
+            }
+            unitsMustStay = unitsMustStay.Concat(enemyUnits).ToList();
             return new object[] {player, board, unitsMustStay, unitsMustDisappear };
         }
 
