@@ -1,4 +1,5 @@
 ﻿using castledice_game_logic;
+using castledice_game_logic_tests.Mocks;
 using castledice_game_logic.GameObjects;
 using castledice_game_logic.Math;
 using CastleGO = castledice_game_logic.GameObjects.Castle;
@@ -86,9 +87,9 @@ public class CellTests
     public void HasContent_ShouldReturnTrue_IfSomeContentOnCellMeetsGivenCondition()
     {
         var cell = GetCell();
-        var castle = new CastleGO(GetPlayer());
+        var castle = new ReplaceableMock();
         cell.AddContent(castle);
-        Func<Content, bool> predicate = o => o is CastleGO;
+        Func<Content, bool> predicate = o => o is IReplaceable;
         
         
         Assert.True(cell.HasContent(predicate));
@@ -115,7 +116,7 @@ public class CellTests
     public void HasContentWithoutArguments_ShouldReturnTrue_IfSomeContentIsOnCell()
     {
         var cell = GetCell();
-        cell.AddContent(new Tree());
+        cell.AddContent(GetCellContent());
         
         Assert.True(cell.HasContent());
     }

@@ -3,30 +3,63 @@
 public class Castle : Content, ICapturable, IUpgradeable, IPlayerOwned, IPlaceBlocking
 {
     private Player _player;
+    private int _durability;
+    private int _defaultDurability;
     
-    public Castle(Player player)
+    public Castle(Player player, int durability)
     {
         _player = player;
+        _durability = durability;
+        _defaultDurability = durability;
     }
 
     public void Capture(Player capturer)
     {
-        throw new NotImplementedException();
+        if (capturer == _player)
+        {
+            return;
+        }
+        int capturerActionPoints = capturer.ActionPoints.Amount;
+        if (capturerActionPoints < _durability)
+        {
+            capturer.ActionPoints.DecreaseActionPoints(capturerActionPoints);
+            _durability -= capturerActionPoints;
+            return;
+        }
+
+        
+        capturer.ActionPoints.DecreaseActionPoints(_durability);
+        _durability = 0;
+
+        if (_durability <= 0)
+        {
+            _player = capturer;
+            _durability = _defaultDurability;
+        }
     }
 
     public bool CanBeCaptured(Player capturer)
     {
-        return true;
+        if (capturer == _player)
+        {
+            return false;
+        }
+        return capturer.ActionPoints.Amount > 0;
     }
 
     public int GetCaptureCost(Player capturer)
     {
-        return capturer.ActionPoints.Amount;
+        int capturerActionPoints = capturer.ActionPoints.Amount;
+        if (capturerActionPoints < _durability)
+        {
+            return capturerActionPoints;
+        }
+        return _durability;
     }
 
     public void Free()
     {
-        _player = new NullPlayer();
+       
     }
 
     public bool CanBeUpgraded()
@@ -42,11 +75,16 @@ public class Castle : Content, ICapturable, IUpgradeable, IPlayerOwned, IPlaceBl
 
     public void Upgrade()
     {
-        throw new NotImplementedException();
+        
     }
 
     public Player GetOwner()
     {
         return _player;
+    }
+
+    public bool IsBlocking()
+    {
+        return true;
     }
 }

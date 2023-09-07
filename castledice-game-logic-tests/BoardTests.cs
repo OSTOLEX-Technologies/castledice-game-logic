@@ -1,9 +1,9 @@
 ﻿using castledice_game_logic;
-using castledice_game_logic;
+using castledice_game_logic_tests.Mocks;
 using castledice_game_logic.Exceptions;
 using castledice_game_logic.GameObjects;
 using castledice_game_logic.Math;
-
+using static castledice_game_logic_tests.ObjectCreationUtility;
 using CastleGO = castledice_game_logic.GameObjects.Castle;
 namespace castledice_game_logic_tests;
 
@@ -133,21 +133,21 @@ public class BoardTests
         var board = new Board(CellType.Square);
         board.AddCell(2, 2);
         board.AddCell(1, 1);
-        board[1, 1].AddContent(new Tree());
+        board[1, 1].AddContent(GetObstacle());//Obstacle is definitely not capturable
         
-        Assert.Empty(board.GetCellsPositions(cl => cl.HasContent(ct => ct is CastleGO)));
+        Assert.Empty(board.GetCellsPositions(cl => cl.HasContent(ct => ct is ICapturable)));
     }
 
     [Fact]
     public void GetCellsPositions_ShouldReturnAppropriatePositions()
     {
-        var tree = new Tree();
+        var tree = new CapturableMock();
         var treePosition = new Vector2Int(9, 9);
         var board = new Board(CellType.Square);
         board.AddCell(treePosition);
         board[treePosition].AddContent(tree);
 
-        var cellPositions = board.GetCellsPositions(c => c.HasContent(ct => ct is Tree));
+        var cellPositions = board.GetCellsPositions(c => c.HasContent(ct => ct is ICapturable));
         Assert.Contains(treePosition, cellPositions);
     }
 }

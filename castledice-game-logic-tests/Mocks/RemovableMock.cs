@@ -16,4 +16,9 @@ public class RemovableMock : Content, IRemovable, IPlaceBlocking
     {
         return RemoveCost;
     }
+
+    public bool IsBlocking()
+    {
+        return true;
+    }
 }

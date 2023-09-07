@@ -17,4 +17,9 @@ public class ReplaceableMock : Content, IReplaceable, IPlayerOwned, IPlaceBlocki
     {
         return Owner;
     }
+
+    public bool IsBlocking()
+    {
+        return true;
+    }
 }

@@ -37,7 +37,7 @@ public class CellsPickingUtilityTests
         private static object[] ObstacleInTheMiddleRadiusOneCase()
         {
             var board = GetFullNByNBoard(5);
-            board[2, 2].AddContent(new Tree());
+            board[2, 2].AddContent(GetObstacle());
             var expectedMatrix = new bool[,]
             {
                 { true, true, true, true, true },
@@ -47,14 +47,14 @@ public class CellsPickingUtilityTests
                 { true, true, true, true, true },
             };
             int radius = 1;
-            Func<Cell, bool> predicate = c => c.HasContent(ct => ct is Tree);
+            Func<Cell, bool> predicate = c => c.HasContent(ct => ct is IPlaceBlocking);
             return new object[] { board, expectedMatrix, predicate, radius };
         }
 
         private static object[] ObstacleInTheLeftUpperCornerRadiusTwoCase()
         {
             var board = GetFullNByNBoard(5);
-            board[0, 0].AddContent(new Tree());
+            board[0, 0].AddContent(GetObstacle());
             var expectedMatrix = new bool[,]
             {
                 { true, false, false, true, true },
@@ -63,7 +63,7 @@ public class CellsPickingUtilityTests
                 { true, true, true, true, true },
                 { true, true, true, true, true },
             };
-            Func<Cell, bool> predicate = c => c.HasContent(ct => ct is Tree);
+            Func<Cell, bool> predicate = c => c.HasContent(ct => ct is IPlaceBlocking);
             int radius = 2;
             return new object[] { board, expectedMatrix, predicate, radius };
         }
@@ -71,7 +71,7 @@ public class CellsPickingUtilityTests
         private static object[] ObstacleInTheMiddleRadiusTwoCase()
         {
             var board = GetFullNByNBoard(5);
-            board[2, 2].AddContent(new Tree());
+            board[2, 2].AddContent(GetObstacle());
             var expectedMatrix = new bool[,]
             {
                 { true, false, false, false, true },
@@ -80,7 +80,7 @@ public class CellsPickingUtilityTests
                 { false, false, false, false, false },
                 { true, false, false, false, true },
             };
-            Func<Cell, bool> predicate = c => c.HasContent(ct => ct is Tree);
+            Func<Cell, bool> predicate = c => c.HasContent(ct => ct is IPlaceBlocking);
             int radius = 2;
             return new object[] { board, expectedMatrix, predicate, radius };
         }
@@ -88,7 +88,7 @@ public class CellsPickingUtilityTests
         private static object[] ObstacleInTheMiddleRadiusThreeCase()
         {
             var board = GetFullNByNBoard(7);
-            board[3, 3].AddContent(new Tree());
+            board[3, 3].AddContent(GetObstacle());
             var expectedMatrix = new bool[,]
             {
                 {true, true, false, false, false, true, true},
@@ -99,7 +99,7 @@ public class CellsPickingUtilityTests
                 {true, false, false, false, false, false, true},
                 {true, true, false, false, false, true, true},
             };
-            Func<Cell, bool> predicate = c => c.HasContent(ct => ct is Tree);
+            Func<Cell, bool> predicate = c => c.HasContent(ct => ct is IPlaceBlocking);
             int radius = 3;
             return new object[] { board, expectedMatrix, predicate, radius };
         }
@@ -269,9 +269,9 @@ public class CellsPickingUtilityTests
     public void ExcludeCells_ShouldSetAvailabilityMatrixCellsToFalse_ByPredicate()
     {
         var board = GetFullNByNBoard(4);
-        board[0, 0].AddContent(new Tree());
-        board[1, 2].AddContent(new Tree());
-        board[2, 1].AddContent(new Tree());
+        board[0, 0].AddContent(GetObstacle());
+        board[1, 2].AddContent(GetObstacle());
+        board[2, 1].AddContent(GetObstacle());
         var expectedMatrix = new bool[,]
         {
             { false, true, true, true },

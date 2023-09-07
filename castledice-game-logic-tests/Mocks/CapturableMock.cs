@@ -33,4 +33,9 @@ public class CapturableMock : Content, ICapturable, IPlayerOwned, IPlaceBlocking
     {
         return Owner;
     }
+
+    public bool IsBlocking()
+    {
+        return true;
+    }
 }

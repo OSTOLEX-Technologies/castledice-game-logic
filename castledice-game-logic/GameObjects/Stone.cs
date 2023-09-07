@@ -2,5 +2,8 @@
 
 public class Stone : Content, IPlaceBlocking
 {
-    
+    public bool IsBlocking()
+    {
+        return true;
+    }
 }

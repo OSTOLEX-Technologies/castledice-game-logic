@@ -16,7 +16,7 @@ public static class ObjectCreationUtility
 {
     public static CastleGO GetCastle(Player player)
     {
-        return new CastleGO(player);
+        return new CastleGO(player, 1);
     }
     
     public static Board GetFullNByNBoard(int size)

@@ -48,4 +48,8 @@ public class Knight : Content, IPlayerOwned, IUpgradeable, IReplaceable, IPlaceB
     }
 
     public PlacementType PlacementType { get; }
+    public bool IsBlocking()
+    {
+        return true;
+    }
 }
