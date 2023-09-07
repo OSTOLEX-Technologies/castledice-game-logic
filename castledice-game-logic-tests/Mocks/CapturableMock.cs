@@ -24,6 +24,11 @@ public class CapturableMock : Content, ICapturable, IPlayerOwned
         return GetCaptureCostFunc(capturer);
     }
 
+    public void Free()
+    {
+        Owner = new NullPlayer();
+    }
+
     public Player GetOwner()
     {
         return Owner;

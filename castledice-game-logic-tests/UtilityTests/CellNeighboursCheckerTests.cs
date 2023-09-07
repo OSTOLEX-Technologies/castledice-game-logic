@@ -2,6 +2,7 @@
 using castledice_game_logic.GameObjects;
 using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
+using castledice_game_logic.Utilities;
 
 namespace castledice_game_logic_tests;
 using static ObjectCreationUtility;

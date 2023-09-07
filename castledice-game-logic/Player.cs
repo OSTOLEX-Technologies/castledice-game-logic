@@ -7,6 +7,8 @@ public class Player
     public PlayerActionPoints ActionPoints { get; }
     
     public int Id { get; }
+    
+    public virtual bool IsNull => false;
 
     public Player(PlayerActionPoints actionPoints, int id)
     {
