@@ -118,26 +118,26 @@ public class CastleTests
     public void Capture_ShouldDoNothing_IfCapturerIsOwner()
     {
         int capturerActionPoints = 5;
-        int caslteDurability = 3;
+        int castleDurability = 3;
         var owner = GetPlayer(actionPoints: capturerActionPoints);
         var capturer = GetPlayer(actionPoints: capturerActionPoints); //Player, with same amount of action points as capturer.
-        var castle = new CastleGO(owner, caslteDurability);
+        var castle = new CastleGO(owner, castleDurability);
         
         castle.Capture(owner);
         
         Assert.Equal(capturerActionPoints, owner.ActionPoints.Amount);
-        Assert.Equal(caslteDurability, castle.GetCaptureCost(capturer));
+        Assert.Equal(castleDurability, castle.GetCaptureCost(capturer));
     }
 
     [Theory]
     [InlineData(5, 3, 0)]
     [InlineData(3, 4, 1)]
     [InlineData(2, 5, 3)]
-    public void Capture_ShouldReduceCapturerActionPoints(int caslteDurability, int capturerActionPoints, int expectedCapturerActionPoints)
+    public void Capture_ShouldReduceCapturerActionPoints(int castleDurability, int capturerActionPoints, int expectedCapturerActionPoints)
     {
         var owner = GetPlayer();
         var capturer = GetPlayer(actionPoints: capturerActionPoints);
-        var castle = new CastleGO(owner, caslteDurability);
+        var castle = new CastleGO(owner, castleDurability);
         
         castle.Capture(capturer);
         
