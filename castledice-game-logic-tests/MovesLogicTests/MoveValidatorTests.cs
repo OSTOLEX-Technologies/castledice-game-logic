@@ -340,7 +340,8 @@ public class MoveValidatorTests
     }
 
     [Fact]
-    public void ValidateMove_ShouldReturnFalse_IfRemoveMoveOnTooExpensiveRemovable()
+    //Removable objects cost action points to remove and player may not have enough action points.
+    public void ValidateMove_ShouldReturnFalse_IfNotEnoughActionPointsForRemoveMove()
     {
         var player = GetPlayer(actionPoints: 2);
         var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
