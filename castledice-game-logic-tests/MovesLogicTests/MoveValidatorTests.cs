@@ -198,7 +198,7 @@ public class MoveValidatorTests
     }
 
     [Fact]
-    public void ValidateMove_ShouldReturnFalse_IfReplaceMoveOnCellWithNoRemovableObjects()
+    public void ValidateMove_ShouldReturnFalse_IfReplaceMoveOnCellWithNoReplaceableObjects()
     {
         var player = GetPlayer();
         var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
@@ -253,7 +253,7 @@ public class MoveValidatorTests
     
     [Fact]
     //This method tests the situation when player tries to replace object that is simply too expensive to replace.
-    public void ValidateMove_ShouldReturnFalse_IfReplaceMoveOnObjectExpensiveToRemove()
+    public void ValidateMove_ShouldReturnFalse_IfReplaceMoveOnObjectExpensiveToReplace()
     {
         var player = GetPlayer(actionPoints: 2);
         var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
@@ -284,6 +284,91 @@ public class MoveValidatorTests
         board[1, 1].AddContent(enemyKnight);
         var position = new Vector2Int(1, 1);
         var move = new ReplaceMoveBuilder() { Player = player, Position = position }.Build();
+        var validator = new MoveValidator(board, turnsSwitcher);
+        
+        Assert.True(validator.ValidateMove(move));
+    }
+
+    [Fact]
+    public void ValidateMove_ShouldReturnFalse_IfRemoveMoveOnCellWithNoRemovables()
+    {
+        var player = GetPlayer();
+        var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
+        var board = GetFullNByNBoard(3);
+        var playerUnit = new PlayerUnitMock(){Owner = player};
+        var position = new Vector2Int(1, 1);
+        board[0, 0].AddContent(playerUnit);
+        board[position].AddContent(GetObstacle());//Obstacle is not a removable
+        var move = new RemoveMoveBuilder() { Player = player, Position = position }.Build();
+        var validator = new MoveValidator(board, turnsSwitcher);
+        
+        Assert.False(validator.ValidateMove(move));
+    }
+
+    [Fact]
+    public void ValidateMove_ShouldReturnFalse_IfRemoveMoveFarFromPlayerUnits()
+    {
+        var player = GetPlayer();
+        var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
+        var board = GetFullNByNBoard(3);
+        var playerUnit = new PlayerUnitMock(){Owner = player};
+        var removable = new RemovableMock();
+        var position = new Vector2Int(2, 2);
+        board[0, 0].AddContent(playerUnit);
+        board[position].AddContent(removable);
+        var move = new RemoveMoveBuilder() { Player = player, Position = position }.Build();
+        var validator = new MoveValidator(board, turnsSwitcher);
+        
+        Assert.False(validator.ValidateMove(move));
+    }
+
+    [Fact]
+    public void ValidateMove_ShouldReturnFalse_IfRemoveMoveOnRemovableThatCannotBeRemoved()
+    {
+        var player = GetPlayer();
+        var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
+        var board = GetFullNByNBoard(3);
+        var playerUnit = new PlayerUnitMock(){Owner = player};
+        var removable = new RemovableMock(){CanRemove = false};
+        var position = new Vector2Int(1, 1);
+        board[0, 0].AddContent(playerUnit);
+        board[position].AddContent(removable);
+        var move = new RemoveMoveBuilder() { Player = player, Position = position }.Build();
+        var validator = new MoveValidator(board, turnsSwitcher);
+        
+        Assert.False(validator.ValidateMove(move));
+    }
+
+    [Fact]
+    //Removable objects cost action points to remove and player may not have enough action points.
+    public void ValidateMove_ShouldReturnFalse_IfNotEnoughActionPointsForRemoveMove()
+    {
+        var player = GetPlayer(actionPoints: 2);
+        var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
+        var board = GetFullNByNBoard(3);
+        var playerUnit = new PlayerUnitMock(){Owner = player};
+        var removable = new RemovableMock(){CanRemove = true, RemoveCost = 5};
+        var position = new Vector2Int(1, 1);
+        board[0, 0].AddContent(playerUnit);
+        board[position].AddContent(removable);
+        var move = new RemoveMoveBuilder() { Player = player, Position = position }.Build();
+        var validator = new MoveValidator(board, turnsSwitcher);
+        
+        Assert.False(validator.ValidateMove(move));
+    }
+    
+    [Fact]
+    public void ValidateMove_ShouldReturnTrue_IfRemoveMoveOnRemovableNearPlayerUnits()
+    {
+        var player = GetPlayer(actionPoints: 2);
+        var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
+        var board = GetFullNByNBoard(3);
+        var playerUnit = new PlayerUnitMock(){Owner = player};
+        var removable = new RemovableMock(){CanRemove = true, RemoveCost = 1};
+        var position = new Vector2Int(1, 1);
+        board[0, 0].AddContent(playerUnit);
+        board[position].AddContent(removable);
+        var move = new RemoveMoveBuilder() { Player = player, Position = position }.Build();
         var validator = new MoveValidator(board, turnsSwitcher);
         
         Assert.True(validator.ValidateMove(move));

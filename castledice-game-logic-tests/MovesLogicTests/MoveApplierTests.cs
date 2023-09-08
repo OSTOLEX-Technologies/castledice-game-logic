@@ -18,6 +18,7 @@ public class MoveApplierTests
             yield return PlaceMoveCase();
             yield return ReplaceMoveCase();
             yield return UpgradeMoveCase();
+            yield return RemoveMoveCase();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -59,6 +60,18 @@ public class MoveApplierTests
             var upgradeable = new UpgradeableMock() { Owner = player, UpgradeCost = 4 };
             board[0, 0].AddContent(upgradeable);
             var move = new UpgradeMoveBuilder() { Player = player, Position = (0, 0) }.Build();
+            int expectedActionPoints = 2;
+            
+            return new object[] { board, player, move, expectedActionPoints };
+        }
+
+        private static object[] RemoveMoveCase()
+        {
+            var board = GetFullNByNBoard(2);
+            var player = GetPlayer(actionPoints: 6);
+            var removable = new RemovableMock() { RemoveCost = 4};
+            board[0, 0].AddContent(removable);
+            var move = new RemoveMoveBuilder() { Player = player, Position = (0, 0) }.Build();
             int expectedActionPoints = 2;
             
             return new object[] { board, player, move, expectedActionPoints };
@@ -248,5 +261,30 @@ public class MoveApplierTests
         var newOwner = capturable.Owner;
         
         Assert.Same(capturer, newOwner);
+    }
+
+    [Fact]
+    public void ApplyMove_ShouldThrowArgumentException_IfRemoveMoveOnCellWithNoRemovables()
+    {
+        var board = GetFullNByNBoard(2);
+        var move = new RemoveMoveBuilder() { Position = (0, 0) }.Build();
+        var applier = new MoveApplier(board);
+
+        Assert.Throws<ArgumentException>(() => applier.ApplyMove(move));
+    }
+
+    [Fact]
+    public void ApplyMove_ShouldRemoveContent_IfRemoveMoveApplied()
+    {
+        var board = GetFullNByNBoard(2);
+        var removable = new RemovableMock();
+        board[0, 0].AddContent(removable);
+        var move = new RemoveMoveBuilder() { Position = (0, 0) }.Build();
+        var applier = new MoveApplier(board);
+        
+        applier.ApplyMove(move);
+        var cellContent = board[0, 0].GetContent();
+        
+        Assert.DoesNotContain(removable, cellContent);
     }
 }

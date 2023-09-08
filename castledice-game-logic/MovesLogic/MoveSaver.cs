@@ -39,4 +39,10 @@ public class MoveSaver : IMoveVisitor
         _history.History.Add(new CaptureMoveSnapshot(move));
         return true;
     }
+
+    public bool VisitRemoveMove(RemoveMove move)
+    {
+        _history.History.Add(new RemoveMoveSnapshot(move));
+        return true;
+    }
 }

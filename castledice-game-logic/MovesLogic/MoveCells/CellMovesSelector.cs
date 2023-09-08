@@ -42,9 +42,13 @@ public class CellMovesSelector
             {
                 return new CellMove(cell, MoveType.Capture);
             }
-            if(CanRemoveOnCell(cell, player))
+            if(CanReplaceOnCell(cell, player))
             { 
                 return new CellMove(cell, MoveType.Replace);
+            }
+            if (CanRemoveOnCell(cell, player))
+            {
+                return new CellMove(cell, MoveType.Remove);
             }
             if (CanPlaceOnCell(cell, player))
             {
@@ -82,23 +86,7 @@ public class CellMovesSelector
     
     private bool CanPlaceOnCell(Cell cell, Player player)
     {
-        return !cell.HasContent(c => ContentBelongsToOtherPlayer(c, player) || ContentIsObstacle(c));
-    }
-    
-    private bool ContentBelongsToOtherPlayer(Content content, Player player)
-    {
-        if (content is IPlayerOwned)
-        {
-            var ownedContent = content as IPlayerOwned;
-            var owner = ownedContent.GetOwner();
-            return player != owner;
-        }
-        return false;
-    }
-
-    private bool ContentIsObstacle(Content content)
-    {
-        return content is Tree;
+        return PlaceRules.CanPlaceOnCellIgnoreNeighbours(_board, cell.Position, player);
     }
 
     private bool CanCaptureOnCell(Cell cell, Player player)
@@ -106,8 +94,13 @@ public class CellMovesSelector
         return CaptureRules.CanCaptureOnCellIgnoreNeighbours(_board, cell.Position, player);
     }
 
-    private bool CanRemoveOnCell(Cell cell, Player player)
+    private bool CanReplaceOnCell(Cell cell, Player player)
     {
         return ReplaceRules.CanReplaceOnCellIgnoreNeighbours(_board, cell.Position, player);
+    }
+
+    private bool CanRemoveOnCell(Cell cell, Player player)
+    {
+        return RemoveRules.CanRemoveOnCellIgnoreNeighbours(_board, cell.Position, player);
     }
 }

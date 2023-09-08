@@ -2,11 +2,6 @@
 
 public interface IReplaceable
 {
-    bool CanBeReplaced()
-    {
-        return true;
-    }
-
     /// <summary>
     /// Returns replace cost that doesn't take into account replacement cost.
     /// </summary>

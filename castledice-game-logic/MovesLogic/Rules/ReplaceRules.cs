@@ -39,12 +39,9 @@ public static class ReplaceRules
         if (content is IReplaceable)
         {
             var replaceable = content as IReplaceable;
-            if (replaceable.CanBeReplaced())
-            {
-                int replaceCost = replaceable.GetReplaceCost();
-                int playerActionPoints = player.ActionPoints.Amount;
-                return replaceCost <= playerActionPoints;
-            }
+            int replaceCost = replaceable.GetReplaceCost();
+            int playerActionPoints = player.ActionPoints.Amount;
+            return replaceCost <= playerActionPoints;
         }
         return false;
     }
