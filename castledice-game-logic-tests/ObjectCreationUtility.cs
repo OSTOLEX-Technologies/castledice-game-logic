@@ -8,15 +8,16 @@ using castledice_game_logic.GameObjects;
 using castledice_game_logic.GameObjects.Factories;
 using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
+using Moq;
 using CastleGO = castledice_game_logic.GameObjects.Castle;
 
 namespace castledice_game_logic_tests;
 
 public static class ObjectCreationUtility
 {
-    public static CastleGO GetCastle(Player player)
+    public static CastleGO GetCastle(Player player, int durability = 3)
     {
-        return new CastleGO(player);
+        return new CastleGO(player, durability);
     }
     
     public static Board GetFullNByNBoard(int size)
@@ -55,11 +56,15 @@ public static class ObjectCreationUtility
     public static BoardConfig GetDefaultBoardConfig(Player firstPlayer, Player secondPlayer)
     {
         var cellsGenerator = new RectCellsGenerator(10, 10);
-        var castlesSpawner = new CastlesSpawner(new Dictionary<Player, Vector2Int>()
+        var castlesPlacementData = new Dictionary<Player, Vector2Int>()
         {
-            {firstPlayer, new Vector2Int(0, 0)},
-            {secondPlayer, new Vector2Int(9, 9)}
-        });
+            { firstPlayer, new Vector2Int(0, 0) },
+            { secondPlayer, new Vector2Int(9, 9) }
+        };
+        var castlesFactoryMock = new Mock<ICastlesFactory>();
+        castlesFactoryMock.Setup(m => m.GetCastle(firstPlayer)).Returns(GetCastle(firstPlayer));
+        castlesFactoryMock.Setup(m => m.GetCastle(secondPlayer)).Returns(GetCastle(secondPlayer));
+        var castlesSpawner = new CastlesSpawner(castlesPlacementData, castlesFactoryMock.Object);
         var cellType = CellType.Square;
         var boardConfig = new BoardConfig()
         {
@@ -95,7 +100,7 @@ public static class ObjectCreationUtility
 
     
     /// <summary>
-    /// Returns cell content that can't be removed by player.
+    /// Returns cell content that blocks placement and can't be removed by player.
     /// </summary>
     /// <returns></returns>
     public static Content GetObstacle()

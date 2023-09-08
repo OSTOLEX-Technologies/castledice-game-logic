@@ -12,7 +12,7 @@ public class BoardValidatorTests
         var board = GetFullNByNBoard(10);
         var firstPlayer = GetPlayer();
         var secondPlayer = GetPlayer();
-        var castle = new CastleGO(firstPlayer);
+        var castle = GetCastle(firstPlayer);
         board[0, 0].AddContent(castle);
         var playersList = new List<Player>()
         {

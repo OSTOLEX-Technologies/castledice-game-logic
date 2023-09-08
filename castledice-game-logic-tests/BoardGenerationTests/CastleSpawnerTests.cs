@@ -1,61 +1,83 @@
 ﻿using castledice_game_logic;
 using castledice_game_logic.BoardGeneration.CellsGeneration;
 using castledice_game_logic.BoardGeneration.ContentGeneration;
+using castledice_game_logic.GameObjects.Factories;
 using castledice_game_logic.Math;
-
+using Moq;
 using static castledice_game_logic_tests.ObjectCreationUtility;
 using CastleGO = castledice_game_logic.GameObjects.Castle;
 namespace castledice_game_logic_tests;
 
 public class CastleSpawnerTests
 {
-    [Fact]
-    public void SpawnContent_ShouldSpawnCastles_OnGivenPositions()
+    public static IEnumerable<object[]> CastlesSpawnDataCases()
     {
-        var firstPlayer = GetPlayer();
-        var secondPlayer = GetPlayer();
-        var firstPlayerCastlePosition = new Vector2Int(0, 0);
-        var secondPlayerCastlePosition = new Vector2Int(9, 9);
-        var castlesSpawnData = new Dictionary<Player, Vector2Int>()
+        yield return new object[]
         {
-            { firstPlayer,  firstPlayerCastlePosition},
-            { secondPlayer,  secondPlayerCastlePosition}
+            new Dictionary<Player, Vector2Int>()
+            {
+                { GetPlayer(), (0, 0) },
+                { GetPlayer(), (9, 9) }
+            }
         };
-        var board = new Board(CellType.Square);
-        var cellsGenerator = new RectCellsGenerator(10, 10);
-        cellsGenerator.GenerateCells(board);
-        var castlesSpawner = new CastlesSpawner(castlesSpawnData);
-        
-        castlesSpawner.SpawnContent(board);
-        
-        Assert.Contains(board[firstPlayerCastlePosition].GetContent(), c => c is CastleGO);
-        Assert.Contains(board[secondPlayerCastlePosition].GetContent(), c => c is CastleGO);
+        yield return new object[]
+        {
+            new Dictionary<Player, Vector2Int>()
+            {
+                { GetPlayer(), (3, 3) }
+            }
+        };
+        yield return new object[]
+        {
+            new Dictionary<Player, Vector2Int>()
+            {
+                { GetPlayer(), (0, 0) },
+                { GetPlayer(), (9, 9)},
+                { GetPlayer(), (4, 4)}
+            }
+        };
     }
 
-    [Fact]
-    public void SpawnContent_ShouldSpawnCastles_WithAppropriatePlayersAssigned()
+    private ICastlesFactory GetFactory(Dictionary<Player, Vector2Int> castlesSpawnData)
     {
-        var firstPlayer = GetPlayer();
-        var secondPlayer = GetPlayer();
-        var firstPlayerCastlePosition = new Vector2Int(0, 0);
-        var secondPlayerCastlePosition = new Vector2Int(9, 9);
-        var castlesSpawnData = new Dictionary<Player, Vector2Int>()
+        var factoryMock = new Mock<ICastlesFactory>();
+        foreach (var keyValuePair in castlesSpawnData)
         {
-            { firstPlayer,  firstPlayerCastlePosition},
-            { secondPlayer,  secondPlayerCastlePosition}
-        };
-        var board = new Board(CellType.Square);
-        var cellsGenerator = new RectCellsGenerator(10, 10);
-        cellsGenerator.GenerateCells(board);
-        var castlesSpawner = new CastlesSpawner(castlesSpawnData);
+            factoryMock.Setup(m => m.GetCastle(keyValuePair.Key)).Returns(GetCastle(keyValuePair.Key));
+        }
+        return factoryMock.Object;
+    }
+    
+    [Theory]
+    [MemberData(nameof(CastlesSpawnDataCases))]
+    public void SpawnContent_ShouldSpawnCastles_OnGivenPositions(Dictionary<Player, Vector2Int> castlesSpawnData)
+    {
+        var board = GetFullNByNBoard(10);
+        var factory = GetFactory(castlesSpawnData);
+        var castlesSpawner = new CastlesSpawner(castlesSpawnData, factory);
+        
+        castlesSpawner.SpawnContent(board);
+        
+        foreach (var keyValuePair in castlesSpawnData)
+        {
+            Assert.Contains(board[keyValuePair.Value].GetContent(), c => c is CastleGO);
+        }
+    }
+
+    [Theory]
+    [MemberData(nameof(CastlesSpawnDataCases))]
+    public void SpawnContent_ShouldSpawnCastles_WithAppropriatePlayersAssigned(Dictionary<Player, Vector2Int> castlesSpawnData)
+    {
+        var board = GetFullNByNBoard(10);
+        var factory = GetFactory(castlesSpawnData);
+        var castlesSpawner = new CastlesSpawner(castlesSpawnData, factory);
         
         castlesSpawner.SpawnContent(board);
 
-        var firstPlayerCastle =
-            board[firstPlayerCastlePosition].GetContent().FirstOrDefault(c => c is CastleGO) as CastleGO;
-        var secondPlayerCastle =
-            board[secondPlayerCastlePosition].GetContent().FirstOrDefault(c => c is CastleGO) as CastleGO;
-        Assert.Same(firstPlayer, firstPlayerCastle.GetOwner());
-        Assert.Same(secondPlayer, secondPlayerCastle.GetOwner());
+        foreach (var keyValuePair in castlesSpawnData)
+        {
+            var castle = board[keyValuePair.Value].GetContent().FirstOrDefault(c => c is CastleGO) as CastleGO;
+            Assert.Same(keyValuePair.Key, castle.GetOwner());
+        }
     }
 }

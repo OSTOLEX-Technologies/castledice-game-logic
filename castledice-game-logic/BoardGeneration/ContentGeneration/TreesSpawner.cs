@@ -1,4 +1,5 @@
 ﻿using castledice_game_logic.GameObjects;
+using castledice_game_logic.GameObjects.Factories;
 
 namespace castledice_game_logic.BoardGeneration.ContentGeneration;
 
@@ -7,12 +8,14 @@ public class TreesSpawner : IContentSpawner
     private int _minTreesCount;
     private int _maxTreesCount;
     private int _minDistanceBetweenTrees;
+    private ITreesFactory _factory;
 
-    public TreesSpawner(int minTreesCount, int maxTreesCount, int minDistanceBetweenTrees)
+    public TreesSpawner(int minTreesCount, int maxTreesCount, int minDistanceBetweenTrees, ITreesFactory factory)
     {
         _minTreesCount = minTreesCount;
         _maxTreesCount = maxTreesCount;
         _minDistanceBetweenTrees = minDistanceBetweenTrees;
+        _factory = factory;
     }
 
     
@@ -22,7 +25,7 @@ public class TreesSpawner : IContentSpawner
         var cells = GetCellsToSpawnOn(board);
         foreach (var cell in cells)
         {
-            cell.AddContent(new Tree());
+            cell.AddContent(_factory.GetTree());
         }
     }
 

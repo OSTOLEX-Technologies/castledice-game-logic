@@ -34,4 +34,9 @@ public class PlayerUnitMock : Content, IPlayerOwned, IReplaceable, IPlaceBlockin
     {
         
     }
+
+    public bool IsBlocking()
+    {
+        return true;
+    }
 }

@@ -5,8 +5,5 @@
 /// </summary>
 public interface IPlaceBlocking
 {
-    bool IsBlocking()
-    {
-        return true;
-    }
+    public bool IsBlocking();
 }

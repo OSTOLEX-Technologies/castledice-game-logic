@@ -4,5 +4,8 @@ namespace castledice_game_logic_tests.Mocks;
 
 public class ObstacleMock : Content, IPlaceBlocking
 {
-    
+    public bool IsBlocking()
+    {
+        return true;
+    }
 }

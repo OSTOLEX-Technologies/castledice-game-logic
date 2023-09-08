@@ -2,7 +2,9 @@
 using castledice_game_logic.BoardGeneration.CellsGeneration;
 using castledice_game_logic.BoardGeneration.ContentGeneration;
 using castledice_game_logic.GameConfiguration;
+using castledice_game_logic.GameObjects.Factories;
 using castledice_game_logic.Math;
+using Moq;
 using static castledice_game_logic_tests.ObjectCreationUtility;
 
 namespace castledice_game_logic_tests;
@@ -37,10 +39,14 @@ public class GameTests
             firstPlayer,
             secondPlayer
         };
-        var castlesSpawner = new CastlesSpawner(new Dictionary<Player, Vector2Int>()
+        var factoryMock = new Mock<ICastlesFactory>();
+        factoryMock.Setup(m => m.GetCastle(firstPlayer)).Returns(GetCastle(firstPlayer));
+        factoryMock.Setup(m => m.GetCastle(secondPlayer)).Returns(GetCastle(secondPlayer));
+        var castlesPlacementData = new Dictionary<Player, Vector2Int>()
         {
-            {firstPlayer, new Vector2Int(0, 0)}
-        });
+            { firstPlayer, new Vector2Int(0, 0) }
+        };
+        var castlesSpawner = new CastlesSpawner(castlesPlacementData, factoryMock.Object);
         var cellsGenerator = new RectCellsGenerator(10, 10);
         var cellType = CellType.Square;
         var boardConfig = new BoardConfig()
