@@ -1,6 +1,6 @@
 ﻿namespace castledice_game_logic.GameObjects;
 
-public class Castle : Content, ICapturable, IUpgradeable, IPlayerOwned, IPlaceBlocking
+public class Castle : Content, ICapturable, IPlayerOwned, IPlaceBlocking
 {
     private Player _player;
     private int _durability;
@@ -8,6 +8,10 @@ public class Castle : Content, ICapturable, IUpgradeable, IPlayerOwned, IPlaceBl
     
     public Castle(Player player, int durability)
     {
+        if (durability <= 0)
+        {
+            throw new ArgumentException("Durability must be positive!");
+        }
         _player = player;
         _durability = durability;
         _defaultDurability = durability;
@@ -60,22 +64,6 @@ public class Castle : Content, ICapturable, IUpgradeable, IPlayerOwned, IPlaceBl
     public void Free()
     {
        
-    }
-
-    public bool CanBeUpgraded()
-    {
-        return true;
-    }
-
-    //TODO: Write implementation with configs
-    public int GetUpgradeCost()
-    {
-        return 2;
-    }
-
-    public void Upgrade()
-    {
-        
     }
 
     public Player GetOwner()

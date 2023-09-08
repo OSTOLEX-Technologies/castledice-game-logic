@@ -12,14 +12,6 @@ public class CastleTests
         
         Assert.True(castle is ICapturable);
     }
-
-    [Fact]
-    public void Castle_ShouldImplement_IUpgradeable()
-    {
-        var castle = new CastleGO(GetPlayer(), 1);
-        
-        Assert.True(castle is IUpgradeable);
-    }
     
     [Fact]
     public void Castle_ShouldImplement_IPlayerOwned()
@@ -94,15 +86,6 @@ public class CastleTests
     }
 
     [Fact]
-    public void CanBeUpgraded_ShouldReturnTrue_IfCastleIsNotMaxLevel()
-    {
-        var player = GetPlayer();
-        var castle = new CastleGO(player, 1);
-        
-        Assert.True(castle.CanBeUpgraded());
-    }
-
-    [Fact]
     public void CanBeCaptured_ShouldReturnFalse_IfCaptuererIsOwner()
     {
         var player = GetPlayer();
@@ -114,9 +97,8 @@ public class CastleTests
     [Fact]
     public void CanBeCaptured_ShouldReturnFalse_IfCapturerHasNoActionPoints()
     {
-        var owner = GetPlayer();
         var capturer = GetPlayer(actionPoints: 0);
-        var castle = new CastleGO(owner, 3);
+        var castle = new CastleGO(GetPlayer(), 3);
         
         Assert.False(castle.CanBeCaptured(capturer));
     }
@@ -124,14 +106,15 @@ public class CastleTests
     [Fact]
     public void CanBeCaptured_ShouldReturnTrue_IfCapturerHasActionPoints()
     {
-        var owner = GetPlayer();
         var capturer = GetPlayer(actionPoints: 1);
-        var castle = new CastleGO(owner, 3);
+        var castle = new CastleGO(GetPlayer(), 3);
         
         Assert.True(castle.CanBeCaptured(capturer));
     }
 
     [Fact]
+    // In this test the amount of durability of castle is checked by passing player
+    // with amount of action points bigger than castle durability into GetCaptureCost method.
     public void Capture_ShouldDoNothing_IfCapturerIsOwner()
     {
         int capturerActionPoints = 5;
@@ -162,6 +145,8 @@ public class CastleTests
     }
     
     [Fact]
+    // If amount of capturer`s action points is more ore equal to castle`s durability, 
+    // then capturer will become owner of castle after calling Capture method
     public void Capture_ShouldSetCapturerAsOwner_IfCapturerHadEnoughActionPoints()
     {
         var owner = GetPlayer();
@@ -187,5 +172,13 @@ public class CastleTests
         var actualCaptureCost = castle.GetCaptureCost(secondCapturer);
         
         Assert.Equal(expectedCaptureCost, actualCaptureCost);
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-1)]
+    public void Constructor_ShouldThrowArgumentException_IfNonPositiveDurabilityGiven(int durability)
+    {
+        Assert.Throws<ArgumentException>(() => new CastleGO(GetPlayer(), durability));
     }
 }

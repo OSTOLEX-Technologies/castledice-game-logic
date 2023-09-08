@@ -10,18 +10,12 @@ namespace castledice_game_logic_tests;
 
 public class TreesSpawnerTests
 {
-    
-    //TODO: Need help with testing trees spawner
     [Fact]
     public void SpawnContent_ShouldSpawnExactNumberOfTrees_IfOneNumberRangeIsGiven()
     {
-        var board = new Board(CellType.Square);
-        var factoryMock = new Mock<ITreesFactory>();
-        factoryMock.Setup(f => f.GetTree()).Returns(new Tree(1, false));
-        var cellsGenerator = new RectCellsGenerator(10, 10);
-        cellsGenerator.GenerateCells(board);
+        var board = GetFullNByNBoard(10);
         int treesAmount = 3;
-        var treesSpawner = new TreesSpawner(treesAmount, treesAmount, 3, factoryMock.Object);
+        var treesSpawner = new TreesSpawner(treesAmount, treesAmount, 3, GetTreesFactory());
         treesSpawner.SpawnContent(board);
 
         int actualTreesAmount = 0;
@@ -39,14 +33,10 @@ public class TreesSpawnerTests
     [Fact]
     public void SpawnContent_ThrowsInvalidOperationException_IfImpossibleToSpawnTreesWithGivenConfiguration()
     {
-        var board = new Board(CellType.Square);
-        var cellsGenerator = new RectCellsGenerator(5, 5);
-        cellsGenerator.GenerateCells(board);
+        var board = GetFullNByNBoard(5);
         int treesAmount = 5;
         int minDistanceBetweenTrees = 3;
-        var factoryMock = new Mock<ITreesFactory>();
-        factoryMock.Setup(f => f.GetTree()).Returns(new Tree(1, false));
-        var treesSpawner = new TreesSpawner(treesAmount, treesAmount, minDistanceBetweenTrees, factoryMock.Object);
+        var treesSpawner = new TreesSpawner(treesAmount, treesAmount, minDistanceBetweenTrees, GetTreesFactory());
 
         Assert.Throws<InvalidOperationException>(() => treesSpawner.SpawnContent(board));
     }
@@ -64,5 +54,12 @@ public class TreesSpawnerTests
         var cellContent = board[0, 0].GetContent();
 
         Assert.Contains(expectedTree, cellContent);
+    }
+
+    private ITreesFactory GetTreesFactory()
+    {
+        var factoryMock = new Mock<ITreesFactory>();
+        factoryMock.Setup(f => f.GetTree()).Returns(new Tree(1, false));
+        return factoryMock.Object;
     }
 }

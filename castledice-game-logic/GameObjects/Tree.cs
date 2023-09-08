@@ -7,6 +7,10 @@ public class Tree : Content, IPlaceBlocking, IRemovable
     
     public Tree(int removeCost, bool canBeRemoved)
     {
+        if (removeCost <= 0)
+        {
+            throw new ArgumentException("Remove cost must be positive!");
+        }
         _removeCost = removeCost;
         _canBeRemoved = canBeRemoved;
     }

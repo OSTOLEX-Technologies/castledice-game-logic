@@ -1,4 +1,5 @@
-﻿using castledice_game_logic.GameObjects;
+﻿using System.Runtime.InteropServices;
+using castledice_game_logic.GameObjects;
 using static castledice_game_logic_tests.ObjectCreationUtility;
 
 namespace castledice_game_logic_tests;
@@ -41,5 +42,13 @@ public class TreeTests
     {
         var tree = new Tree(1, false);
         Assert.True(tree.IsBlocking());
+    }
+    
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-1)]
+    public void Constructor_ShouldThrowArgumentException_IfNonPositiveRemoveCostIsGiven(int cost)
+    {
+        Assert.Throws<ArgumentException>(() => new Tree(cost, false));
     }
 }

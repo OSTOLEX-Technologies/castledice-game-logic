@@ -1,4 +1,5 @@
 ﻿using castledice_game_logic;
+using castledice_game_logic_tests.Mocks;
 using castledice_game_logic.GameObjects;
 using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
@@ -67,7 +68,7 @@ public class CellNeighboursCheckerTests
     {        
         var player = GetPlayer();
         var board = GetFullNByNBoard(5);
-        var unit = new Knight(player);
+        var unit = new PlayerUnitMock(){Owner = player};
         board[1, 1].AddContent(unit);
         var position = new Vector2Int(2, 2);
         
