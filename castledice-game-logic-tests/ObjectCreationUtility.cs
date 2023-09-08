@@ -95,7 +95,7 @@ public static class ObjectCreationUtility
 
     
     /// <summary>
-    /// Returns cell content that can't be removed by player.
+    /// Returns cell content that blocks placement and can't be removed by player.
     /// </summary>
     /// <returns></returns>
     public static Content GetObstacle()
