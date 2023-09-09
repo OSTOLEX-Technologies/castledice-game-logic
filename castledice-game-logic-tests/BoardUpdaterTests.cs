@@ -71,9 +71,9 @@ public class BoardUpdaterTests
     
     [Theory]
     [ClassData(typeof(UpdateBoardTestCases))]
-    public void UpdateBoard_ShouldCallUpdateMethod_OnEveryContent(Board boardWithContent, List<UpdateableContent> contentOnBoard)
+    public void UpdateBoard_ShouldCallUpdateMethod_OnEveryContent(Board board, List<UpdateableContent> contentOnBoard)
     {
-        var updater = new BoardUpdater(boardWithContent);
+        var updater = new BoardUpdater(board);
         
         updater.UpdateBoard();
 
@@ -85,9 +85,9 @@ public class BoardUpdaterTests
     
     [Theory]
     [ClassData(typeof(UpdateBoardTestCases))]
-    public void UpdateBoard_ShouldCallUpdateMethod_OnceOnEachContent(Board boardWithContent, List<UpdateableContent> contentOnBoard)
+    public void UpdateBoard_ShouldCallUpdateMethod_OnceOnEachContent(Board board, List<UpdateableContent> contentOnBoard)
     {
-        var updater = new BoardUpdater(boardWithContent);
+        var updater = new BoardUpdater(board);
         
         updater.UpdateBoard();
 
