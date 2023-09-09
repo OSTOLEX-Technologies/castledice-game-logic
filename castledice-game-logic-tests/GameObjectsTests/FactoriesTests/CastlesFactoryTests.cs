@@ -19,9 +19,9 @@ public class CastlesFactoryTests
         
         var castle = factory.GetCastle(GetPlayer());
         
-        Assert.Equal(castleDurability, castle.GetCaptureCost(GetPlayer(castleDurability + 1)));
+        Assert.Equal(castleDurability, castle.GetCaptureCost(GetPlayer(actionPoints: castleDurability + 1)));
         castle.Free();
-        Assert.Equal(freeDurability, castle.GetCaptureCost(GetPlayer(freeDurability + 1)));
+        Assert.Equal(freeDurability, castle.GetCaptureCost(GetPlayer(actionPoints: freeDurability + 1)));
     }
 
     [Fact]
