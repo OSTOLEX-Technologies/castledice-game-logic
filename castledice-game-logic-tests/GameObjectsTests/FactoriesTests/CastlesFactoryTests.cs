@@ -7,20 +7,21 @@ namespace castledice_game_logic_tests.FactoriesTests;
 public class CastlesFactoryTests
 {
     [Theory]
-    [InlineData(3)]
-    [InlineData(5)]
-    [InlineData(1)]
-    // In this test durability of the castle is checked by passing player with amount of action points
+    [InlineData(3, 1)]
+    [InlineData(5, 2)]
+    [InlineData(1, 4)]
+    // In this test durability (both free and standard) of the castle is checked by passing player with amount of action points
     // that is definitely bigger than castle durability into GetCaptureCost method.
-    public void GetCastle_ShouldReturnCastle_CreatedAccordingToConfig(int castleDurability)
+    public void GetCastle_ShouldReturnCastle_CreatedAccordingToConfig(int castleDurability, int freeDurability)
     {
-        var config = new CastleConfig() { Durability = castleDurability };
+        var config = new CastleConfig() { Durability = castleDurability, FreeDurability = freeDurability};
         var factory = new CastlesFactory(config);
-        var capturer = GetPlayer(castleDurability + 1);
         
         var castle = factory.GetCastle(GetPlayer());
         
-        Assert.Equal(castleDurability, castle.GetCaptureCost(capturer));
+        Assert.Equal(castleDurability, castle.GetCaptureCost(GetPlayer(castleDurability + 1)));
+        castle.Free();
+        Assert.Equal(freeDurability, castle.GetCaptureCost(GetPlayer(freeDurability + 1)));
     }
 
     [Fact]
@@ -34,8 +35,8 @@ public class CastlesFactoryTests
         Assert.Same(owner, castle.GetOwner());
     }
     
-    private CastleConfig GetConfig(int durability = 3)
+    private CastleConfig GetConfig(int durability = 3, int freeDurability = 1)
     {
-        return new CastleConfig() { Durability = durability };
+        return new CastleConfig() { Durability = durability, FreeDurability = freeDurability};
     }
 }

@@ -15,9 +15,9 @@ namespace castledice_game_logic_tests;
 
 public static class ObjectCreationUtility
 {
-    public static CastleGO GetCastle(Player player, int durability = 3)
+    public static CastleGO GetCastle(Player player, int durability = 3, int freeDurability = 1)
     {
-        return new CastleGO(player, durability);
+        return new CastleGO(player, durability, freeDurability);
     }
     
     public static Board GetFullNByNBoard(int size)

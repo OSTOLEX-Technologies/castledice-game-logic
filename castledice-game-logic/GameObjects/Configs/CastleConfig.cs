@@ -3,4 +3,5 @@
 public struct CastleConfig
 {
     public int Durability;
+    public int FreeDurability; //Durability of the castle that has no owner.
 }

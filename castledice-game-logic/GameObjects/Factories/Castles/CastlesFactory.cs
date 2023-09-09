@@ -13,6 +13,6 @@ public class CastlesFactory : ICastlesFactory
     
     public Castle GetCastle(Player owner)
     {
-        return new Castle(owner, _config.Durability);
+        return new Castle(owner, _config.Durability, _config.FreeDurability);
     }
 }
