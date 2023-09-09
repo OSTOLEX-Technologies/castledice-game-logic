@@ -11,6 +11,12 @@ public class BoardUpdater
 
     public void UpdateBoard()
     {
-
+        foreach (var cell in _board)
+        {
+            foreach (var content in cell.GetContent())
+            {
+                content.Update();
+            }
+        }
     }
 }
