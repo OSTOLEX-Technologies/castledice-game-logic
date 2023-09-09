@@ -13,10 +13,14 @@ public class Castle : Content, ICapturable, IPlayerOwned, IPlaceBlocking
         {
             throw new ArgumentException("Durability must be positive!");
         }
-        
+        if (freeDurability <= 0)
+        {
+            throw new ArgumentException("Free durability must be positive!");
+        }
         _player = player;
         _durability = durability;
         _defaultDurability = durability;
+        _freeDurability = freeDurability;
     }
 
     public void Capture(Player capturer)
@@ -65,7 +69,8 @@ public class Castle : Content, ICapturable, IPlayerOwned, IPlaceBlocking
 
     public void Free()
     {
-       
+        _player = new NullPlayer();
+        _durability = _freeDurability;
     }
 
     public Player GetOwner()
