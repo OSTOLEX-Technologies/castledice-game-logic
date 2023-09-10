@@ -7,7 +7,9 @@ namespace castledice_game_logic.TurnsLogic;
 /// </summary>
 public class PlayersList : IEnumerable<Player>
 {
-    public event EventHandler<Player> PlayerKicked; 
+    public int Count => _players.Count;
+    public event EventHandler<Player> PlayerKicked;
+    
     private List<Player> _players = new();
     
     public void AddPlayer(Player player)
@@ -17,6 +19,19 @@ public class PlayersList : IEnumerable<Player>
             return;
         }
         _players.Add(player);
+    }
+
+    public PlayersList()
+    {
+        
+    }
+
+    public PlayersList(IEnumerable<Player> players)
+    {
+        foreach (var player in players)
+        {
+            AddPlayer(player);
+        }
     }
     
     public void KickPlayer(Player player)

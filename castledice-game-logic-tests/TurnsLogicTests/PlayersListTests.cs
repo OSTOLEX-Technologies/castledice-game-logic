@@ -84,4 +84,27 @@ public class PlayersListTests
         Assert.Same(firstPlayer, playersList[0]);
         Assert.Same(secondPlayer, playersList[1]);
     }
+
+    [Fact]
+    public void Constructor_ShouldNotAddDuplicates_IfEnumerableWithDuplicatesGiven()
+    {
+        var firstPlayer = GetPlayer();
+        var secondPlayer = GetPlayer();
+        var enumerable = new List<Player>() { firstPlayer, firstPlayer, firstPlayer, secondPlayer};
+        
+        var playersList = new PlayersList(enumerable);
+        
+        Assert.Same(firstPlayer, playersList[0]);
+        Assert.Same(secondPlayer, playersList[1]);
+    }
+
+    [Fact]
+    public void Count_ShouldReturnPlayersCount()
+    {
+        var playersList = new PlayersList();
+        playersList.AddPlayer(GetPlayer());
+        playersList.AddPlayer(GetPlayer());
+        
+        Assert.Equal(2, playersList.Count);
+    }
 }

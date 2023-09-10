@@ -2,10 +2,10 @@
 
 public class PlayerTurnsSwitcher : ICurrentPlayerProvider
 {
-    private List<Player> _players;
+    private PlayersList _players;
     private int _current = 0;
 
-    public PlayerTurnsSwitcher(List<Player> players)
+    public PlayerTurnsSwitcher(PlayersList players)
     {
         _players = players;
     }
