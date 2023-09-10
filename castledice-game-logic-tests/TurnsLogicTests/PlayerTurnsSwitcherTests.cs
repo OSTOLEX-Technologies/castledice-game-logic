@@ -82,4 +82,23 @@ public class PlayerTurnsSwitcherTests
         
         Assert.Same(expectedPlayer, actualPlayer);
     }
+    
+    [Fact]
+    public void SwitchTurn_ShouldInvokeTurnSwitchedEvent()
+    {
+        var playersList = new List<Player>()
+        {
+            GetPlayer(),
+            GetPlayer(),
+            GetPlayer(),
+            GetPlayer()
+        };
+        var turnsSwitcher = new PlayerTurnsSwitcher(new PlayersList(playersList));
+        bool eventInvoked = false;
+        turnsSwitcher.TurnSwitched += (sender, args) => eventInvoked = true;
+
+        turnsSwitcher.SwitchTurn();
+        
+        Assert.True(eventInvoked);
+    }
 }

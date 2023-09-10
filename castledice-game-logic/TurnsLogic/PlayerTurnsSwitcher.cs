@@ -2,6 +2,8 @@
 
 public class PlayerTurnsSwitcher : ICurrentPlayerProvider
 {
+    public event EventHandler TurnSwitched; 
+    
     private PlayersList _players;
     private int _current = 0;
 
@@ -22,5 +24,6 @@ public class PlayerTurnsSwitcher : ICurrentPlayerProvider
         {
             _current = 0;
         }
+        TurnSwitched?.Invoke(this, EventArgs.Empty);
     }
 }

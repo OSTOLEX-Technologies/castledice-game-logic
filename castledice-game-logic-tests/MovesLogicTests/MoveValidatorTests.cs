@@ -521,8 +521,5 @@ public class MoveValidatorTests
         Assert.Throws<NotImplementedException>(() => validator.ValidateMove(testMove));
     }
 
-    private PlayerTurnsSwitcher GetTurnsSwitcher(params Player[] players)
-    {
-        return new PlayerTurnsSwitcher(new PlayersList(players));
-    } 
+
 }

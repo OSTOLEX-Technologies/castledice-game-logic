@@ -8,6 +8,7 @@ using castledice_game_logic.GameObjects;
 using castledice_game_logic.GameObjects.Factories;
 using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
+using castledice_game_logic.TurnsLogic;
 using Moq;
 using CastleGO = castledice_game_logic.GameObjects.Castle;
 
@@ -24,6 +25,11 @@ public static class ObjectCreationUtility
     {
         return new PlayerUnitMock() { Owner = player };
     }
+    
+    public static PlayerTurnsSwitcher GetTurnsSwitcher(params Player[] players)
+    {
+        return new PlayerTurnsSwitcher(new PlayersList(players));
+    } 
     
     public static Board GetFullNByNBoard(int size)
     {

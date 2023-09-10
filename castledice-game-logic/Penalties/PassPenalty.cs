@@ -13,7 +13,12 @@ public class PassPenalty : IPenalty
         throw new NotImplementedException();
     }
 
-    public PassPenalty(int maxPassCount, TimeCondition timeCondition, ICurrentPlayerProvider currentPlayerProvider)
+    /// <summary>
+    /// Parameter maxPassCount must be positive.
+    /// </summary>
+    /// <param name="maxPassCount"></param>
+    /// <param name="turnsSwitcher"></param>
+    public PassPenalty(int maxPassCount, PlayerTurnsSwitcher turnsSwitcher)
     {
         
     }
