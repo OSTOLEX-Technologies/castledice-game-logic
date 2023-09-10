@@ -47,4 +47,4 @@ jobs:
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"OSTOLEX-Technologies_castledice-game-logic" /o:"ostolex-technologies" /d:sonar.token="${{ secrets.SONAR_TOKEN }}"  /d:sonar.cs.dotcover.reportsPaths=dotCover.Output.html /d:sonar.host.url="https://sonarcloud.io"
           dotnet build –-no-incremental
           dotnet dotcover test --dcReportType=HTML
-          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token=("${{ secrets.SONAR_TOKEN }}")
