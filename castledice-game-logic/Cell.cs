@@ -41,6 +41,10 @@ public class Cell
         return _content.Any(predicate);
     }
 
+    /// <summary>
+    /// Returns true if cell has any content.
+    /// </summary>
+    /// <returns></returns>
     public bool HasContent()
     {
         return _content.Count > 0;
