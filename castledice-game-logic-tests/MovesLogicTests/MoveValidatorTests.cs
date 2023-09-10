@@ -8,14 +8,13 @@ using CastleGO = castledice_game_logic.GameObjects.Castle;
 namespace castledice_game_logic_tests;
 using static ObjectCreationUtility;
 
-//TODO: Can I improve agility of these tests? Because after modifying MoveValidator constructor I ended up modifying all of these guys.
 public class MoveValidatorTests
 {
     [Fact]
     public void ValidateMove_ShouldReturnFalse_IfMovePositionIsOutsideOfBoard()
     {
         var player = GetPlayer();
-        var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
+        var turnsSwitcher = GetTurnsSwitcher(player);
         var board = GetFullNByNBoard(10);
         var position = new Vector2Int(100, 100);
         var move = new TestMove(player, position);
@@ -28,7 +27,7 @@ public class MoveValidatorTests
     public void ValidateMove_ShouldReturnFalse_IfMovePositionIsNegative()
     {
         var player = GetPlayer();
-        var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
+        var turnsSwitcher = GetTurnsSwitcher(player);
         var board = GetFullNByNBoard(10);
         var position = new Vector2Int(-1, -1);
         var move = new TestMove(player, position);
@@ -41,7 +40,7 @@ public class MoveValidatorTests
     public void ValidateMove_ShouldReturnFalse_IfNoCellWithGivenPosition()
     {
         var player = GetPlayer();
-        var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
+        var turnsSwitcher = GetTurnsSwitcher(player);
         var board = new Board(CellType.Square);
         board.AddCell(1, 1);
         var position = new Vector2Int(0, 0);
@@ -55,8 +54,7 @@ public class MoveValidatorTests
     public void ValidateMove_ShouldReturnFalse_IfNotPlayerTurn()
     {
         var player = GetPlayer();
-        var otherPlayer = GetPlayer();
-        var turnSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player, otherPlayer});
+        var turnSwitcher = GetTurnsSwitcher(player, GetPlayer());
         var board = GetFullNByNBoard(2);
         var position = new Vector2Int(0, 0);
         var move = new TestMove(player, position);
@@ -70,7 +68,7 @@ public class MoveValidatorTests
     public void ValidateMove_ShouldReturnFalse_IfPlaceMoveOnCellWithObstacle()
     {
         var player = GetPlayer();
-        var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
+        var turnsSwitcher = GetTurnsSwitcher(player);
         var board = GetFullNByNBoard(10);
         var playerUnit = new PlayerUnitMock() { Owner = player };
         var obstacle = GetObstacle();
@@ -87,7 +85,7 @@ public class MoveValidatorTests
     public void ValidateMove_ShouldReturnFalse_IfPlaceMoveFarFromPlayerUnits()
     {
         var player = GetPlayer();
-        var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
+        var turnsSwitcher = GetTurnsSwitcher(player);
         var board = GetFullNByNBoard(10);
         var playerUnit = new PlayerUnitMock(){Owner = player};
         board[0, 0].AddContent(playerUnit);
@@ -102,7 +100,7 @@ public class MoveValidatorTests
     public void ValidateMove_ShouldReturnFalse_IfPlaceMoveOnCellWithEnemyUnit()
     {
         var player = GetPlayer();
-        var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
+        var turnsSwitcher = GetTurnsSwitcher(player);
         var enemy = GetPlayer();
         var board = GetFullNByNBoard(10);
         var playerKnight = new PlayerUnitMock(){Owner = player};
@@ -120,7 +118,7 @@ public class MoveValidatorTests
     public void ValidateMove_ShouldReturnFalse_IfPlaceMoveOnCellWithPlayerUnit()
     {
         var player = GetPlayer();
-        var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
+        var turnsSwitcher = GetTurnsSwitcher(player);
         var board = GetFullNByNBoard(10);
         var knight = new PlayerUnitMock(){Owner = player};
         board[1, 1].AddContent(knight);
@@ -135,7 +133,7 @@ public class MoveValidatorTests
     public void ValidateMove_ShouldReturnFalse_IfPlaceMoveIsTooExpensive()
     {
         var player = GetPlayer(actionPoints: 1);
-        var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
+        var turnsSwitcher = GetTurnsSwitcher(player);
         var board = GetFullNByNBoard(10);
         var knight = new PlayerUnitMock(){Owner = player};
         var contentToPlace = new PlaceableMock() { Cost = 3 };
@@ -151,7 +149,7 @@ public class MoveValidatorTests
     public void ValidateMove_ShouldReturnFalse_IfPlaceMoveTooExpensive()
     {
         var player = GetPlayer(actionPoints: 2);
-        var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
+        var turnsSwitcher = GetTurnsSwitcher(player);
         var board = GetFullNByNBoard(2);
         var playerUnit = new PlayerUnitMock() { Owner = player };
         var contentToPlace = new PlaceableMock(){Cost = 4};
@@ -171,7 +169,7 @@ public class MoveValidatorTests
     public void ValidateMove_ShouldReturnTrue_IfPlaceIsValid()
     {
         var player = GetPlayer(actionPoints: 6);
-        var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
+        var turnsSwitcher = GetTurnsSwitcher(player);
         var board = GetFullNByNBoard(10);
         var playerUnit = new PlayerUnitMock(){Owner = player};
         board[0, 0].AddContent(playerUnit);
@@ -186,7 +184,7 @@ public class MoveValidatorTests
     public void ValidateMove_ShouldReturnFalse_IfReplaceMoveOnEmptyCell()
     {
         var player = GetPlayer();
-        var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
+        var turnsSwitcher = GetTurnsSwitcher(player);
         var board = GetFullNByNBoard(10);
         var playerUnit = new PlayerUnitMock(){Owner = player};
         board[0, 0].AddContent(playerUnit);
@@ -201,7 +199,7 @@ public class MoveValidatorTests
     public void ValidateMove_ShouldReturnFalse_IfReplaceMoveOnCellWithNoReplaceableObjects()
     {
         var player = GetPlayer();
-        var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
+        var turnsSwitcher = GetTurnsSwitcher(player);
         var board = GetFullNByNBoard(10);
         var obstacle = GetObstacle();
         var playerUnit = new PlayerUnitMock(){Owner = player};
@@ -218,7 +216,7 @@ public class MoveValidatorTests
     public void ValidateMove_ShouldReturnFalse_IfReplaceMoveFarFromPlayerUnits()
     {
         var player = GetPlayer();
-        var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
+        var turnsSwitcher = GetTurnsSwitcher(player);
         var board = GetFullNByNBoard(10);
         var playerUnit = new PlayerUnitMock(){Owner = player};
         board[0, 0].AddContent(playerUnit);
@@ -237,7 +235,7 @@ public class MoveValidatorTests
     public void ValidateMove_ShouldReturnFalse_IfReplaceMoveIsTooExpensive()
     {
         var player = GetPlayer(actionPoints: 3);
-        var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
+        var turnsSwitcher = GetTurnsSwitcher(player);
         var board = GetFullNByNBoard(10);
         var playerUnit = new PlayerUnitMock(){Owner = player};
         var replaceable = new ReplaceableMock() { ReplaceCost = 2 };
@@ -256,7 +254,7 @@ public class MoveValidatorTests
     public void ValidateMove_ShouldReturnFalse_IfReplaceMoveOnObjectExpensiveToReplace()
     {
         var player = GetPlayer(actionPoints: 2);
-        var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
+        var turnsSwitcher = GetTurnsSwitcher(player);
         var enemy = GetPlayer();
         var board = GetFullNByNBoard(2);
         var playerUnit = new PlayerUnitMock() { Owner = player };
@@ -275,7 +273,7 @@ public class MoveValidatorTests
     public void ValidateMove_ShouldReturnTrue_IfReplaceableObjectOnCellNearPlayerUnits()
     {
         var player = GetPlayer();
-        var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
+        var turnsSwitcher = GetTurnsSwitcher(player);
         var enemy = GetPlayer();
         var board = GetFullNByNBoard(10);
         var playerUnit = new PlayerUnitMock(){Owner = player};
@@ -293,7 +291,7 @@ public class MoveValidatorTests
     public void ValidateMove_ShouldReturnFalse_IfRemoveMoveOnCellWithNoRemovables()
     {
         var player = GetPlayer();
-        var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
+        var turnsSwitcher = GetTurnsSwitcher(player);
         var board = GetFullNByNBoard(3);
         var playerUnit = new PlayerUnitMock(){Owner = player};
         var position = new Vector2Int(1, 1);
@@ -309,7 +307,7 @@ public class MoveValidatorTests
     public void ValidateMove_ShouldReturnFalse_IfRemoveMoveFarFromPlayerUnits()
     {
         var player = GetPlayer();
-        var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
+        var turnsSwitcher = GetTurnsSwitcher(player);
         var board = GetFullNByNBoard(3);
         var playerUnit = new PlayerUnitMock(){Owner = player};
         var removable = new RemovableMock();
@@ -326,7 +324,7 @@ public class MoveValidatorTests
     public void ValidateMove_ShouldReturnFalse_IfRemoveMoveOnRemovableThatCannotBeRemoved()
     {
         var player = GetPlayer();
-        var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
+        var turnsSwitcher = GetTurnsSwitcher(player);
         var board = GetFullNByNBoard(3);
         var playerUnit = new PlayerUnitMock(){Owner = player};
         var removable = new RemovableMock(){CanRemove = false};
@@ -344,7 +342,7 @@ public class MoveValidatorTests
     public void ValidateMove_ShouldReturnFalse_IfNotEnoughActionPointsForRemoveMove()
     {
         var player = GetPlayer(actionPoints: 2);
-        var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
+        var turnsSwitcher = GetTurnsSwitcher(player);
         var board = GetFullNByNBoard(3);
         var playerUnit = new PlayerUnitMock(){Owner = player};
         var removable = new RemovableMock(){CanRemove = true, RemoveCost = 5};
@@ -361,7 +359,7 @@ public class MoveValidatorTests
     public void ValidateMove_ShouldReturnTrue_IfRemoveMoveOnRemovableNearPlayerUnits()
     {
         var player = GetPlayer(actionPoints: 2);
-        var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
+        var turnsSwitcher = GetTurnsSwitcher(player);
         var board = GetFullNByNBoard(3);
         var playerUnit = new PlayerUnitMock(){Owner = player};
         var removable = new RemovableMock(){CanRemove = true, RemoveCost = 1};
@@ -378,7 +376,7 @@ public class MoveValidatorTests
     public void ValidateMove_ShouldReturnFalse_IfUpgradeMoveOnCellWithNoUpgradableObjects()
     {
         var player = GetPlayer();
-        var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
+        var turnsSwitcher = GetTurnsSwitcher(player);
         var board = GetFullNByNBoard(10);
         var playerUnit = new PlayerUnitMock(){Owner = player};
         board[0, 0].AddContent(playerUnit);
@@ -393,7 +391,7 @@ public class MoveValidatorTests
     public void ValidateMove_ShouldReturnFalse_IfUpgradeMoveOnEnemyUpgradableObject()
     {
         var player = GetPlayer();
-        var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
+        var turnsSwitcher = GetTurnsSwitcher(player);
         var enemy = GetPlayer();
         var board = GetFullNByNBoard(10);
         var playerUnit = new PlayerUnitMock(){Owner = player};
@@ -411,7 +409,7 @@ public class MoveValidatorTests
     public void ValidateMove_ShouldReturnTrue_IfUpgradeMoveOnCellWithUpgradablePlayerUnit()
     {
         var player = GetPlayer();
-        var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
+        var turnsSwitcher = GetTurnsSwitcher(player);
         var board = GetFullNByNBoard(10);
         var playerUnit = new UpgradeableMock(){Owner = player};
         board[0, 0].AddContent(playerUnit);
@@ -426,7 +424,7 @@ public class MoveValidatorTests
     public void ValidateMove_ShouldReturnFalse_IfCaptureMoveOnCellWithNoCapturableObjects()
     {
         var player = GetPlayer();
-        var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
+        var turnsSwitcher = GetTurnsSwitcher(player);
         var board = GetFullNByNBoard(10);
         var playerUnit = new PlayerUnitMock(){Owner = player};
         board[0, 0].AddContent(playerUnit);
@@ -441,7 +439,7 @@ public class MoveValidatorTests
     public void ValidateMove_ShouldReturnFalse_IfCaptureMoveOnAllyCapturableObject()
     {
         var player = GetPlayer();
-        var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
+        var turnsSwitcher = GetTurnsSwitcher(player);
         var board = GetFullNByNBoard(10);
         var playerUnit = new PlayerUnitMock(){Owner = player};
         board[1, 1].AddContent(playerUnit);
@@ -456,7 +454,7 @@ public class MoveValidatorTests
     public void ValidateMove_ShouldReturnFalse_IfCaptureMoveOnEnemyCapturableObjectFarFromPlayerUnits()
     {
         var player = GetPlayer();
-        var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
+        var turnsSwitcher = GetTurnsSwitcher(player);
         var enemy = GetPlayer();
         var board = GetFullNByNBoard(10);
         var enemyCapturable = new CapturableMock(){Owner = enemy};
@@ -474,7 +472,7 @@ public class MoveValidatorTests
     public void ValidateMove_ShouldReturnFalse_IfCaptureMoveOnCapturableThatCannotBeCaptured()
     {
         var player = GetPlayer();
-        var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
+        var turnsSwitcher = GetTurnsSwitcher(player);
         var enemy = GetPlayer();
         var board = GetFullNByNBoard(10);
         var enemyCapturable = new CapturableMock(){Owner = enemy, CanCapture = false};
@@ -496,7 +494,7 @@ public class MoveValidatorTests
     public void ValidateMove_ShouldReturnTrue_IfValidCaptureMove()
     {
         var player = GetPlayer();
-        var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
+        var turnsSwitcher = GetTurnsSwitcher(player);
         var enemy = GetPlayer();
         var board = GetFullNByNBoard(10);
         var enemyCapturable = new CapturableMock(){Owner = enemy};
@@ -514,7 +512,7 @@ public class MoveValidatorTests
     public void ValidateMove_ShouldThrowNotImplementedException_ForUnfamiliarMoveTypes()
     {
         var player = GetPlayer();
-        var turnsSwitcher = new PlayerTurnsSwitcher(new List<Player>(){player});
+        var turnsSwitcher = GetTurnsSwitcher(player);
         var board = GetFullNByNBoard(10);
         var movePosition = new Vector2Int(0, 0);
         var testMove = new TestMove(player, movePosition);
@@ -522,4 +520,9 @@ public class MoveValidatorTests
 
         Assert.Throws<NotImplementedException>(() => validator.ValidateMove(testMove));
     }
+
+    private PlayerTurnsSwitcher GetTurnsSwitcher(params Player[] players)
+    {
+        return new PlayerTurnsSwitcher(new PlayersList(players));
+    } 
 }
