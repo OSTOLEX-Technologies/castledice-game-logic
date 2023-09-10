@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "castledice-game-logic", "castledice-game-logic\castledice-game-logic.csproj", "{4DE6DA3E-6D04-4B09-BBAF-30C2CA61DA3E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "castledice-game-logic-tests", "castledice-game-logic-tests\castledice-game-logic-tests.csproj", "{FA60A8AD-1C0C-4FDC-9C32-5EF083010EAC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4DE6DA3E-6D04-4B09-BBAF-30C2CA61DA3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DE6DA3E-6D04-4B09-BBAF-30C2CA61DA3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DE6DA3E-6D04-4B09-BBAF-30C2CA61DA3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DE6DA3E-6D04-4B09-BBAF-30C2CA61DA3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA60A8AD-1C0C-4FDC-9C32-5EF083010EAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA60A8AD-1C0C-4FDC-9C32-5EF083010EAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA60A8AD-1C0C-4FDC-9C32-5EF083010EAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA60A8AD-1C0C-4FDC-9C32-5EF083010EAC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
