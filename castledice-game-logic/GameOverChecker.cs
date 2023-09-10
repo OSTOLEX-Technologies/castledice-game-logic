@@ -4,7 +4,7 @@ namespace castledice_game_logic;
 
 public class GameOverChecker
 {
-    private Board _board;
+    private readonly Board _board;
 
     public GameOverChecker(Board board)
     {
