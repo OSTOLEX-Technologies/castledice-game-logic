@@ -10,13 +10,18 @@ public class PassPenalty : IPenalty
 {
     private class PlayerSpending
     {
-        public Player Player;
+        public readonly Player Player;
         public int ActionPointsSpent;
+
+        public PlayerSpending(Player player)
+        {
+            Player = player;
+        }
     }
     
-    private PlayerTurnsSwitcher _turnsSwitcher;
-    private Dictionary<Player, int> _playersPassCounts = new();
-    private int _maxPassCount;
+    private readonly PlayerTurnsSwitcher _turnsSwitcher;
+    private readonly Dictionary<Player, int> _playersPassCounts = new();
+    private readonly int _maxPassCount;
     private PlayerSpending _lastPlayerSpending;
     
 
@@ -52,9 +57,9 @@ public class PassPenalty : IPenalty
 
     public int GetPassCount(Player player)
     {
-        if (_playersPassCounts.ContainsKey(player))
+        if (_playersPassCounts.TryGetValue(player, out var count))
         {
-            return _playersPassCounts[player];
+            return count;
         }
         return 0;
     }
@@ -69,9 +74,8 @@ public class PassPenalty : IPenalty
     private void SwitchToCurrentPlayer()
     {
         var currentPlayer = _turnsSwitcher.GetCurrentPlayer();
-        _lastPlayerSpending = new PlayerSpending()
+        _lastPlayerSpending = new PlayerSpending(currentPlayer)
         {
-            Player = currentPlayer,
             ActionPointsSpent = 0
         };
         currentPlayer.ActionPoints.ActionPointsDecreased += OnActionPointsDecreased;
