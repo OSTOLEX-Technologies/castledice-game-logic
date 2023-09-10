@@ -8,7 +8,7 @@ namespace castledice_game_logic.Penalties;
 /// </summary>
 public class PassPenalty : IPenalty
 {
-    private class PlayerSpending
+    private sealed class PlayerSpending
     {
         public readonly Player Player;
         public int ActionPointsSpent;
