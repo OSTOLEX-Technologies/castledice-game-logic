@@ -7,6 +7,13 @@ public class Castle : Content, ICapturable, IPlayerOwned, IPlaceBlocking
     private int _defaultDurability;
     private int _freeDurability; //Durability of the castle that has no owner.
     
+    /// <summary>
+    /// Parameters durability and freeDurability must be positive. Otherwise exception will be thrown.
+    /// </summary>
+    /// <param name="player"></param>
+    /// <param name="durability"></param>
+    /// <param name="freeDurability"></param>
+    /// <exception cref="ArgumentException"></exception>
     public Castle(Player player, int durability, int freeDurability)
     {
         if (durability <= 0)
