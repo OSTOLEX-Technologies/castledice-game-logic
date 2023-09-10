@@ -21,8 +21,8 @@ public class PlayerActionPoints
         }
     }
 
-    public event EventHandler<int> ActionPointsDecreased;
-    public event EventHandler<int> ActionPointsIncreased; 
+    public event EventHandler<int>? ActionPointsDecreased;
+    public event EventHandler<int>? ActionPointsIncreased; 
 
     public void DecreaseActionPoints(int amount)
     {
