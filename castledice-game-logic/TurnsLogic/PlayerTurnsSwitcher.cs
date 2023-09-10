@@ -9,6 +9,10 @@ public class PlayerTurnsSwitcher : ICurrentPlayerProvider
 
     public PlayerTurnsSwitcher(PlayersList players)
     {
+        if (players.Count == 0)
+        {
+            throw new ArgumentException("Players list can't be empty!");
+        }
         _players = players;
     }
 

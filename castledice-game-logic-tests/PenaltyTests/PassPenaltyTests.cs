@@ -18,7 +18,7 @@ public class PassPenaltyTests
     [InlineData(2)]
     public void GetViolators_ShouldReturnEmptyList_IfNoPlayersExceededMaxPassCount(int maxPassCount)
     {
-        var turnSwitcher = GetTurnsSwitcher();
+        var turnSwitcher = GetTurnsSwitcher(GetPlayer());
         var passPenalty = new PassPenalty(maxPassCount, turnSwitcher);
         
         for (int i = 0; i < maxPassCount-1; i++)

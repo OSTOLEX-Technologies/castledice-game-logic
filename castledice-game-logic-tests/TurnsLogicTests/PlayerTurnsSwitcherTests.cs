@@ -10,7 +10,7 @@ public class PlayerTurnsSwitcherTests
     [Fact]
     public void PlayerTurnSwitcher_ShouldImplementICurrentPlayerProvider()
     {
-        var switcher = new PlayerTurnsSwitcher(new PlayersList());
+        var switcher = GetTurnsSwitcher(GetPlayer());
         Assert.True(switcher is ICurrentPlayerProvider);
     }
     
@@ -100,5 +100,12 @@ public class PlayerTurnsSwitcherTests
         turnsSwitcher.SwitchTurn();
         
         Assert.True(eventInvoked);
+    }
+
+    [Fact]
+    public void Constructor_ShouldThrowArgumentException_IfEmptyPlayerListGiven()
+    {
+        var playersList = new PlayersList();
+        Assert.Throws<ArgumentException>(() => new PlayerTurnsSwitcher(playersList));
     }
 }
