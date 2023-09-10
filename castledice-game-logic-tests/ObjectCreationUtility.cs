@@ -19,6 +19,11 @@ public static class ObjectCreationUtility
     {
         return new CastleGO(player, durability, freeDurability);
     }
+
+    public static PlayerUnitMock GetUnit(Player player)
+    {
+        return new PlayerUnitMock() { Owner = player };
+    }
     
     public static Board GetFullNByNBoard(int size)
     {
