@@ -21,17 +21,22 @@ public class PlayerActionPoints
         }
     }
 
+    public event EventHandler<int>? ActionPointsDecreased;
+    public event EventHandler<int>? ActionPointsIncreased; 
+
     public void DecreaseActionPoints(int amount)
     {
         if (Amount - amount < 0)
         {
             throw new InvalidOperationException("Can't decrease action points, because they amount will be less than zero!");
         }
+        ActionPointsDecreased?.Invoke(this, amount);
         Amount -= amount;
     }
 
     public void IncreaseActionPoints(int amount)
     {
+        ActionPointsIncreased?.Invoke(this, amount);
         Amount += amount;
     }
 }

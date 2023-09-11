@@ -47,5 +47,31 @@ public class PlayerActionPointsTests
         
         Assert.Equal(expectedActionPoints, actualActionPoints);
     }
+    
+    [Fact]
+    public void ActionPointsDecreased_ShouldBeInvoked_WhenDecreasingActionPoints()
+    {
+        var actionPoints = new PlayerActionPoints();
+        actionPoints.Amount = 5;
+        int decreaseAmount = 2;
+        int decreaseAmountFromEvent = 0;
+        actionPoints.ActionPointsDecreased += (sender, amount) => decreaseAmountFromEvent = amount;
         
+        actionPoints.DecreaseActionPoints(decreaseAmount);
+        
+        Assert.Equal(decreaseAmount, decreaseAmountFromEvent);
+    }
+    
+    [Fact]
+    public void ActionPointsIncreased_ShouldBeInvoked_WhenIncreasingActionPoints()
+    {
+        var actionPoints = new PlayerActionPoints();
+        int increaseAmount = 2;
+        int increaseAmountFromEvent = 0;
+        actionPoints.ActionPointsIncreased += (sender, amount) => increaseAmountFromEvent = amount;
+        
+        actionPoints.IncreaseActionPoints(increaseAmount);
+        
+        Assert.Equal(increaseAmount, increaseAmountFromEvent);
+    }
 }

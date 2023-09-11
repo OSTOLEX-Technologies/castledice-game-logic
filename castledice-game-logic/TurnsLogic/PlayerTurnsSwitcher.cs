@@ -2,11 +2,17 @@
 
 public class PlayerTurnsSwitcher : ICurrentPlayerProvider
 {
+    public event EventHandler? TurnSwitched; 
+    
     private PlayersList _players;
     private int _current = 0;
 
     public PlayerTurnsSwitcher(PlayersList players)
     {
+        if (players.Count == 0)
+        {
+            throw new ArgumentException("Players list can't be empty!");
+        }
         _players = players;
     }
 
@@ -22,5 +28,6 @@ public class PlayerTurnsSwitcher : ICurrentPlayerProvider
         {
             _current = 0;
         }
+        TurnSwitched?.Invoke(this, EventArgs.Empty);
     }
 }
