@@ -11,6 +11,10 @@ public class GameOverChecker
         _board = board;
     }
 
+    public bool IsGameOver(){
+        return !GetWinner().IsNull;
+    }
+    
     public Player GetWinner()
     {
         var castlesOwners = GetCastlesOwners();
@@ -21,17 +25,16 @@ public class GameOverChecker
         return new NullPlayer();
     }
     
-    public bool IsGameOver(){
-        return GetCastlesOwners().Count == 1;
-    }
-
     private List<Player> GetCastlesOwners()
     {
         var castlesOwners = new HashSet<Player>();
         var castles = GetCastles();
         foreach (var castle in castles)
         {
-            castlesOwners.Add(castle.GetOwner());
+            if (!castle.GetOwner().IsNull)
+            {
+                castlesOwners.Add(castle.GetOwner());
+            }
         }
         return castlesOwners.ToList();
     }
