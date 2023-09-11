@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - develop
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
@@ -37,7 +38,6 @@ jobs:
         run: |
           New-Item -Path .\.sonar\scanner -ItemType Directory
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
-        feature/penalty_system/pass_penalty
           dotnet tool install --global JetBrains.dotCover.GlobalTool
       - name: Build and analyze
         env:
@@ -45,7 +45,6 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-        feature/penalty_system/pass_penalty
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"OSTOLEX-Technologies_castledice-game-logic" /o:"ostolex-technologies" /d:sonar.token="${{ secrets.SONAR_TOKEN }}"  /d:sonar.cs.dotcover.reportsPaths=dotCover.Output.html /d:sonar.host.url="https://sonarcloud.io"
           dotnet build
           dotnet dotcover test --dcReportType=HTML
