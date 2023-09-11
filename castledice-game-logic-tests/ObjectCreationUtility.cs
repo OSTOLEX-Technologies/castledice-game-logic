@@ -21,6 +21,11 @@ public static class ObjectCreationUtility
         return new CastleGO(player, durability, freeDurability);
     }
 
+    public static Knight GetKnight(Player player, int health = 3, int placementCost = 1)
+    {
+        return new Knight(player, placementCost, health);
+    }
+
     public static PlayerUnitMock GetUnit(Player player)
     {
         return new PlayerUnitMock() { Owner = player };
