@@ -54,8 +54,8 @@ public class PlayersListTests
         var player = GetPlayer();
         var playersList = new PlayersList();
         playersList.AddPlayer(player);
-        Player kickedPlayer = null;
-        playersList.PlayerKicked += (sender, player) => kickedPlayer = player;
+        Player kickedPlayer = new NullPlayer();
+        playersList.PlayerKicked += (sender, playerFromEvent) => kickedPlayer = playerFromEvent;
         
         playersList.KickPlayer(player);
         
@@ -65,11 +65,11 @@ public class PlayersListTests
     [Theory]
     [InlineData(100)]
     [InlineData(-1)]
-    public void Indexer_ShouldThrowIndexOutOfRangeException_IfInvalidIndexGiven(int index)
+    public void Indexer_ShouldThrowArgumentException_IfInvalidIndexGiven(int index)
     {
         var playersList = new PlayersList();
         
-        Assert.Throws<IndexOutOfRangeException>(() => playersList[index]);
+        Assert.Throws<ArgumentException>(() => playersList[index]);
     }
     
     [Fact]

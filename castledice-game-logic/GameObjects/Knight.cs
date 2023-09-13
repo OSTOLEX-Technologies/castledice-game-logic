@@ -2,9 +2,9 @@
 
 public class Knight : Content, IPlayerOwned, IReplaceable, IPlaceBlocking, IPlaceable
 {
-    private Player _player;
-    private int _health;
-    private int _placementCost;
+    private readonly Player _player;
+    private readonly int _health;
+    private readonly int _placementCost;
 
     public Knight(Player player, int placementCost, int health)
     {

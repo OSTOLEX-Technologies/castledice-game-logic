@@ -2,6 +2,12 @@
 
 public struct TreeConfig
 {
-    public int RemoveCost;
-    public bool CanBeRemoved;
+    public int RemoveCost { get; }
+    public bool CanBeRemoved { get; }
+
+    public TreeConfig(int removeCost, bool canBeRemoved)
+    {
+        RemoveCost = removeCost;
+        CanBeRemoved = canBeRemoved;
+    }
 }

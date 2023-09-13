@@ -2,8 +2,8 @@
 
 public class Tree : Content, IPlaceBlocking, IRemovable
 {
-    private int _removeCost;
-    private bool _canBeRemoved;
+    private readonly int _removeCost;
+    private readonly bool _canBeRemoved;
     
     public Tree(int removeCost, bool canBeRemoved)
     {

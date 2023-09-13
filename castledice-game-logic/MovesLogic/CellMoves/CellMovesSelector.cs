@@ -6,7 +6,7 @@ namespace castledice_game_logic.MovesLogic;
 
 public class CellMovesSelector
 {
-    private Board _board;
+    private readonly Board _board;
 
     public CellMovesSelector(Board board)
     {
@@ -63,18 +63,17 @@ public class CellMovesSelector
         return cell.HasContent(c => ContentBelongsToPlayer(c, player));
     }
     
-    private bool ContentBelongsToPlayer(Content content, Player player)
+    private static bool ContentBelongsToPlayer(Content content, Player player)
     {
-        if (content is IPlayerOwned)
+        if (content is IPlayerOwned ownedContent)
         {
-            var ownedContent = content as IPlayerOwned;
             var owner = ownedContent.GetOwner();
             return player == owner;
         }
         return false;
     }
 
-    private bool CanUpgradeOnCell(Cell cell, Player player)
+    private static bool CanUpgradeOnCell(Cell cell, Player player)
     {
         return UpgradeRules.CanUpgradeOnCell(cell, player);
     }

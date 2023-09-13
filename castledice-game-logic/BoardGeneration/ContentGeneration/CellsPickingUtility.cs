@@ -15,10 +15,10 @@ public class CellsPickingUtility
         public int IntersectionsCount;
     }
     
-    private Board _board;
-    private bool[,] _availabilityMatrix;
+    private readonly Board _board;
+    private readonly bool[,] _availabilityMatrix;
     private Vector2Int _lastPickedCellPosition;
-    private IRangeRandomNumberGenerator _rangeRandomNumberGenerator;
+    private readonly IRangeRandomNumberGenerator _rangeRandomNumberGenerator;
     private bool _cellPicked;
 
     public CellsPickingUtility(Board board)
@@ -182,7 +182,7 @@ public class CellsPickingUtility
                 }
             }
         }
-        throw new IndexOutOfRangeException("Cell number is bigger than amount of available cells!");
+        throw new ArgumentException("Cell number is bigger than amount of available cells!");
     }
 
     public void ExcludePicked()
@@ -242,26 +242,14 @@ public class CellsPickingUtility
 
     private void ExcludeCellsAround(Vector2Int cellPosition, int radius)
     {
-        for (int i = cellPosition.X - radius; i <= cellPosition.X + radius; i++)
+        int minI = System.Math.Clamp(cellPosition.X - radius, 0, _board.GetLength(0) - 1);
+        int maxI = System.Math.Clamp(cellPosition.X + radius, 0, _board.GetLength(0) - 1);
+        int minJ = System.Math.Clamp(cellPosition.Y - radius, 0, _board.GetLength(1) - 1);
+        int maxJ = System.Math.Clamp(cellPosition.Y + radius, 0, _board.GetLength(1) - 1);
+        for (int i = minI; i <= maxI; i++)
         {
-            if (i < 0)
+            for (int j = minJ; j <= maxJ; j++)
             {
-                continue;
-            }
-            if (i >= _board.GetLength(0))
-            {
-                break;
-            }
-            for (int j = cellPosition.Y - radius; j <= cellPosition.Y + radius; j++)
-            {
-                if (j < 0)
-                {
-                    continue;
-                }
-                if (j >= _board.GetLength(1))
-                {
-                    break;
-                }
                 if (i == cellPosition.X && j == cellPosition.Y)
                 {
                     continue;
@@ -276,14 +264,14 @@ public class CellsPickingUtility
         }
     }
 
-    private float DistanceBetween(Vector2Int a, Vector2Int b)
+    private static float DistanceBetween(Vector2Int a, Vector2Int b)
     {
         Vector2Int distanceVector = new Vector2Int(a.X - b.X, a.Y - b.Y);
         float distance = MathF.Sqrt(distanceVector.X * distanceVector.X + distanceVector.Y * distanceVector.Y);
         return distance;
     }
 
-    private int Round(float toRound)
+    private static int Round(float toRound)
     {
         float wholePart = MathF.Floor(toRound);
         float decimalPart = toRound - wholePart;
@@ -345,17 +333,22 @@ public class CellsPickingUtility
         {
             throw new ArgumentException("Radius cannot be less than zero!");
         }
+
+        return CountIntersections(cellPosition, radius);
+    }
+
+    private int CountIntersections(Vector2Int cellPosition, int radius)
+    {
         int intersectionsCount = 0;
         for (int i = cellPosition.X - radius; i <= cellPosition.X + radius; i++)
         {
             for (int j = cellPosition.Y - radius; j <= cellPosition.Y + radius; j++)
             {
-                if (i >= 0 && j >= 0  && i < _board.GetLength(0) && j < _board.GetLength(1))
+                if (i >= 0 && j >= 0  && 
+                    i < _board.GetLength(0) && j < _board.GetLength(1) && 
+                    _availabilityMatrix[i, j])
                 {
-                    if (_availabilityMatrix[i, j])
-                    {
-                        continue;
-                    }
+                    continue;
                 }
                 float distanceToCell = DistanceBetween(cellPosition, new Vector2Int(i, j));
                 int roundedDistance = Round(distanceToCell);

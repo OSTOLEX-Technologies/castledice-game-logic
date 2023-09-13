@@ -2,6 +2,12 @@
 
 public struct CastleConfig
 {
-    public int Durability;
-    public int FreeDurability; //Durability of the castle that has no owner.
+    public int Durability { get; }
+    public int FreeDurability { get; }
+
+    public CastleConfig(int durability, int freeDurability)
+    {
+        Durability = durability;
+        FreeDurability = freeDurability;
+    }
 }

@@ -6,7 +6,7 @@ namespace castledice_game_logic;
 
 public class Cell
 {
-    private List<Content> _content = new();
+    private readonly List<Content> _content = new();
     private readonly Vector2Int _position;
 
     public Vector2Int Position => _position;
@@ -38,7 +38,7 @@ public class Cell
 
     public bool HasContent(Func<Content, bool> predicate)
     {
-        return _content.Any(predicate);
+        return _content.Exists(c => predicate(c));
     }
 
     /// <summary>

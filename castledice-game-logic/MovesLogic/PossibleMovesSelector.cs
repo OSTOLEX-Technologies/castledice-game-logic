@@ -7,9 +7,9 @@ namespace castledice_game_logic.MovesLogic;
 
 public class PossibleMovesSelector
 {
-    private Board _board;
-    private IPlaceablesFactory _placeablesFactory;
-    private IPlacementListProvider _placementListProvider;
+    private readonly Board _board;
+    private readonly IPlaceablesFactory _placeablesFactory;
+    private readonly IPlacementListProvider _placementListProvider;
 
     public PossibleMovesSelector(Board board, IPlaceablesFactory placeablesFactory, IPlacementListProvider placementListProvider)
     {
@@ -28,32 +28,17 @@ public class PossibleMovesSelector
         var cellMovesSelector = new CellMovesSelector(_board);
         var cell = _board[position];
         var cellMove = cellMovesSelector.GetCellMoveForCell(player, cell);
-        
-        if (cellMove.MoveType == MoveType.None)
+
+        return cellMove.MoveType switch
         {
-            return new List<AbstractMove>();
-        }
-        if (cellMove.MoveType == MoveType.Upgrade)
-        {
-            return GetUpgradeMoves(player, cellMove.Cell);
-        }
-        if (cellMove.MoveType == MoveType.Capture)
-        {
-            return GetCaptureMoves(player, cellMove.Cell);
-        }
-        if (cellMove.MoveType == MoveType.Place)
-        {
-            return GetPlaceMoves(player, cellMove.Cell);
-        }
-        if (cellMove.MoveType == MoveType.Replace)
-        {
-            return GetReplaceMoves(player, cellMove.Cell);
-        }
-        if (cellMove.MoveType == MoveType.Remove)
-        {
-            return GetRemoveMoves(player, cellMove.Cell);
-        }
-        throw new InvalidOperationException("Unfamiliar move type: " + cellMove.MoveType);
+            MoveType.None => new List<AbstractMove>(),
+            MoveType.Upgrade => GetUpgradeMoves(player, cellMove.Cell),
+            MoveType.Capture => GetCaptureMoves(player, cellMove.Cell),
+            MoveType.Place => GetPlaceMoves(player, cellMove.Cell),
+            MoveType.Replace => GetReplaceMoves(player, cellMove.Cell),
+            MoveType.Remove => GetRemoveMoves(player, cellMove.Cell),
+            _ => throw new InvalidOperationException("Unfamiliar move type: " + cellMove.MoveType)
+        };
     }
 
     private List<AbstractMove> GetUpgradeMoves(Player player, Cell cell)
@@ -66,11 +51,9 @@ public class PossibleMovesSelector
     {
         var moves = new List<AbstractMove>();
         var captureCost = CaptureRules.GetCaptureCost(_board, cell.Position, player);
-        if (captureCost <= player.ActionPoints.Amount)
-        {
-            var captureMove = new CaptureMove(player, cell.Position);
-            moves.Add(captureMove);
-        }
+        if (captureCost > player.ActionPoints.Amount) return moves;
+        var captureMove = new CaptureMove(player, cell.Position);
+        moves.Add(captureMove);
 
         return moves;
     }
@@ -84,11 +67,9 @@ public class PossibleMovesSelector
             var placeable = _placeablesFactory.CreatePlaceable(type, player);
             bool canPlace = placeable.CanBePlacedOn(cell);
             bool canAfford = player.ActionPoints.Amount >= placeable.GetPlacementCost();
-            if (canPlace && canAfford)
-            {
-                var move = new PlaceMove(player, cell.Position, placeable);
-                moves.Add(move);
-            }
+            if (!canPlace || !canAfford) continue;
+            var move = new PlaceMove(player, cell.Position, placeable);
+            moves.Add(move);
         }
         return moves;
     }
@@ -103,11 +84,9 @@ public class PossibleMovesSelector
             int replaceCost = ReplaceRules.GetReplaceCost(_board, cell.Position, placeable);
             bool canPlace = placeable.CanBePlacedOn(cell);
             bool canAfford = player.ActionPoints.Amount >= replaceCost;
-            if (canPlace && canAfford)
-            {
-                var move = new ReplaceMove(player, cell.Position, placeable);
-                moves.Add(move);
-            }
+            if (!canPlace || !canAfford) continue;
+            var move = new ReplaceMove(player, cell.Position, placeable);
+            moves.Add(move);
         }
         return moves;
     }
@@ -116,11 +95,9 @@ public class PossibleMovesSelector
     {
         var moves = new List<AbstractMove>();
         var removeCost = RemoveRules.GetRemoveCost(_board, cell.Position);
-        if (removeCost <= player.ActionPoints.Amount)
-        {
-            var removeMove = new RemoveMove(player, cell.Position);
-            moves.Add(removeMove);
-        }
+        if (removeCost > player.ActionPoints.Amount) return moves;
+        var removeMove = new RemoveMove(player, cell.Position);
+        moves.Add(removeMove);
         return moves;
     }
 }

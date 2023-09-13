@@ -4,7 +4,7 @@ namespace castledice_game_logic.TurnsLogic;
 
 public class TimeCondition : ITurnSwitchCondition
 {
-    private ITimer _timer;
+    private readonly ITimer _timer;
     private bool _isStarted = false;
 
     public TimeCondition(ITimer timer)

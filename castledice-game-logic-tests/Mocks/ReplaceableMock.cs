@@ -6,7 +6,7 @@ namespace castledice_game_logic_tests.Mocks;
 public class ReplaceableMock : Content, IReplaceable, IPlayerOwned, IPlaceBlocking
 {
     public int ReplaceCost;
-    public Player Owner;
+    public Player Owner = new NullPlayer();
 
     public int GetReplaceCost()
     {

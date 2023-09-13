@@ -1,4 +1,5 @@
-﻿using castledice_game_logic.ActionPointsLogic;
+﻿using System.Diagnostics;
+using castledice_game_logic.ActionPointsLogic;
 
 namespace castledice_game_logic_tests;
 using static ObjectCreationUtility;
@@ -56,8 +57,12 @@ public class GiveActionPointsActionTests
         var action = new GiveActionPointsAction(player, actionPointsToGive);
 
         var snapshot = action.GetSnapshot();
-        var giveAPSnapshot = snapshot as GiveActionPointsSnapshot;
-        Assert.Equal(actionPointsToGive, giveAPSnapshot.Amount);
-        Assert.Equal(player.Id, giveAPSnapshot.PlayerId);
+        var giveApSnapshot = snapshot as GiveActionPointsSnapshot;
+        if (giveApSnapshot is null)
+        {
+            Assert.Fail("Snapshot is not GiveActionPointsSnapshot");
+        }
+        Assert.Equal(actionPointsToGive, giveApSnapshot.Amount);
+        Assert.Equal(player.Id, giveApSnapshot.PlayerId);
     }
 }

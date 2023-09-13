@@ -15,17 +15,10 @@ public static class UpgradeRules
     
     private static bool ContentCanBeUpgradedByPlayer(Content content, Player player)
     {
-        if (content is IUpgradeable)
-        {
-            var upgradeable = content as IUpgradeable;
-            if (upgradeable.CanBeUpgraded())
-            {
-                int upgradeCost = upgradeable.GetUpgradeCost();
-                return upgradeCost <= player.ActionPoints.Amount;
-            }
-        }
-
-        return false;
+        if (content is not IUpgradeable upgradeable) return false;
+        if (!upgradeable.CanBeUpgraded()) return false;
+        int upgradeCost = upgradeable.GetUpgradeCost();
+        return upgradeCost <= player.ActionPoints.Amount;
     }
 
     public static int GetUpgradeCost(Board board, Vector2Int position)
@@ -41,7 +34,7 @@ public static class UpgradeRules
     private static IUpgradeable GetUpgradableOnPosition(Board board, Vector2Int position)
     {
         var cell = board[position];
-        var upgradeable = cell.GetContent().FirstOrDefault(c => c is IUpgradeable) as IUpgradeable;
+        var upgradeable = cell.GetContent().Find(c => c is IUpgradeable) as IUpgradeable;
         if (upgradeable == null)
         {
             throw new ArgumentException("No upgradeable on position: " + position);

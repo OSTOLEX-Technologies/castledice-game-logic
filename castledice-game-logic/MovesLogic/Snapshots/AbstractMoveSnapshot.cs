@@ -7,16 +7,14 @@ namespace castledice_game_logic.MovesLogic.Snapshots;
 [Serializable]
 public abstract class AbstractMoveSnapshot : IActionSnapshot
 {
-    protected ActionType _actionType = ActionType.Move;
-    protected int _playerId;
-    protected Vector2Int _position;
+    private readonly Vector2Int _position;
 
     [JsonConverter(typeof(StringEnumConverter))] 
 
-    public ActionType ActionType => _actionType;
-    
-    public int PlayerId => _playerId;
-    
+    public ActionType ActionType { get; } = ActionType.Move;
+
+    public int PlayerId { get; }
+
     public Vector2Int Position => _position;
     
     [JsonConverter(typeof(StringEnumConverter))] 
@@ -25,7 +23,7 @@ public abstract class AbstractMoveSnapshot : IActionSnapshot
     
     protected AbstractMoveSnapshot(AbstractMove move)
     {
-        _playerId = move.Player.Id;
+        PlayerId = move.Player.Id;
         _position = move.Position;
     }
 
@@ -33,7 +31,7 @@ public abstract class AbstractMoveSnapshot : IActionSnapshot
 
     protected bool Equals(AbstractMoveSnapshot other)
     {
-        return _actionType == other._actionType && _playerId == other._playerId && _position.Equals(other._position) && MoveType == other.MoveType;
+        return ActionType == other.ActionType && PlayerId == other.PlayerId && _position.Equals(other._position) && MoveType == other.MoveType;
     }
 
     public override bool Equals(object? obj)
@@ -46,6 +44,6 @@ public abstract class AbstractMoveSnapshot : IActionSnapshot
 
     public override int GetHashCode()
     {
-        return HashCode.Combine((int)_actionType, _playerId, _position, (int)MoveType);
+        return HashCode.Combine((int)ActionType, PlayerId, _position, (int)MoveType);
     }
 }

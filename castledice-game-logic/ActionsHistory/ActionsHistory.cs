@@ -2,5 +2,5 @@
 
 public class ActionsHistory
 {
-    public List<IActionSnapshot> History { get; } = new List<IActionSnapshot>();
+    public List<IActionSnapshot> History { get; } = new();
 }

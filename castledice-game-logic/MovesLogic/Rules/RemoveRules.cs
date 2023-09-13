@@ -27,14 +27,10 @@ public static class RemoveRules
 
     private static bool ContentCanBeRemovedByPlayer(Content content, Player player)
     {
-        if (content is IRemovable removable)
-        {
-            bool canRemove = removable.CanBeRemoved();
-            bool canAfford = removable.GetRemoveCost() <= player.ActionPoints.Amount;
-            return canAfford && canRemove;
-        }
-
-        return false;
+        if (content is not IRemovable removable) return false;
+        bool canRemove = removable.CanBeRemoved();
+        bool canAfford = removable.GetRemoveCost() <= player.ActionPoints.Amount;
+        return canAfford && canRemove;
     }
     
     public static int GetRemoveCost(Board board, Vector2Int position)
@@ -51,12 +47,11 @@ public static class RemoveRules
     private static IRemovable GetRemovableContentOnPosition(Board board, Vector2Int position)
     {
         var cell = board[position];
-        var removable = cell.GetContent().FirstOrDefault(c => c is IRemovable) as IRemovable;
+        var removable = cell.GetContent().Find(c => c is IRemovable) as IRemovable;
         if (removable == null)
         {
             throw new ArgumentException("No replaceable objects on position: " + position);
         }
-
         return removable;
     }
 }

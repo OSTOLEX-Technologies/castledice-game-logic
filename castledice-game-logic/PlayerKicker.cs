@@ -4,7 +4,7 @@ namespace castledice_game_logic;
 
 public class PlayerKicker
 {
-    private Board _board;
+    private readonly Board _board;
 
     public PlayerKicker(Board board)
     {
@@ -25,7 +25,7 @@ public class PlayerKicker
         }
     }
 
-    private void RemovePlayerUnits(Cell cell, Player player)
+    private static void RemovePlayerUnits(Cell cell, Player player)
     {
         var cellContent = cell.GetContent();
         var contentToRemove = cellContent.Where(c => ContentIsPlayerUnit(c, player)).ToList();
@@ -35,7 +35,7 @@ public class PlayerKicker
         }
     }
 
-    private bool ContentIsPlayerUnit(Content content, Player player)
+    private static bool ContentIsPlayerUnit(Content content, Player player)
     {
         if (content is IPlayerOwned playerOwned and IReplaceable)
         {
@@ -45,7 +45,7 @@ public class PlayerKicker
         return false;
     }
 
-    private void FreeCapturablesOwnedByPlayer(Cell cell, Player player)
+    private static void FreeCapturablesOwnedByPlayer(Cell cell, Player player)
     {
         var cellContent = cell.GetContent();
         var capturablesToFree = cellContent.Where(c => ContentIsCapturableOwnedByPlayer(c, player)).Cast<ICapturable>();
@@ -55,7 +55,7 @@ public class PlayerKicker
         }
     }
 
-    private bool ContentIsCapturableOwnedByPlayer(Content content, Player player)
+    private static bool ContentIsCapturableOwnedByPlayer(Content content, Player player)
     {
         return content is ICapturable and IPlayerOwned playerOwned && playerOwned.GetOwner() == player;
     }

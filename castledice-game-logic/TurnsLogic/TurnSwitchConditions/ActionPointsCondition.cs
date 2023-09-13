@@ -2,7 +2,7 @@
 
 public class ActionPointsCondition : ITurnSwitchCondition
 {
-    private ICurrentPlayerProvider _currentPlayerProvider;
+    private readonly ICurrentPlayerProvider _currentPlayerProvider;
 
     public ActionPointsCondition(ICurrentPlayerProvider currentPlayerProvider)
     {

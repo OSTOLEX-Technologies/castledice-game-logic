@@ -10,7 +10,7 @@ public class TreesFactoryTests
     [InlineData(2, true)]
     public void GetTree_ShouldReturnTrees_CreatedAccordingToConfig(int removeCost, bool canBeRemoved)
     {
-        var config = new TreeConfig() { RemoveCost = removeCost, CanBeRemoved = canBeRemoved };
+        var config = new TreeConfig(removeCost, canBeRemoved);
         var factory = new TreesFactory(config);
         var tree = factory.GetTree();
         

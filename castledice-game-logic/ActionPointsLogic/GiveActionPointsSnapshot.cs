@@ -4,7 +4,7 @@ namespace castledice_game_logic.ActionPointsLogic;
 using Newtonsoft.Json;
 
 [Serializable]
-public class GiveActionPointsSnapshot : IActionSnapshot
+public sealed class GiveActionPointsSnapshot : IActionSnapshot
 {
     public int PlayerId { get; }
     public int Amount { get; }

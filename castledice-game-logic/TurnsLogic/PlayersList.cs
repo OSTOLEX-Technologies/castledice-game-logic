@@ -8,9 +8,9 @@ namespace castledice_game_logic.TurnsLogic;
 public class PlayersList : IEnumerable<Player>
 {
     public int Count => _players.Count;
-    public event EventHandler<Player> PlayerKicked;
+    public event EventHandler<Player>? PlayerKicked;
     
-    private List<Player> _players = new();
+    private readonly List<Player> _players = new();
     
     public void AddPlayer(Player player)
     {
@@ -46,7 +46,7 @@ public class PlayersList : IEnumerable<Player>
         {
             if (i < 0 || i >= _players.Count)
             {
-                throw new IndexOutOfRangeException();
+                throw new ArgumentException("No player on index: " + i + " in players list!");
             }
             return _players[i];
         }

@@ -4,7 +4,7 @@ namespace castledice_game_logic.MovesLogic;
 
 public class MoveSaver : IMoveVisitor
 {
-    private ActionsHistory _history;
+    private readonly ActionsHistory _history;
 
     public MoveSaver(ActionsHistory history)
     {

@@ -46,7 +46,6 @@ public class TimeConditionTests
     public void ShouldSwitchTurn_ShouldResetInnerTimer_IfReturnedTrue()
     {
         var timer = new TickTimerMock();
-        var turnTime = 10;
         timer.SetDuration(10);
         var timeCondition = new TimeCondition(timer);
         timeCondition.Start();

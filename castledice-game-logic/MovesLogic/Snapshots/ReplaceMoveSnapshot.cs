@@ -4,7 +4,7 @@ using Newtonsoft.Json.Converters;
 
 namespace castledice_game_logic.MovesLogic.Snapshots;
 
-public class ReplaceMoveSnapshot : AbstractMoveSnapshot
+public sealed class ReplaceMoveSnapshot : AbstractMoveSnapshot
 {
     [JsonConverter(typeof(StringEnumConverter))]
     public PlacementType ReplacementType { get; }
@@ -21,7 +21,7 @@ public class ReplaceMoveSnapshot : AbstractMoveSnapshot
         return JsonConvert.SerializeObject(this);
     }
 
-    protected bool Equals(ReplaceMoveSnapshot other)
+    private bool Equals(ReplaceMoveSnapshot other)
     {
         return base.Equals(other) && ReplacementType == other.ReplacementType;
     }
