@@ -2,7 +2,7 @@
 
 namespace castledice_game_logic.MovesLogic;
 
-public class RemoveMove : AbstractMove
+public sealed class RemoveMove : AbstractMove
 {
     public RemoveMove(Player player, Vector2Int position) : base(player, position)
     {

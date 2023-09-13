@@ -28,26 +28,16 @@ public static class ReplaceRules
     
     private static bool ContentCanBeReplacedByPlayer(Content content, Player player)
     {
-        if (content is IPlayerOwned)
+        if (content is IPlayerOwned playerOwned && playerOwned.GetOwner() == player)
         {
-            var playerOwned = content as IPlayerOwned;
-            if (playerOwned.GetOwner() == player)
-            {
-                return false;
-            }
+            return false;
         }
-        if (content is IReplaceable)
-        {
-            var replaceable = content as IReplaceable;
-            int replaceCost = replaceable.GetReplaceCost();
-            int playerActionPoints = player.ActionPoints.Amount;
-            return replaceCost <= playerActionPoints;
-        }
-        return false;
+        if (content is not IReplaceable replaceable) return false;
+        int replaceCost = replaceable.GetReplaceCost();
+        int playerActionPoints = player.ActionPoints.Amount;
+        return replaceCost <= playerActionPoints;
     }
-
     
-    //TODO: Should GetReplaceCost also check if it is possible to place replacement on cell?
     public static int GetReplaceCost(Board board, Vector2Int position, IPlaceable replacement)
     {
         if (!board.HasCell(position))
@@ -64,7 +54,7 @@ public static class ReplaceRules
     private static IReplaceable GetReplaceableOnPosition(Board board, Vector2Int position)
     {
         var cell = board[position];
-        var replaceable = cell.GetContent().FirstOrDefault(c => c is IReplaceable) as IReplaceable;
+        var replaceable = cell.GetContent().Find(c => c is IReplaceable) as IReplaceable;
         if (replaceable == null)
         {
             throw new ArgumentException("No replaceable objects on position: " + position);

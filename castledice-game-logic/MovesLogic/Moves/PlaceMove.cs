@@ -19,7 +19,7 @@ public sealed class PlaceMove : AbstractMove
         return visitor.VisitPlaceMove(this);
     }
 
-    protected bool Equals(PlaceMove other)
+    private bool Equals(PlaceMove other)
     {
         return base.Equals(other) && _contentToPlace.Equals(other._contentToPlace);
     }

@@ -2,7 +2,7 @@
 
 public struct Vector2Int
 {
-    public bool Equals(Vector2Int other)
+    public readonly bool Equals(Vector2Int other)
     {
         return X == other.X && Y == other.Y;
     }

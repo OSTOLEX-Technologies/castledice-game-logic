@@ -3,7 +3,7 @@
 namespace castledice_game_logic.MovesLogic.Snapshots;
 
 [Serializable]
-public class RemoveMoveSnapshot : AbstractMoveSnapshot
+public sealed class RemoveMoveSnapshot : AbstractMoveSnapshot
 {
     public override MoveType MoveType => MoveType.Remove;
     
