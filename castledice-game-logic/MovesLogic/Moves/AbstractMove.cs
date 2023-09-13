@@ -4,8 +4,8 @@ namespace castledice_game_logic.MovesLogic;
 
 public abstract class AbstractMove 
 {
-    protected Player _player;
-    protected Vector2Int _position;
+    protected readonly Player _player;
+    protected readonly Vector2Int _position;
 
     public Player Player => _player;
     public Vector2Int Position => _position;
@@ -35,4 +35,6 @@ public abstract class AbstractMove
     {
         return HashCode.Combine(_player, _position);
     }
+    
+    
 }

@@ -54,7 +54,7 @@ public class PlayersListTests
         var player = GetPlayer();
         var playersList = new PlayersList();
         playersList.AddPlayer(player);
-        Player kickedPlayer = null;
+        Player kickedPlayer = new NullPlayer();
         playersList.PlayerKicked += (sender, player) => kickedPlayer = player;
         
         playersList.KickPlayer(player);

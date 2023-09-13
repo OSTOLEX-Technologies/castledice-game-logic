@@ -7,18 +7,15 @@ public class BoardValidator
 {
     public bool BoardCastlesAreValid(List<Player> players, Board board)
     {
-        int castlesCount = 0;
         List<Player> castlesOwners = new List<Player>();
         foreach (var cell in board)
         {
-            if (cell.HasContent(c => c is Castle))
+            var castle = cell.GetContent().Find(c => c is Castle) as Castle;
+            if (castle == null) continue;
+            var owner = castle.GetOwner();
+            if (!castlesOwners.Contains(owner))
             {
-                var castle = cell.GetContent().FirstOrDefault(c => c is Castle) as Castle;
-                var owner = castle.GetOwner();
-                if (!castlesOwners.Contains(owner))
-                {
-                    castlesOwners.Add(owner);
-                }
+                castlesOwners.Add(owner);
             }
         }
         if (castlesOwners.Count != players.Count)

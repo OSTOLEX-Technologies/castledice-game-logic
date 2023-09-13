@@ -22,14 +22,14 @@ public class GameOverCheckerTests
             return GetEnumerator();
         }
 
-        private object[] OneCastleOwnedByPlayer()
+        private static object[] OneCastleOwnedByPlayer()
         {
             var board = GetFullNByNBoard(2);
             board[0, 0].AddContent(GetCastle(GetPlayer()));
             return new object[] { board, true };
         }
 
-        private object[] TwoCastlesOwnedByOnePlayer()
+        private static object[] TwoCastlesOwnedByOnePlayer()
         {
             var board = GetFullNByNBoard(2);
             var player = GetPlayer();
@@ -38,7 +38,7 @@ public class GameOverCheckerTests
             return new object[] { board, true };
         }
         
-        private object[] TwoCastlesOwnedByDifferentPlayers()
+        private static object[] TwoCastlesOwnedByDifferentPlayers()
         {
             var board = GetFullNByNBoard(2);
             var firstPlayer = GetPlayer();
@@ -48,7 +48,7 @@ public class GameOverCheckerTests
             return new object[] { board, false };
         }
 
-        private object[] OneOfTwoCastlesIsFree()
+        private static object[] OneOfTwoCastlesIsFree()
         {
             var board = GetFullNByNBoard(2);
             var player = GetPlayer();

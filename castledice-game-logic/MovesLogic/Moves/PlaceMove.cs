@@ -3,9 +3,9 @@ using castledice_game_logic.Math;
 
 namespace castledice_game_logic.MovesLogic;
 
-public class PlaceMove : AbstractMove
+public sealed class PlaceMove : AbstractMove
 {
-    private IPlaceable _contentToPlace;
+    private readonly IPlaceable _contentToPlace;
 
     public IPlaceable ContentToPlace => _contentToPlace;
     

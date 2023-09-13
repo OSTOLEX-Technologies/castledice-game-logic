@@ -21,7 +21,7 @@ public class TreesSpawnerTests
         int actualTreesAmount = 0;
         foreach (var cell in board)
         {
-            if (cell.GetContent().Any(c => c is Tree))
+            if (cell.GetContent().Exists(c => c is Tree))
             {
                 actualTreesAmount++;
             }
@@ -56,7 +56,7 @@ public class TreesSpawnerTests
         Assert.Contains(expectedTree, cellContent);
     }
 
-    private ITreesFactory GetTreesFactory()
+    private static ITreesFactory GetTreesFactory()
     {
         var factoryMock = new Mock<ITreesFactory>();
         factoryMock.Setup(f => f.GetTree()).Returns(new Tree(1, false));

@@ -32,7 +32,7 @@ public class KnightsFactoryTests
         Assert.Same(owner, knight.GetOwner());
     }
 
-    private KnightConfig GetConfig(int placementCost = 1, int health = 2)
+    private static KnightConfig GetConfig(int placementCost = 1, int health = 2)
     {
         return new KnightConfig() { PlacementCost = placementCost, Health = health };
     }

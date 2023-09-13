@@ -5,7 +5,7 @@ namespace castledice_game_logic_tests.Mocks;
 
 public class PlayerUnitMock : Content, IPlayerOwned, IReplaceable, IPlaceBlocking, IUpgradeable
 {
-    public Player Owner;
+    public Player Owner = new NullPlayer();
     public int RemoveCost;
     public bool CanUpgrade = true;
     public int UpgradeCost;

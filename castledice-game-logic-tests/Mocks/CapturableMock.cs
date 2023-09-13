@@ -5,7 +5,7 @@ namespace castledice_game_logic_tests.Mocks;
 
 public class CapturableMock : Content, ICapturable, IPlayerOwned, IPlaceBlocking
 {
-    public Player Owner;
+    public Player Owner = new NullPlayer();
     public bool CanCapture = true;
     public Func<Player, int> GetCaptureCostFunc = (p) => 1;
         

@@ -2,7 +2,7 @@
 
 public class GiveActionPointsSaver
 {
-    private ActionsHistory _history;
+    private readonly ActionsHistory _history;
 
     public GiveActionPointsSaver(ActionsHistory history)
     {

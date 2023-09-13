@@ -7,8 +7,8 @@
 /// </summary>
 public class RectCellsGenerator : ICellsGenerator
 {
-    private int _boardLength;
-    private int _boardWidth;
+    private readonly int _boardLength;
+    private readonly int _boardWidth;
 
     public RectCellsGenerator(int boardLength, int boardWidth)
     {

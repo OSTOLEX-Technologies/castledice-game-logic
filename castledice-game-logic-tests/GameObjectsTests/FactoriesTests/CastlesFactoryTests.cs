@@ -35,7 +35,7 @@ public class CastlesFactoryTests
         Assert.Same(owner, castle.GetOwner());
     }
     
-    private CastleConfig GetConfig(int durability = 3, int freeDurability = 1)
+    private static CastleConfig GetConfig(int durability = 3, int freeDurability = 1)
     {
         return new CastleConfig() { Durability = durability, FreeDurability = freeDurability};
     }

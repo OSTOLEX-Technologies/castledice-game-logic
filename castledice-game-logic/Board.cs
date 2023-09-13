@@ -6,8 +6,8 @@ namespace castledice_game_logic;
 
 public class Board : IEnumerable<Cell>
 {
-    private CellType _cellType;
-    private Cell[,] _cells;
+    private readonly CellType _cellType;
+    private Cell?[,] _cells;
 
     public Cell this[int i, int j]
     {
@@ -30,27 +30,17 @@ public class Board : IEnumerable<Cell>
         }
     }
 
-    public Cell this[Vector2Int position]
-    {
-        get
-        {
-            return this[position.X, position.Y];
-        }
-    }
-    
+    public Cell this[Vector2Int position] => this[position.X, position.Y];
+
     public int GetLength(int dimensionIndex)
     {
-        if (_cells == null)
-        {
-            return 0;
-        }
-
         return _cells.GetLength(dimensionIndex);
     }
     
     public Board(CellType cellType)
     {
         _cellType = cellType;
+        _cells = new Cell[0, 0];
     }
 
     public CellType GetCellType()
@@ -67,12 +57,7 @@ public class Board : IEnumerable<Cell>
     {
         if (x < 0 || y < 0)
         {
-            throw new IndexOutOfRangeException();
-        }
-
-        if (_cells == null)
-        {
-            _cells = new Cell[x + 1, y + 1];
+            throw new ArgumentException("Coordinates must be positive");
         }
 
         if (_cells.GetLength(0) <= x || _cells.GetLength(1) <= y)
@@ -113,7 +98,7 @@ public class Board : IEnumerable<Cell>
         {
             return false;
         }
-        if (_cells == null || x >= _cells.GetLength(0) || y >= _cells.GetLength(1))
+        if (x >= _cells.GetLength(0) || y >= _cells.GetLength(1))
         {
             return false;
         }
@@ -130,7 +115,7 @@ public class Board : IEnumerable<Cell>
             {
                 if (_cells[i, j] != null)
                 {
-                    yield return _cells[i, j];
+                    yield return _cells[i, j]!;
                 }
             }
         }
@@ -144,10 +129,6 @@ public class Board : IEnumerable<Cell>
     public List<Vector2Int> GetCellsPositions(Func<Cell, bool> predicate)
     {
         List<Vector2Int> positions = new List<Vector2Int>();
-        if (_cells == null)
-        {
-            return positions;
-        }
         for (int i = 0; i < _cells.GetLength(0); i++)
         {
             for (int j = 0; j < _cells.GetLength(1); j++)
@@ -156,7 +137,7 @@ public class Board : IEnumerable<Cell>
                 {
                     continue;
                 }
-                if (predicate(_cells[i, j]))
+                if (predicate(_cells[i, j]!))
                 {
                     positions.Add(new Vector2Int(i, j));
                 }

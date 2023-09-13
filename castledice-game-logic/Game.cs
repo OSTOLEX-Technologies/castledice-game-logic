@@ -118,4 +118,9 @@ public class Game
     {
         return false;
     }
+
+    protected virtual void OnGameOver(Player e)
+    {
+        GameOver?.Invoke(this, e);
+    }
 }
