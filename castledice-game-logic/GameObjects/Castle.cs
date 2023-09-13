@@ -4,8 +4,8 @@ public class Castle : Content, ICapturable, IPlayerOwned, IPlaceBlocking
 {
     private Player _player;
     private int _durability;
-    private int _defaultDurability;
-    private int _freeDurability; //Durability of the castle that has no owner.
+    private readonly int _defaultDurability;
+    private readonly int _freeDurability; //Durability of the castle that has no owner.
     
     /// <summary>
     /// Parameters durability and freeDurability must be positive. Otherwise exception will be thrown.
@@ -41,15 +41,11 @@ public class Castle : Content, ICapturable, IPlayerOwned, IPlaceBlocking
         {
             capturer.ActionPoints.DecreaseActionPoints(capturerActionPoints);
             _durability -= capturerActionPoints;
-            return;
         }
-
-        
-        capturer.ActionPoints.DecreaseActionPoints(_durability);
-        _durability = 0;
-
-        if (_durability <= 0)
+        else
         {
+            capturer.ActionPoints.DecreaseActionPoints(_durability);
+            _durability = 0;
             _player = capturer;
             _durability = _defaultDurability;
         }

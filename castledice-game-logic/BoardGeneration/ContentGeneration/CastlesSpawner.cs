@@ -6,8 +6,8 @@ namespace castledice_game_logic.BoardGeneration.ContentGeneration;
 
 public class CastlesSpawner : IContentSpawner
 {
-    private Dictionary<Player, Vector2Int> _castlesPlacementsData;
-    private ICastlesFactory _factory;
+    private readonly Dictionary<Player, Vector2Int> _castlesPlacementsData;
+    private readonly ICastlesFactory _factory;
 
     public CastlesSpawner(Dictionary<Player, Vector2Int> castlesPlacementsData, ICastlesFactory factory)
     {

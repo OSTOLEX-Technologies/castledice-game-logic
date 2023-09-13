@@ -71,11 +71,11 @@ public class Game
             { firstPlayer, (0, 0) },
             { secondPlayer, (9, 9) }
         };
-        var castleConfig = new CastleConfig(){Durability = 3, FreeDurability = 1};
+        var castleConfig = new CastleConfig(durability: 3, freeDurability: 1);
         var castlesFactory = new CastlesFactory(castleConfig);
         var castlesSpawner = new CastlesSpawner(castlesPositions, castlesFactory);
         
-        var treeConfig = new TreeConfig(){CanBeRemoved = false};
+        var treeConfig = new TreeConfig(canBeRemoved: false, removeCost: 1);
         var treesFactory = new TreesFactory(treeConfig);
         var treesSpawner = new TreesSpawner(1, 3, 3, treesFactory);
         

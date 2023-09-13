@@ -2,8 +2,23 @@
 
 public struct Vector2Int
 {
-    public int X;
-    public int Y;
+    public bool Equals(Vector2Int other)
+    {
+        return X == other.X && Y == other.Y;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return obj is Vector2Int other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(X, Y);
+    }
+
+    public int X { get; set; }
+    public int Y { get; set; }
 
     public Vector2Int(int x, int y)
     {

@@ -2,7 +2,7 @@
 
 public class RangeRandomNumberGenerator : IRangeRandomNumberGenerator
 {
-    private Random _rnd = new Random();
+    private readonly Random _rnd = new();
 
     public int GetRandom(int minInclusive, int maxExclusive)
     {

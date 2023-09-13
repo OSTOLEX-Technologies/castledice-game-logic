@@ -5,10 +5,10 @@ namespace castledice_game_logic.BoardGeneration.ContentGeneration;
 
 public class TreesSpawner : IContentSpawner
 {
-    private int _minTreesCount;
-    private int _maxTreesCount;
-    private int _minDistanceBetweenTrees;
-    private ITreesFactory _factory;
+    private readonly int _minTreesCount;
+    private readonly int _maxTreesCount;
+    private readonly int _minDistanceBetweenTrees;
+    private readonly ITreesFactory _factory;
 
     public TreesSpawner(int minTreesCount, int maxTreesCount, int minDistanceBetweenTrees, ITreesFactory factory)
     {
@@ -17,9 +17,7 @@ public class TreesSpawner : IContentSpawner
         _minDistanceBetweenTrees = minDistanceBetweenTrees;
         _factory = factory;
     }
-
     
-    //TODO: Discuss trees spawning algorithm
     public void SpawnContent(Board board)
     {
         var cells = GetCellsToSpawnOn(board);
@@ -100,7 +98,7 @@ public class TreesSpawner : IContentSpawner
         return true;
     }
 
-    private void PreparePicker(CellsPickingUtility pickingUtility, Board board)
+    private static void PreparePicker(CellsPickingUtility pickingUtility, Board board)
     {        
         var castlesPositions = board.GetCellsPositions(c => c.HasContent(ct => ct is Castle));
         foreach (var position in castlesPositions)

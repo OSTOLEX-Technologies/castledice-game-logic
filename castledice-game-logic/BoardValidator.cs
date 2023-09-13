@@ -22,14 +22,8 @@ public class BoardValidator
         {
             return false;
         }
-        foreach (var owner in castlesOwners)
-        {
-            if (!players.Contains(owner))
-            {
-                return false;
-            }
-        }
-        return true;
+
+        return castlesOwners.TrueForAll(players.Contains);
     }
     
     

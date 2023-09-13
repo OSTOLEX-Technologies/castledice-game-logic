@@ -6,7 +6,7 @@ namespace castledice_game_logic.MovesLogic;
 
 public class CellMovesSelector
 {
-    private Board _board;
+    private readonly Board _board;
 
     public CellMovesSelector(Board board)
     {
