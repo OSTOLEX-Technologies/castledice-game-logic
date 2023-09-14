@@ -2,8 +2,16 @@
 
 public class ActionPointsCondition : ITurnSwitchCondition
 {
-    public bool ShouldSwitchTurn(Player currentPlayer)
+    private readonly ICurrentPlayerProvider _currentPlayerProvider;
+
+    public ActionPointsCondition(ICurrentPlayerProvider currentPlayerProvider)
     {
+        _currentPlayerProvider = currentPlayerProvider;
+    }
+
+    public bool ShouldSwitchTurn()
+    {
+        var currentPlayer = _currentPlayerProvider.GetCurrentPlayer();
         return currentPlayer.ActionPoints.Amount <= 0;
     }
 }

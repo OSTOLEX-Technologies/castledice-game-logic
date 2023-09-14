@@ -9,18 +9,24 @@ public class ActionPointsConditionTests
     [Fact]
     public void ShouldSwitchTurn_ShouldReturnFalse_IfCurrentPlayerHasActionPoints()
     {
-        var player = GetPlayer(actionPoints: 1); 
-        var switchCondition = new ActionPointsCondition();
+        var player = GetPlayer(actionPoints: 1);
+        var currentPlayerProviderMock = new Mock<ICurrentPlayerProvider>();
+        currentPlayerProviderMock.Setup(provider => provider.GetCurrentPlayer()).Returns(player);
+        var currentPlayerProvider = currentPlayerProviderMock.Object;
+        var switchCondition = new ActionPointsCondition(currentPlayerProvider);
         
-        Assert.False(switchCondition.ShouldSwitchTurn(player));
+        Assert.False(switchCondition.ShouldSwitchTurn());
     }
 
     [Fact]
     public void ShouldSwitchTurn_ShouldReturnTrue_IfCurrentPlayerHasNoActionPoints()
     {
         var player = GetPlayer(actionPoints: 0);
-        var switchCondition = new ActionPointsCondition();
+        var currentPlayerProviderMock = new Mock<ICurrentPlayerProvider>();
+        currentPlayerProviderMock.Setup(provider => provider.GetCurrentPlayer()).Returns(player);
+        var currentPlayerProvider = currentPlayerProviderMock.Object;
+        var switchCondition = new ActionPointsCondition(currentPlayerProvider);
         
-        Assert.True(switchCondition.ShouldSwitchTurn(player));
+        Assert.True(switchCondition.ShouldSwitchTurn());
     }
 }

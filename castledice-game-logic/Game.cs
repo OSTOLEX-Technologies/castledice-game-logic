@@ -39,7 +39,7 @@ public class Game
     //Turns logic
     private PlayersList _players;
     private PlayerTurnsSwitcher _turnsSwitcher;
-    private List<ITurnSwitchCondition> _turnSwitchConditions;
+    private List<ITurnSwitchCondition> _turnSwitchConditions = new();
     
     //Factories
     private IPlaceablesFactory _placeablesFactory;
@@ -48,64 +48,37 @@ public class Game
     private GameOverChecker _gameOverChecker;
     
     //Penalties
-    private List<IPenalty> _penalties;
+    private List<IPenalty> _penalties = new();
     
+    public ICurrentPlayerProvider CurrentPlayerProvider => _turnsSwitcher;
+    public PlayerTurnsSwitcher TurnsSwitcher => _turnsSwitcher;
 
     public Game(List<Player> players, 
-        BoardConfig boardConfig, 
-        List<ITurnSwitchCondition> turnSwitchConditions, 
+        BoardConfig boardConfig,
         RandomConfig randomConfig, 
         UnitsConfig unitsConfig, 
-        IPlacementListProvider placementListProvider,
-        List<IPenalty> penalties)
+        IPlacementListProvider placementListProvider)
     {
-        InitializePlayers(players);
+
+        _players = new PlayersList(players);
+        
         InitializeBoard(boardConfig);
         ValidateBoard();
-        InitializeTurns(turnSwitchConditions);
-        InitializeHistory();
+        
+        _actionsHistory = new ActionsHistory();
+
         InitializeActionPoints(randomConfig);
         InitializePlaceablesFactory(unitsConfig);
         InitializeMovesLogic(placementListProvider);
-        InitializeGameOverCheck();
-        InitializeBoardUpdater();
-        InitializePenatlites(penalties);
-        InitializeBranchesCutter();
-    }
-
-    private void InitializePenatlites(List<IPenalty> penalties)
-    {
-        _penalties = penalties;
-    }
-
-    private void InitializeBoardUpdater()
-    {
+            
         _boardUpdater = new BoardUpdater(_board);
-
-    }
-
-    private void InitializeBranchesCutter()
-    {
-        _unitBranchesCutter = new UnitBranchesCutter(_board);
-
-    }
-
-    private void InitializePlayers(List<Player> players)
-    {
-        _players = new PlayersList(players);
-    }
-
-    private void InitializeTurns(List<ITurnSwitchCondition> turnSwitchConditions)
-    {
+        _gameOverChecker = new GameOverChecker(_board);
         _turnsSwitcher = new PlayerTurnsSwitcher(_players);
-        _turnSwitchConditions = turnSwitchConditions;
+        _unitBranchesCutter = new UnitBranchesCutter(_board);
     }
 
-    private void InitializeHistory()
-    {
-        _actionsHistory = new ActionsHistory();
-    }
-
+    #region Initialize methods
+    
     private void InitializeActionPoints(RandomConfig randomConfig)
     {
         _actionPointsGivers = new Dictionary<Player, ActionPointsGiver>();
@@ -135,11 +108,7 @@ public class Game
         _cellMovesSelector = new CellMovesSelector(_board);
         _possibleMovesSelector = new PossibleMovesSelector(_board, _placeablesFactory, placementListProvider);
     }
-
-    private void InitializeGameOverCheck()
-    {
-        _gameOverChecker = new GameOverChecker(_board);
-    }
+    
 
     private void InitializeBoard(BoardConfig config)
     {
@@ -152,6 +121,8 @@ public class Game
         }
     }
     
+    #endregion
+
 
     private void ValidateBoard()
     {
@@ -185,6 +156,16 @@ public class Game
     public List<AbstractMove> GetPossibleMoves(Player player, Vector2Int position)
     {
         return _possibleMovesSelector.GetPossibleMoves(player, position);
+    }
+    
+    public void AddPenalty(IPenalty penalty)
+    {
+        _penalties.Add(penalty);
+    }
+    
+    public void AddTurnSwitchCondition(ITurnSwitchCondition condition)
+    {
+        _turnSwitchConditions.Add(condition);
     }
     
     public bool TryMakeMove(AbstractMove move)
@@ -232,7 +213,7 @@ public class Game
     {
         foreach (var condition in _turnSwitchConditions)
         {
-            if (condition.ShouldSwitchTurn(_turnsSwitcher.GetCurrentPlayer()))
+            if (condition.ShouldSwitchTurn())
             {
                 SwitchTurn();
             }
