@@ -82,15 +82,7 @@ public static class ObjectCreationUtility
         castlesFactoryMock.Setup(m => m.GetCastle(secondPlayer)).Returns(GetCastle(secondPlayer));
         var castlesSpawner = new CastlesSpawner(castlesPlacementData, castlesFactoryMock.Object);
         var cellType = CellType.Square;
-        var boardConfig = new BoardConfig()
-        {
-            CellsGenerator = cellsGenerator,
-            ContentSpawners = new List<IContentSpawner>()
-            {
-                castlesSpawner
-            },
-            CellType = cellType
-        };
+        var boardConfig = new BoardConfig(new List<IContentSpawner>() { castlesSpawner }, cellsGenerator, cellType);
         return boardConfig;
     }
     

@@ -37,6 +37,15 @@ public class PlayersListTests
     }
 
     [Fact]
+    public void AddPlayer_ShouldThrowArgumentException_IfAddingPlayerWithExistingId()
+    {
+        var playersList = new PlayersList(new List<Player>(){GetPlayer(id: 3)});
+        var player = GetPlayer(id: 3);
+
+        Assert.Throws<ArgumentException>(() => playersList.AddPlayer(player));
+    }
+
+    [Fact]
     public void KickPlayer_ShouldRemovePlayer()
     {
         var player = GetPlayer();
@@ -76,8 +85,8 @@ public class PlayersListTests
     public void Indexer_ShouldReturnPlayers_AccordingToAddPlayerOrder()
     {
         var playersList = new PlayersList();
-        var firstPlayer = GetPlayer();
-        var secondPlayer = GetPlayer();
+        var firstPlayer = GetPlayer(id: 1);
+        var secondPlayer = GetPlayer(id: 2);
         playersList.AddPlayer(firstPlayer);
         playersList.AddPlayer(secondPlayer);
         
@@ -88,8 +97,8 @@ public class PlayersListTests
     [Fact]
     public void Constructor_ShouldNotAddDuplicates_IfEnumerableWithDuplicatesGiven()
     {
-        var firstPlayer = GetPlayer();
-        var secondPlayer = GetPlayer();
+        var firstPlayer = GetPlayer(id: 1);
+        var secondPlayer = GetPlayer(id: 2);
         var enumerable = new List<Player>() { firstPlayer, firstPlayer, firstPlayer, secondPlayer};
         
         var playersList = new PlayersList(enumerable);
@@ -102,9 +111,11 @@ public class PlayersListTests
     public void Count_ShouldReturnPlayersCount()
     {
         var playersList = new PlayersList();
-        playersList.AddPlayer(GetPlayer());
-        playersList.AddPlayer(GetPlayer());
+        playersList.AddPlayer(GetPlayer(id: 1));
+        playersList.AddPlayer(GetPlayer(id: 2));
         
         Assert.Equal(2, playersList.Count);
     }
+    
+    
 }

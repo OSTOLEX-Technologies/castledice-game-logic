@@ -18,6 +18,12 @@ public class PlayersList : IEnumerable<Player>
         {
             return;
         }
+
+        if (_players.Exists(p => p.Id == player.Id))
+        {
+            throw new ArgumentException("Player with id: " + player.Id + " already exists in players list!");
+        }
+
         _players.Add(player);
     }
 

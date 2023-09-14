@@ -53,8 +53,8 @@ public class MoveValidatorTests
     [Fact]
     public void ValidateMove_ShouldReturnFalse_IfNotPlayerTurn()
     {
-        var player = GetPlayer();
-        var turnSwitcher = GetTurnsSwitcher(player, GetPlayer());
+        var player = GetPlayer(id: 1);
+        var turnSwitcher = GetTurnsSwitcher(player, GetPlayer(id: 2));
         var board = GetFullNByNBoard(2);
         var position = new Vector2Int(0, 0);
         var move = new TestMove(player, position);

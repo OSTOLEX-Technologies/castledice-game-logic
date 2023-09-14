@@ -17,7 +17,7 @@ public class PlayerTurnsSwitcherTests
     [Fact]
     public void GetCurrent_ShouldReturnFirstPlayerFromList_IfSwitchTurnNotCalled()
     {
-        var playersList = new List<Player>() { GetPlayer(), GetPlayer() };
+        var playersList = GetPlayersList(2);
         var turnSwitcher = new PlayerTurnsSwitcher(new PlayersList(playersList));
 
         var actualPlayer = turnSwitcher.GetCurrentPlayer();
@@ -29,7 +29,7 @@ public class PlayerTurnsSwitcherTests
     [Fact]
     public void SwitchTurn_ShouldSwitchCurrentPlayer_ToNextFromTheList()
     {
-        var playersList = new List<Player>() { GetPlayer(), GetPlayer() };
+        var playersList = GetPlayersList(2);
         var turnSwitcher = new PlayerTurnsSwitcher(new PlayersList(playersList));
         
         turnSwitcher.SwitchTurn();
@@ -42,13 +42,7 @@ public class PlayerTurnsSwitcherTests
     [Fact]
     public void SwitchTurn_ShouldSwitchPlayers_InOrderOfList()
     {
-        var playersList = new List<Player>()
-        {
-            GetPlayer(),
-            GetPlayer(),
-            GetPlayer(),
-            GetPlayer()
-        };
+        var playersList = GetPlayersList(4);
         var turnsSwitcher = new PlayerTurnsSwitcher(new PlayersList(playersList));
 
         for (int i = 0; i < playersList.Count; i++)
@@ -63,13 +57,7 @@ public class PlayerTurnsSwitcherTests
     [Fact]
     public void SwitchTurn_ShouldSwitchToFirstPlayer_IfReachedEndOfList()
     {
-        var playersList = new List<Player>()
-        {
-            GetPlayer(),
-            GetPlayer(),
-            GetPlayer(),
-            GetPlayer()
-        };
+        var playersList = GetPlayersList(4);
         var turnsSwitcher = new PlayerTurnsSwitcher(new PlayersList(playersList));
 
         for (int i = 0; i < playersList.Count; i++)
@@ -86,13 +74,7 @@ public class PlayerTurnsSwitcherTests
     [Fact]
     public void SwitchTurn_ShouldInvokeTurnSwitchedEvent()
     {
-        var playersList = new List<Player>()
-        {
-            GetPlayer(),
-            GetPlayer(),
-            GetPlayer(),
-            GetPlayer()
-        };
+        var playersList = GetPlayersList(4);
         var turnsSwitcher = new PlayerTurnsSwitcher(new PlayersList(playersList));
         bool eventInvoked = false;
         turnsSwitcher.TurnSwitched += (sender, args) => eventInvoked = true;
@@ -107,5 +89,16 @@ public class PlayerTurnsSwitcherTests
     {
         var playersList = new PlayersList();
         Assert.Throws<ArgumentException>(() => new PlayerTurnsSwitcher(playersList));
+    }
+
+    private static PlayersList GetPlayersList(int playersCount)
+    {
+        var list = new PlayersList();
+        for (int i = 1; i <= playersCount; i++)
+        {
+            list.AddPlayer(GetPlayer(id: i));
+        }
+
+        return list;
     }
 }
