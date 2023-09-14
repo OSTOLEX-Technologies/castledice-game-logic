@@ -49,4 +49,14 @@ public class Knight : Content, IPlayerOwned, IReplaceable, IPlaceBlocking, IPlac
     {
         return true;
     }
+
+    public override void Update()
+    {
+        
+    }
+
+    public override void Accept(IContentVisitor visitor)
+    {
+        visitor.VisitKnight(this);
+    }
 }

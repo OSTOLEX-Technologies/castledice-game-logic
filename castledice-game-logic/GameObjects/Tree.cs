@@ -29,4 +29,14 @@ public class Tree : Content, IPlaceBlocking, IRemovable
     {
         return true;
     }
+
+    public override void Update()
+    {
+        
+    }
+
+    public override void Accept(IContentVisitor visitor)
+    {
+        visitor.VisitTree(this);
+    }
 }

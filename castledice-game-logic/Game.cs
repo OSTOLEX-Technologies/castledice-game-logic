@@ -59,9 +59,9 @@ public class Game
         IPlacementListProvider placementListProvider,
         List<IPenalty> penalties)
     {
+        InitializePlayers(players);
         InitializeBoard(boardConfig);
         ValidateBoard();
-        InitializePlayers(players);
         InitializeTurns(turnSwitchConditions);
         InitializeHistory();
         InitializeActionPoints(randomConfig);

@@ -38,4 +38,14 @@ public class CapturableMock : Content, ICapturable, IPlayerOwned, IPlaceBlocking
     {
         return true;
     }
+
+    public override void Update()
+    {
+        
+    }
+
+    public override void Accept(IContentVisitor visitor)
+    {
+        
+    }
 }

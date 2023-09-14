@@ -8,4 +8,14 @@ public class ObstacleMock : Content, IPlaceBlocking
     {
         return true;
     }
+
+    public override void Update()
+    {
+        
+    }
+
+    public override void Accept(IContentVisitor visitor)
+    {
+        
+    }
 }

@@ -29,4 +29,14 @@ public class UpgradeableMock : Content, IUpgradeable, IPlayerOwned
     {
         return Owner;
     }
+
+    public override void Update()
+    {
+        
+    }
+
+    public override void Accept(IContentVisitor visitor)
+    {
+      
+    }
 }

@@ -17,6 +17,11 @@ public class BoardUpdaterTests
             WasUpdated = true;
             UpdatesCount++;
         }
+
+        public override void Accept(IContentVisitor visitor)
+        {
+            
+        }
     }
 
     private class UpdateBoardTestCases : IEnumerable<object[]>

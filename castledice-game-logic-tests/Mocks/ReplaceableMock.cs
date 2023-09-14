@@ -22,4 +22,14 @@ public class ReplaceableMock : Content, IReplaceable, IPlayerOwned, IPlaceBlocki
     {
         return true;
     }
+
+    public override void Update()
+    {
+        
+    }
+
+    public override void Accept(IContentVisitor visitor)
+    {
+        
+    }
 }

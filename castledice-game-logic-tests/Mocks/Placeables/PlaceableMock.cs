@@ -20,4 +20,13 @@ public class PlaceableMock : Content, IPlaceable
     }
 
     public PlacementType PlacementType => PlacementTypeToReturn;
+    public override void Update()
+    {
+        
+    }
+
+    public override void Accept(IContentVisitor visitor)
+    {
+        
+    }
 }

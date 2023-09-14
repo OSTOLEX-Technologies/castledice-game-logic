@@ -39,4 +39,14 @@ public class PlayerUnitMock : Content, IPlayerOwned, IReplaceable, IPlaceBlockin
     {
         return true;
     }
+
+    public override void Update()
+    {
+        
+    }
+
+    public override void Accept(IContentVisitor visitor)
+    {
+        
+    }
 }

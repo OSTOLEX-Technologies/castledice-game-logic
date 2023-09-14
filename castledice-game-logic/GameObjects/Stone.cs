@@ -6,4 +6,14 @@ public class Stone : Content, IPlaceBlocking
     {
         return true;
     }
+
+    public override void Update()
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void Accept(IContentVisitor visitor)
+    {
+        throw new NotImplementedException();
+    }
 }

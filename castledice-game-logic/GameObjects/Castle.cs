@@ -85,4 +85,14 @@ public class Castle : Content, ICapturable, IPlayerOwned, IPlaceBlocking
     {
         return true;
     }
+
+    public override void Update()
+    {
+        
+    }
+
+    public override void Accept(IContentVisitor visitor)
+    {
+        visitor.VisitCastle(this);
+    }
 }
