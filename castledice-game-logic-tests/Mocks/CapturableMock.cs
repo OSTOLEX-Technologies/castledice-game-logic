@@ -44,8 +44,8 @@ public class CapturableMock : Content, ICapturable, IPlayerOwned, IPlaceBlocking
         
     }
 
-    public override void Accept(IContentVisitor visitor)
+    public override T Accept<T>(IContentVisitor<T> visitor)
     {
-        
+        throw new NotImplementedException();
     }
 }

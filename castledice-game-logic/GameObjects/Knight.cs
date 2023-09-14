@@ -55,8 +55,8 @@ public class Knight : Content, IPlayerOwned, IReplaceable, IPlaceBlocking, IPlac
         
     }
 
-    public override void Accept(IContentVisitor visitor)
+    public override T Accept<T>(IContentVisitor<T> visitor)
     {
-        visitor.VisitKnight(this);
+        return visitor.VisitKnight(this);
     }
 }

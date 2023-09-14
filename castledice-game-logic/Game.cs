@@ -123,7 +123,6 @@ public class Game
     
     #endregion
 
-
     private void ValidateBoard()
     {
         BoardValidator validator = new BoardValidator();

@@ -1,8 +1,8 @@
 ﻿namespace castledice_game_logic.GameObjects;
 
-public interface IContentVisitor
+public interface IContentVisitor<out T>
 {
-    void VisitTree(Tree tree);
-    void VisitCastle(Castle castle);
-    void VisitKnight(Knight knight);
+    T VisitTree(Tree tree);
+    T VisitCastle(Castle castle);
+    T VisitKnight(Knight knight);
 }

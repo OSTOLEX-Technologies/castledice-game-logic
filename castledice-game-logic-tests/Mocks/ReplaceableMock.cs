@@ -28,8 +28,8 @@ public class ReplaceableMock : Content, IReplaceable, IPlayerOwned, IPlaceBlocki
         
     }
 
-    public override void Accept(IContentVisitor visitor)
+    public override T Accept<T>(IContentVisitor<T> visitor)
     {
-        
+        throw new NotImplementedException();
     }
 }

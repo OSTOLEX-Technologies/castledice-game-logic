@@ -91,8 +91,8 @@ public class Castle : Content, ICapturable, IPlayerOwned, IPlaceBlocking
         
     }
 
-    public override void Accept(IContentVisitor visitor)
+    public override T Accept<T>(IContentVisitor<T> visitor)
     {
-        visitor.VisitCastle(this);
+        return visitor.VisitCastle(this);
     }
 }

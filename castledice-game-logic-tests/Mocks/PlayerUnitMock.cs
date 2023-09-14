@@ -45,8 +45,8 @@ public class PlayerUnitMock : Content, IPlayerOwned, IReplaceable, IPlaceBlockin
         
     }
 
-    public override void Accept(IContentVisitor visitor)
+    public override T Accept<T>(IContentVisitor<T> visitor)
     {
-        
+        throw new NotImplementedException();
     }
 }

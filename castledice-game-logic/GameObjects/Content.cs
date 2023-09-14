@@ -4,5 +4,5 @@ public abstract class Content
 {
     public abstract void Update();
 
-    public abstract void Accept(IContentVisitor visitor);
+    public abstract T Accept<T>(IContentVisitor<T> visitor);
 }

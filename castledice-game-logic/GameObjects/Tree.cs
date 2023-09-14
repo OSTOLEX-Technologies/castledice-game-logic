@@ -35,8 +35,8 @@ public class Tree : Content, IPlaceBlocking, IRemovable
         
     }
 
-    public override void Accept(IContentVisitor visitor)
+    public override T Accept<T>(IContentVisitor<T> visitor)
     {
-        visitor.VisitTree(this);
+        return visitor.VisitTree(this);
     }
 }
