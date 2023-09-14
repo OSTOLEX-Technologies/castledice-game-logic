@@ -45,19 +45,24 @@ public class NegentropyRandomNumberGenerator : IRandomNumberGenerator
         float raiseAmount = (float)_precision - ValuesSum(others);
         raiseAmount /= 2;
         int othersCount = others.Count;
-        foreach (var key in others.Keys)
+        var keys = others.Keys.ToList();
+        foreach (var key in keys)
         {
             others[key] += raiseAmount / othersCount;
         }
         float leftAmount = _precision - ValuesSum(others);
         others.Add(lastResult, leftAmount);
         return others;
-
     }
 
     private Dictionary<int, float> GetProbabilitiesCopy()
     {
-        return _probabilities.ToDictionary(item => item.Key, item => item.Value);
+        var copy = new Dictionary<int, float>();
+        foreach (var probability in _probabilities)
+        {
+            copy.Add(probability.Key, probability.Value);
+        }
+        return copy;
     }
 
     private static float ValuesSum(Dictionary<int, float> probabilities)

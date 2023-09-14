@@ -66,15 +66,24 @@ public class Game
         ValidateBoard();
         
         _actionsHistory = new ActionsHistory();
-
-        InitializeActionPoints(randomConfig);
-        InitializePlaceablesFactory(unitsConfig);
-        InitializeMovesLogic(placementListProvider);
-            
         _boardUpdater = new BoardUpdater(_board);
         _gameOverChecker = new GameOverChecker(_board);
         _turnsSwitcher = new PlayerTurnsSwitcher(_players);
         _unitBranchesCutter = new UnitBranchesCutter(_board);
+        
+        InitializeActionPoints(randomConfig);
+        InitializePlaceablesFactory(unitsConfig);
+        InitializeMovesLogic(placementListProvider);
+
+        GiveActionPointsToFirstPlayer();
+    }
+
+    private void GiveActionPointsToFirstPlayer()
+    {
+        var currentPlayer = _turnsSwitcher.GetCurrentPlayer();
+        var firstActionPointsGive = _actionPointsGivers[currentPlayer].GiveActionPoints();
+        _giveActionPointsApplier.ApplyAction(firstActionPointsGive);
+        _giveActionPointsSaver.SaveAction(firstActionPointsGive);
     }
 
     #region Initialize methods
