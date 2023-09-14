@@ -18,7 +18,7 @@ public class TimeCondition : ITurnSwitchCondition
         _isStarted = true;
     }
 
-    public bool ShouldSwitchTurn()
+    public bool ShouldSwitchTurn(Player currentPlayer)
     {
         if (!_isStarted)
         {

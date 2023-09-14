@@ -5,5 +5,5 @@
 /// </summary>
 public interface ITurnSwitchCondition
 {
-    bool ShouldSwitchTurn();
+    bool ShouldSwitchTurn(Player currentPlayer);
 }

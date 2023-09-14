@@ -2,6 +2,7 @@
 using castledice_game_logic.Time;
 using castledice_game_logic.TurnsLogic;
 using Moq;
+using static castledice_game_logic_tests.ObjectCreationUtility;
 
 namespace castledice_game_logic_tests;
 
@@ -16,7 +17,7 @@ public class TimeConditionTests
         var timeCondition = new TimeCondition(timer);
         timeCondition.Start();
         
-        Assert.False(timeCondition.ShouldSwitchTurn());
+        Assert.False(timeCondition.ShouldSwitchTurn(GetPlayer()));
     }
 
     [Fact]
@@ -28,7 +29,7 @@ public class TimeConditionTests
         var timeCondition = new TimeCondition(timer);
         timeCondition.Start();
 
-        Assert.True(timeCondition.ShouldSwitchTurn());
+        Assert.True(timeCondition.ShouldSwitchTurn(GetPlayer()));
     }
 
     [Fact]
@@ -39,7 +40,7 @@ public class TimeConditionTests
         var timer = timerMock.Object;
         var timeCondition = new TimeCondition(timer);
 
-        Assert.False(timeCondition.ShouldSwitchTurn());
+        Assert.False(timeCondition.ShouldSwitchTurn(GetPlayer()));
     }
 
     [Fact]
@@ -51,10 +52,10 @@ public class TimeConditionTests
         timeCondition.Start();
         
         timer.Tick(18);
-        Assert.True(timeCondition.ShouldSwitchTurn());
+        Assert.True(timeCondition.ShouldSwitchTurn(GetPlayer()));
         timer.Tick(5);
-        Assert.False(timeCondition.ShouldSwitchTurn());
+        Assert.False(timeCondition.ShouldSwitchTurn(GetPlayer()));
         timer.Tick(6);
-        Assert.True(timeCondition.ShouldSwitchTurn());
+        Assert.True(timeCondition.ShouldSwitchTurn(GetPlayer()));
     }
 }

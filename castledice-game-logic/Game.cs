@@ -59,6 +59,8 @@ public class Game
         IPlacementListProvider placementListProvider,
         List<IPenalty> penalties)
     {
+        InitializeBoard(boardConfig);
+        ValidateBoard();
         InitializePlayers(players);
         InitializeTurns(turnSwitchConditions);
         InitializeHistory();
@@ -66,11 +68,9 @@ public class Game
         InitializePlaceablesFactory(unitsConfig);
         InitializeMovesLogic(placementListProvider);
         InitializeGameOverCheck();
-        InitializeBranchesCutter();
         InitializeBoardUpdater();
         InitializePenatlites(penalties);
-        InitializeBoard(boardConfig);
-        ValidateBoard();
+        InitializeBranchesCutter();
     }
 
     private void InitializePenatlites(List<IPenalty> penalties)
@@ -232,7 +232,7 @@ public class Game
     {
         foreach (var condition in _turnSwitchConditions)
         {
-            if (condition.ShouldSwitchTurn())
+            if (condition.ShouldSwitchTurn(_turnsSwitcher.GetCurrentPlayer()))
             {
                 SwitchTurn();
             }

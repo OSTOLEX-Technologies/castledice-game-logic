@@ -92,7 +92,7 @@ public class CellsPickingUtility
 
     private void ExcludeRow(int index)
     {
-        if (index > _availabilityMatrix.GetLength(0))
+        if (index >= _availabilityMatrix.GetLength(0) || index < 0)
         {
             return;
         }
@@ -116,7 +116,7 @@ public class CellsPickingUtility
 
     private void ExcludeColumn(int index)
     {
-        if (index > _availabilityMatrix.GetLength(1))
+        if (index >= _availabilityMatrix.GetLength(1) || index < 0)
         {
             return;
         }
