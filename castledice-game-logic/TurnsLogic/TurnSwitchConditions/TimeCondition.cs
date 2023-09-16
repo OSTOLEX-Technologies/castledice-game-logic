@@ -7,9 +7,10 @@ public class TimeCondition : ITurnSwitchCondition
     private readonly ITimer _timer;
     private bool _isStarted = false;
 
-    public TimeCondition(ITimer timer)
+    public TimeCondition(ITimer timer, int turnDuration)
     {
         _timer = timer;
+        timer.SetDuration(turnDuration);
     }
 
     public void Start()

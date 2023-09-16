@@ -14,7 +14,7 @@ public class TimeConditionTests
         var timerMock = new Mock<ITimer>();
         timerMock.Setup(t => t.IsElapsed()).Returns(false);
         var timer = timerMock.Object;
-        var timeCondition = new TimeCondition(timer);
+        var timeCondition = new TimeCondition(timer, 10);
         timeCondition.Start();
         
         Assert.False(timeCondition.ShouldSwitchTurn());
@@ -26,7 +26,7 @@ public class TimeConditionTests
         var timerMock = new Mock<ITimer>();
         timerMock.Setup(t => t.IsElapsed()).Returns(true);
         var timer = timerMock.Object;
-        var timeCondition = new TimeCondition(timer);
+        var timeCondition = new TimeCondition(timer, 10);
         timeCondition.Start();
 
         Assert.True(timeCondition.ShouldSwitchTurn());
@@ -38,7 +38,7 @@ public class TimeConditionTests
         var timerMock = new Mock<ITimer>();
         timerMock.Setup(t => t.IsElapsed()).Returns(true);
         var timer = timerMock.Object;
-        var timeCondition = new TimeCondition(timer);
+        var timeCondition = new TimeCondition(timer, 30);
 
         Assert.False(timeCondition.ShouldSwitchTurn());
     }
@@ -46,9 +46,9 @@ public class TimeConditionTests
     [Fact]
     public void ShouldSwitchTurn_ShouldResetInnerTimer_IfReturnedTrue()
     {
+        int duration = 10;
         var timer = new TickTimerMock();
-        timer.SetDuration(10);
-        var timeCondition = new TimeCondition(timer);
+        var timeCondition = new TimeCondition(timer, duration);
         timeCondition.Start();
         
         timer.Tick(18);
