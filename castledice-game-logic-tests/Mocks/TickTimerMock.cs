@@ -16,12 +16,12 @@ public class TickTimerMock : ITimer
         _duration = milliseconds;
     }
 
-    public void Start()
+    public void StartTimer()
     {
         _enabled = true;
     }
 
-    public void Stop()
+    public void StopTimer()
     {
         _enabled = false;
     }
@@ -31,7 +31,7 @@ public class TickTimerMock : ITimer
         return _elapsedTicks >= _duration && _enabled;
     }
 
-    public void Reset()
+    public void ResetTimer()
     {
         _elapsedTicks = 0;
     }

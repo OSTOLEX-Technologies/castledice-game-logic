@@ -52,6 +52,9 @@ public class Game
     
     public ICurrentPlayerProvider CurrentPlayerProvider => _turnsSwitcher;
     public PlayerTurnsSwitcher TurnsSwitcher => _turnsSwitcher;
+    
+    //Events
+    public event EventHandler? OnTurnSwitched;
 
     public Game(List<Player> players, 
         BoardConfig boardConfig,
@@ -224,6 +227,7 @@ public class Game
             if (condition.ShouldSwitchTurn())
             {
                 SwitchTurn();
+                OnTurnSwitched?.Invoke(this, EventArgs.Empty);
             }
         }
     }
