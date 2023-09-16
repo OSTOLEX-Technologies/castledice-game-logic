@@ -99,7 +99,7 @@ public class Game
         foreach (var player in _players)
         {
             var numbersGenerator = new NegentropyRandomNumberGenerator(randomConfig.MinActionPointsRoll,
-                randomConfig.MaxActionPointsRoll,
+                randomConfig.MaxActionPointsRoll + 1,
                 randomConfig.ProbabilityPrecision);
             _actionPointsGivers.Add(player, new ActionPointsGiver(numbersGenerator, player));
         }
