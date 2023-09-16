@@ -6,12 +6,26 @@ public class TimeCondition : ITurnSwitchCondition
 {
     private readonly ITimer _timer;
     private bool _isStarted = false;
+    private readonly PlayerTurnsSwitcher _turnsSwitcher;
 
-    public TimeCondition(ITimer timer, int turnDuration)
+    public TimeCondition(ITimer timer, int turnDuration, PlayerTurnsSwitcher turnSwitcher)
     {
         _timer = timer;
         timer.SetDuration(turnDuration);
+        _turnsSwitcher = turnSwitcher;
+        _turnsSwitcher.TurnSwitched += OnTurnSwitched;
     }
+    
+    ~TimeCondition()
+    {
+        _turnsSwitcher.TurnSwitched -= OnTurnSwitched;
+    }
+
+    private void OnTurnSwitched(object sender, EventArgs e)
+    {
+        _timer.ResetTimer();
+    }
+
 
     public void Start()
     {

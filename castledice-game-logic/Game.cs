@@ -15,12 +15,12 @@ namespace castledice_game_logic;
 /// </summary>
 public class Game
 {
-    public event EventHandler<Player>? GameOver; 
-    
+    public event EventHandler<Player>? GameOver;
+
     private Board _board;
     private UnitBranchesCutter _unitBranchesCutter;
     private BoardUpdater _boardUpdater;
-    
+
     //Moves logic
     private MoveValidator _moveValidator;
     private MoveApplier _moveApplier;
@@ -30,50 +30,52 @@ public class Game
 
     //Actions history
     private ActionsHistory _actionsHistory;
-    
+
     //Action points logic
     private Dictionary<Player, ActionPointsGiver> _actionPointsGivers;
     private GiveActionPointsApplier _giveActionPointsApplier;
     private GiveActionPointsSaver _giveActionPointsSaver;
-    
+
     //Turns logic
     private PlayersList _players;
     private PlayerTurnsSwitcher _turnsSwitcher;
     private List<ITurnSwitchCondition> _turnSwitchConditions = new();
-    
+
     //Factories
     private IPlaceablesFactory _placeablesFactory;
-    
+
     //GameOver check
     private GameOverChecker _gameOverChecker;
-    
+
     //Penalties
     private List<IPenalty> _penalties = new();
-    
+    private PlayerKicker _playerKicker;
+
     public ICurrentPlayerProvider CurrentPlayerProvider => _turnsSwitcher;
     public PlayerTurnsSwitcher TurnsSwitcher => _turnsSwitcher;
-    
+
     //Events
     public event EventHandler? OnTurnSwitched;
 
-    public Game(List<Player> players, 
+    public Game(List<Player> players,
         BoardConfig boardConfig,
-        RandomConfig randomConfig, 
-        UnitsConfig unitsConfig, 
+        RandomConfig randomConfig,
+        UnitsConfig unitsConfig,
         IPlacementListProvider placementListProvider)
     {
 
         _players = new PlayersList(players);
-        
+
         InitializeBoard(boardConfig);
         ValidateBoard();
-        
+
         _actionsHistory = new ActionsHistory();
         _boardUpdater = new BoardUpdater(_board);
         _gameOverChecker = new GameOverChecker(_board);
         _turnsSwitcher = new PlayerTurnsSwitcher(_players);
         _unitBranchesCutter = new UnitBranchesCutter(_board);
-        
+        _playerKicker = new PlayerKicker(_board);
+
         InitializeActionPoints(randomConfig);
         InitializePlaceablesFactory(unitsConfig);
         InitializeMovesLogic(placementListProvider);
@@ -90,14 +92,14 @@ public class Game
     }
 
     #region Initialize methods
-    
+
     private void InitializeActionPoints(RandomConfig randomConfig)
     {
         _actionPointsGivers = new Dictionary<Player, ActionPointsGiver>();
         foreach (var player in _players)
         {
             var numbersGenerator = new NegentropyRandomNumberGenerator(randomConfig.MinActionPointsRoll,
-                randomConfig.MaxActionPointsRoll, 
+                randomConfig.MaxActionPointsRoll,
                 randomConfig.ProbabilityPrecision);
             _actionPointsGivers.Add(player, new ActionPointsGiver(numbersGenerator, player));
         }
@@ -111,7 +113,7 @@ public class Game
         var knightFactory = new KnightsFactory(config.KnightConfig);
         _placeablesFactory = new UnitsFactory(knightFactory);
     }
-    
+
     private void InitializeMovesLogic(IPlacementListProvider placementListProvider)
     {
         _moveApplier = new MoveApplier(_board);
@@ -120,7 +122,7 @@ public class Game
         _cellMovesSelector = new CellMovesSelector(_board);
         _possibleMovesSelector = new PossibleMovesSelector(_board, _placeablesFactory, placementListProvider);
     }
-    
+
 
     private void InitializeBoard(BoardConfig config)
     {
@@ -132,7 +134,7 @@ public class Game
             contentGenerator.SpawnContent(_board);
         }
     }
-    
+
     #endregion
 
     private void ValidateBoard()
@@ -168,23 +170,24 @@ public class Game
     {
         return _possibleMovesSelector.GetPossibleMoves(player, position);
     }
-    
+
     public void AddPenalty(IPenalty penalty)
     {
         _penalties.Add(penalty);
     }
-    
+
     public void AddTurnSwitchCondition(ITurnSwitchCondition condition)
     {
         _turnSwitchConditions.Add(condition);
     }
-    
+
     public bool TryMakeMove(AbstractMove move)
     {
         if (!CanMakeMove(move))
         {
             return false;
         }
+
         _moveApplier.ApplyMove(move);
         _moveSaver.SaveMove(move);
         CutUnitBranches();
@@ -192,6 +195,7 @@ public class Game
         {
             ProcessGameOver();
         }
+
         CheckTurns();
         return true;
     }
@@ -240,9 +244,23 @@ public class Game
         _giveActionPointsApplier.ApplyAction(giveActionPointsAction);
         _giveActionPointsSaver.SaveAction(giveActionPointsAction);
         _boardUpdater.UpdateBoard();
+        ApplyPenalties();
     }
 
-    protected virtual void OnGameOver(Player e)
+    private void ApplyPenalties()
+    {
+        foreach (var penalty in _penalties)
+        {
+            var violators = penalty.GetViolators();
+            foreach (var violator in violators)
+            {
+                _playerKicker.KickFromBoard(violator);
+                _players.KickPlayer(violator);
+            }
+        }
+    }
+
+protected virtual void OnGameOver(Player e)
     {
         GameOver?.Invoke(this, e);
     }
