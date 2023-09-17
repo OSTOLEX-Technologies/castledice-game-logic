@@ -259,6 +259,10 @@ public class Game
                 _players.KickPlayer(violator);
             }
         }
+        if (CheckGameOver())
+        {
+            ProcessGameOver();
+        }
     }
 
     protected virtual void OnGameOver(Player e)
