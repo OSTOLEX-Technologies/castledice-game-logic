@@ -14,12 +14,12 @@ public class ReplaceRulesTests
     {
         public IEnumerator<object[]> GetEnumerator()
         {
-            yield return GetCase(replaceableRemoveCost: 3, placeablePlaceCost: 1, expectedCost: 3);
-            yield return GetCase(replaceableRemoveCost: 4, placeablePlaceCost: 2, expectedCost: 5);
-            yield return GetCase(replaceableRemoveCost: 2, placeablePlaceCost: 2, expectedCost: 3);
-            yield return GetCase(replaceableRemoveCost: 3, placeablePlaceCost: 3, expectedCost: 5);
-            yield return GetCase(replaceableRemoveCost: 1, placeablePlaceCost: 1, expectedCost: 1);
-            yield return GetCase(replaceableRemoveCost: 6, placeablePlaceCost: 1, expectedCost: 6);
+            yield return GetCase(replaceableRemoveCost: 3, placeablePlaceCost: 1, expectedCost: 4);
+            yield return GetCase(replaceableRemoveCost: 4, placeablePlaceCost: 2, expectedCost: 6);
+            yield return GetCase(replaceableRemoveCost: 2, placeablePlaceCost: 2, expectedCost: 4);
+            yield return GetCase(replaceableRemoveCost: 3, placeablePlaceCost: 3, expectedCost: 6);
+            yield return GetCase(replaceableRemoveCost: 1, placeablePlaceCost: 1, expectedCost: 2);
+            yield return GetCase(replaceableRemoveCost: 6, placeablePlaceCost: 1, expectedCost: 7);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
