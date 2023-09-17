@@ -15,7 +15,8 @@ namespace castledice_game_logic;
 /// </summary>
 public class Game
 {
-    public event EventHandler<Player>? GameOver;
+    public event EventHandler<Player>? Win;
+    public event EventHandler Draw;
 
     private Board _board;
     private UnitBranchesCutter _unitBranchesCutter;
@@ -44,7 +45,7 @@ public class Game
     //Factories
     private IPlaceablesFactory _placeablesFactory;
 
-    //GameOver check
+    //Win check
     private GameOverChecker _gameOverChecker;
 
     //Penalties
@@ -71,7 +72,6 @@ public class Game
 
         _actionsHistory = new ActionsHistory();
         _boardUpdater = new BoardUpdater(_board);
-        _gameOverChecker = new GameOverChecker(_board);
         _turnsSwitcher = new PlayerTurnsSwitcher(_players);
         _unitBranchesCutter = new UnitBranchesCutter(_board);
         _playerKicker = new PlayerKicker(_board);
@@ -80,6 +80,8 @@ public class Game
         InitializePlaceablesFactory(unitsConfig);
         InitializeMovesLogic(placementListProvider);
 
+        _gameOverChecker = new GameOverChecker(_board, _turnsSwitcher, _cellMovesSelector);
+        
         GiveActionPointsToFirstPlayer();
     }
 
@@ -221,7 +223,7 @@ public class Game
     private void ProcessGameOver()
     {
         var winner = _gameOverChecker.GetWinner();
-        OnGameOver(winner);
+        OnWin(winner);
     }
 
     public void CheckTurns()
@@ -265,8 +267,13 @@ public class Game
         }
     }
 
-    protected virtual void OnGameOver(Player e)
+    protected virtual void OnWin(Player e)
     {
-        GameOver?.Invoke(this, e);
+        Win?.Invoke(this, e);
+    }
+
+    protected virtual void OnDraw()
+    {
+        Draw?.Invoke(this, EventArgs.Empty);
     }
 }
