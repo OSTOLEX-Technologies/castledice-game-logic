@@ -238,6 +238,7 @@ public class Game
 
     private void SwitchTurn()
     {
+        _turnsSwitcher.GetCurrentPlayer().ActionPoints.Amount = 0;
         _turnsSwitcher.SwitchTurn();
         var currentPlayer = _turnsSwitcher.GetCurrentPlayer();
         var giveActionPointsAction = _actionPointsGivers[currentPlayer].GiveActionPoints();
@@ -260,7 +261,7 @@ public class Game
         }
     }
 
-protected virtual void OnGameOver(Player e)
+    protected virtual void OnGameOver(Player e)
     {
         GameOver?.Invoke(this, e);
     }
