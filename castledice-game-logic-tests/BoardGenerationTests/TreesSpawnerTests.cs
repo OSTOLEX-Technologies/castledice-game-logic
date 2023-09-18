@@ -42,6 +42,23 @@ public class TreesSpawnerTests
     }
 
     [Fact]
+    public void SpawnContent_ShouldNotSpawnTrees_IfZeroAmountIsGiven()
+    {
+        var board = GetFullNByNBoard(10);
+        int treesAmount = 0;
+        var treesSpawner = new TreesSpawner(treesAmount, treesAmount, 3, GetTreesFactory());
+        treesSpawner.SpawnContent(board);
+        
+        foreach (var cell in board)
+        {
+            if (cell.GetContent().Exists(c => c is Tree))
+            {
+                Assert.Fail("Tree was spawned");
+            }
+        }
+    }
+
+    [Fact]
     public void SpawnContent_ShouldUseFactory_GivenInConstructor()
     {
         var board = GetFullNByNBoard(1);
@@ -54,6 +71,12 @@ public class TreesSpawnerTests
         var cellContent = board[0, 0].GetContent();
 
         Assert.Contains(expectedTree, cellContent);
+    }
+
+    [Fact]
+    public void Constructor_ShouldThrowArgumentException_IfMaxIsLessThenMin()
+    {
+        Assert.Throws<ArgumentException>(() => new TreesSpawner(1, 0, 1, GetTreesFactory()));
     }
 
     private static ITreesFactory GetTreesFactory()

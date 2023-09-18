@@ -30,6 +30,7 @@ public class Game
     private PossibleMovesSelector _possibleMovesSelector;
 
     //Actions history
+    public ActionsHistory ActionsHistory => _actionsHistory;
     private ActionsHistory _actionsHistory;
 
     //Action points logic
@@ -222,8 +223,15 @@ public class Game
 
     private void ProcessGameOver()
     {
-        var winner = _gameOverChecker.GetWinner();
-        OnWin(winner);
+        if (_gameOverChecker.IsDraw())
+        {
+            OnDraw();
+        }
+        else
+        {
+            var winner = _gameOverChecker.GetWinner();
+            OnWin(winner);
+        }
     }
 
     public void CheckTurns()
