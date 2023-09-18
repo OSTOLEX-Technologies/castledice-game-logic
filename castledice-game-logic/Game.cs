@@ -15,6 +15,7 @@ namespace castledice_game_logic;
 /// </summary>
 public class Game
 {
+    public event EventHandler<AbstractMove> MoveApplied; 
     public event EventHandler<Player>? Win;
     public event EventHandler Draw;
 
@@ -193,6 +194,7 @@ public class Game
 
         _moveApplier.ApplyMove(move);
         _moveSaver.SaveMove(move);
+        OnMoveApplied(move);
         CutUnitBranches();
         if (CheckGameOver())
         {
@@ -201,6 +203,11 @@ public class Game
 
         CheckTurns();
         return true;
+    }
+
+    private void OnMoveApplied(AbstractMove move)
+    {
+        MoveApplied?.Invoke(this, move);
     }
 
     private void CutUnitBranches()

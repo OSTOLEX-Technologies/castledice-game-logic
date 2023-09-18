@@ -17,7 +17,7 @@ public class PlayerActionPointsSaverTests
         var saver = new GiveActionPointsSaver(history);
 
         saver.SaveAction(action);
-        var actualSnapshot = history.History[0] as GiveActionPointsSnapshot;
+        var actualSnapshot = history.GetHistory()[0] as GiveActionPointsSnapshot;
         
         Assert.Equal(expectedSnapshot, actualSnapshot);
     }
