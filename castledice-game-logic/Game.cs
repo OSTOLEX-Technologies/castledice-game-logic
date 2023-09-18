@@ -43,10 +43,7 @@ public class Game
     private readonly PlayersList _players;
     private readonly PlayerTurnsSwitcher _turnsSwitcher;
     private readonly List<ITurnSwitchCondition> _turnSwitchConditions = new();
-
-    //Factories
-    private readonly IPlaceablesFactory _placeablesFactory;
-
+    
     //Win check
     private readonly GameOverChecker _gameOverChecker;
 
@@ -66,7 +63,6 @@ public class Game
         UnitsConfig unitsConfig,
         IPlacementListProvider placementListProvider)
     {
-
         _players = new PlayersList(players);
 
         _board = InitializeBoard(boardConfig);
@@ -90,12 +86,12 @@ public class Game
         _giveActionPointsApplier = new GiveActionPointsApplier();
         _giveActionPointsSaver = new GiveActionPointsSaver(_actionsHistory);
         var knightFactory = new KnightsFactory(unitsConfig.KnightConfig);
-        _placeablesFactory = new UnitsFactory(knightFactory);
+        IPlaceablesFactory placeablesFactory  = new UnitsFactory(knightFactory);
         _moveApplier = new MoveApplier(_board);
         _moveValidator = new MoveValidator(_board, _turnsSwitcher);
         _moveSaver = new MoveSaver(_actionsHistory);
         _cellMovesSelector = new CellMovesSelector(_board);
-        _possibleMovesSelector = new PossibleMovesSelector(_board, _placeablesFactory, placementListProvider);
+        _possibleMovesSelector = new PossibleMovesSelector(_board, placeablesFactory, placementListProvider);
 
         _gameOverChecker = new GameOverChecker(_board, _turnsSwitcher, _cellMovesSelector);
         
