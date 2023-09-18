@@ -15,13 +15,13 @@ namespace castledice_game_logic;
 /// </summary>
 public class Game
 {
-    public event EventHandler<AbstractMove> MoveApplied; 
+    public event EventHandler<AbstractMove>? MoveApplied; 
     public event EventHandler<Player>? Win;
-    public event EventHandler Draw;
+    public event EventHandler? Draw;
 
     private Board _board;
-    private UnitBranchesCutter _unitBranchesCutter;
-    private BoardUpdater _boardUpdater;
+    private readonly UnitBranchesCutter _unitBranchesCutter;
+    private readonly BoardUpdater _boardUpdater;
 
     //Moves logic
     private MoveValidator _moveValidator;
@@ -32,7 +32,7 @@ public class Game
 
     //Actions history
     public ActionsHistory ActionsHistory => _actionsHistory;
-    private ActionsHistory _actionsHistory;
+    private readonly ActionsHistory _actionsHistory;
 
     //Action points logic
     private Dictionary<Player, ActionPointsGiver> _actionPointsGivers;
@@ -40,19 +40,19 @@ public class Game
     private GiveActionPointsSaver _giveActionPointsSaver;
 
     //Turns logic
-    private PlayersList _players;
-    private PlayerTurnsSwitcher _turnsSwitcher;
-    private List<ITurnSwitchCondition> _turnSwitchConditions = new();
+    private readonly PlayersList _players;
+    private readonly PlayerTurnsSwitcher _turnsSwitcher;
+    private readonly List<ITurnSwitchCondition> _turnSwitchConditions = new();
 
     //Factories
     private IPlaceablesFactory _placeablesFactory;
 
     //Win check
-    private GameOverChecker _gameOverChecker;
+    private readonly GameOverChecker _gameOverChecker;
 
     //Penalties
-    private List<IPenalty> _penalties = new();
-    private PlayerKicker _playerKicker;
+    private readonly List<IPenalty> _penalties = new();
+    private readonly PlayerKicker _playerKicker;
 
     public ICurrentPlayerProvider CurrentPlayerProvider => _turnsSwitcher;
     public PlayerTurnsSwitcher TurnsSwitcher => _turnsSwitcher;
