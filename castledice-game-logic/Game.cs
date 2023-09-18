@@ -111,11 +111,11 @@ public class Game
     private Board InitializeBoard(BoardConfig config)
     {
         var board = new Board(config.CellType);
-        config.CellsGenerator.GenerateCells(_board);
+        config.CellsGenerator.GenerateCells(board);
         //TODO: Make sure that there is only one castle spawner and it is the first one in the list.
         foreach (var contentGenerator in config.ContentSpawners)
         {
-            contentGenerator.SpawnContent(_board);
+            contentGenerator.SpawnContent(board);
         }
 
         return board;
@@ -182,8 +182,10 @@ public class Game
         {
             ProcessGameOver();
         }
-
-        CheckTurns();
+        else
+        {
+            CheckTurns();
+        }
         return true;
     }
 
