@@ -19,25 +19,25 @@ public class Game
     public event EventHandler<Player>? Win;
     public event EventHandler? Draw;
 
-    private Board _board;
+    private readonly Board _board;
     private readonly UnitBranchesCutter _unitBranchesCutter;
     private readonly BoardUpdater _boardUpdater;
 
     //Moves logic
-    private MoveValidator _moveValidator;
-    private MoveApplier _moveApplier;
-    private MoveSaver _moveSaver;
-    private CellMovesSelector _cellMovesSelector;
-    private PossibleMovesSelector _possibleMovesSelector;
+    private readonly MoveValidator _moveValidator;
+    private readonly MoveApplier _moveApplier;
+    private readonly MoveSaver _moveSaver;
+    private readonly CellMovesSelector _cellMovesSelector;
+    private readonly PossibleMovesSelector _possibleMovesSelector;
 
     //Actions history
     public ActionsHistory ActionsHistory => _actionsHistory;
     private readonly ActionsHistory _actionsHistory;
 
     //Action points logic
-    private Dictionary<Player, ActionPointsGiver> _actionPointsGivers;
-    private GiveActionPointsApplier _giveActionPointsApplier;
-    private GiveActionPointsSaver _giveActionPointsSaver;
+    private readonly Dictionary<Player, ActionPointsGiver> _actionPointsGivers;
+    private readonly GiveActionPointsApplier _giveActionPointsApplier;
+    private readonly GiveActionPointsSaver _giveActionPointsSaver;
 
     //Turns logic
     private readonly PlayersList _players;
@@ -45,7 +45,7 @@ public class Game
     private readonly List<ITurnSwitchCondition> _turnSwitchConditions = new();
 
     //Factories
-    private IPlaceablesFactory _placeablesFactory;
+    private readonly IPlaceablesFactory _placeablesFactory;
 
     //Win check
     private readonly GameOverChecker _gameOverChecker;
@@ -69,7 +69,7 @@ public class Game
 
         _players = new PlayersList(players);
 
-        InitializeBoard(boardConfig);
+        _board = InitializeBoard(boardConfig);
         ValidateBoard();
 
         _actionsHistory = new ActionsHistory();
@@ -78,9 +78,24 @@ public class Game
         _unitBranchesCutter = new UnitBranchesCutter(_board);
         _playerKicker = new PlayerKicker(_board);
 
-        InitializeActionPoints(randomConfig);
-        InitializePlaceablesFactory(unitsConfig);
-        InitializeMovesLogic(placementListProvider);
+        _actionPointsGivers = new Dictionary<Player, ActionPointsGiver>();
+        foreach (var player in _players)
+        {
+            var numbersGenerator = new NegentropyRandomNumberGenerator(randomConfig.MinActionPointsRoll,
+                randomConfig.MaxActionPointsRoll + 1,
+                randomConfig.ProbabilityPrecision);
+            _actionPointsGivers.Add(player, new ActionPointsGiver(numbersGenerator, player));
+        }
+
+        _giveActionPointsApplier = new GiveActionPointsApplier();
+        _giveActionPointsSaver = new GiveActionPointsSaver(_actionsHistory);
+        var knightFactory = new KnightsFactory(unitsConfig.KnightConfig);
+        _placeablesFactory = new UnitsFactory(knightFactory);
+        _moveApplier = new MoveApplier(_board);
+        _moveValidator = new MoveValidator(_board, _turnsSwitcher);
+        _moveSaver = new MoveSaver(_actionsHistory);
+        _cellMovesSelector = new CellMovesSelector(_board);
+        _possibleMovesSelector = new PossibleMovesSelector(_board, _placeablesFactory, placementListProvider);
 
         _gameOverChecker = new GameOverChecker(_board, _turnsSwitcher, _cellMovesSelector);
         
@@ -97,46 +112,17 @@ public class Game
 
     #region Initialize methods
 
-    private void InitializeActionPoints(RandomConfig randomConfig)
+    private Board InitializeBoard(BoardConfig config)
     {
-        _actionPointsGivers = new Dictionary<Player, ActionPointsGiver>();
-        foreach (var player in _players)
-        {
-            var numbersGenerator = new NegentropyRandomNumberGenerator(randomConfig.MinActionPointsRoll,
-                randomConfig.MaxActionPointsRoll + 1,
-                randomConfig.ProbabilityPrecision);
-            _actionPointsGivers.Add(player, new ActionPointsGiver(numbersGenerator, player));
-        }
-
-        _giveActionPointsApplier = new GiveActionPointsApplier();
-        _giveActionPointsSaver = new GiveActionPointsSaver(_actionsHistory);
-    }
-
-    private void InitializePlaceablesFactory(UnitsConfig config)
-    {
-        var knightFactory = new KnightsFactory(config.KnightConfig);
-        _placeablesFactory = new UnitsFactory(knightFactory);
-    }
-
-    private void InitializeMovesLogic(IPlacementListProvider placementListProvider)
-    {
-        _moveApplier = new MoveApplier(_board);
-        _moveValidator = new MoveValidator(_board, _turnsSwitcher);
-        _moveSaver = new MoveSaver(_actionsHistory);
-        _cellMovesSelector = new CellMovesSelector(_board);
-        _possibleMovesSelector = new PossibleMovesSelector(_board, _placeablesFactory, placementListProvider);
-    }
-
-
-    private void InitializeBoard(BoardConfig config)
-    {
-        _board = new Board(config.CellType);
+        var board = new Board(config.CellType);
         config.CellsGenerator.GenerateCells(_board);
         //TODO: Make sure that there is only one castle spawner and it is the first one in the list.
         foreach (var contentGenerator in config.ContentSpawners)
         {
             contentGenerator.SpawnContent(_board);
         }
+
+        return board;
     }
 
     #endregion
