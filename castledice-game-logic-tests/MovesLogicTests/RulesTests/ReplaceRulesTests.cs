@@ -14,12 +14,12 @@ public class ReplaceRulesTests
     {
         public IEnumerator<object[]> GetEnumerator()
         {
-            yield return GetCase(replaceableRemoveCost: 3, placeablePlaceCost: 1, expectedCost: 4);
-            yield return GetCase(replaceableRemoveCost: 4, placeablePlaceCost: 2, expectedCost: 6);
-            yield return GetCase(replaceableRemoveCost: 2, placeablePlaceCost: 2, expectedCost: 4);
-            yield return GetCase(replaceableRemoveCost: 3, placeablePlaceCost: 3, expectedCost: 6);
-            yield return GetCase(replaceableRemoveCost: 1, placeablePlaceCost: 1, expectedCost: 2);
-            yield return GetCase(replaceableRemoveCost: 6, placeablePlaceCost: 1, expectedCost: 7);
+            yield return GetCase(replaceableRemoveCost: 3, placeablePlaceCost: 1);
+            yield return GetCase(replaceableRemoveCost: 4, placeablePlaceCost: 2);
+            yield return GetCase(replaceableRemoveCost: 2, placeablePlaceCost: 2);
+            yield return GetCase(replaceableRemoveCost: 3, placeablePlaceCost: 3);
+            yield return GetCase(replaceableRemoveCost: 1, placeablePlaceCost: 1);
+            yield return GetCase(replaceableRemoveCost: 6, placeablePlaceCost: 1);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -27,7 +27,7 @@ public class ReplaceRulesTests
             return GetEnumerator();
         }
 
-        private static object[] GetCase(int replaceableRemoveCost, int placeablePlaceCost, int expectedCost)
+        private static object[] GetCase(int replaceableRemoveCost, int placeablePlaceCost)
         {
             var board = GetFullNByNBoard(2);
             var position = new Vector2Int(0, 0);
@@ -35,7 +35,12 @@ public class ReplaceRulesTests
             var placeable = new PlaceableMock() { Cost = placeablePlaceCost };
             board[position].AddContent(replaceable);
 
-            return new object[] { board, position, placeable, expectedCost };
+            return new object[] { board, position, placeable, CalculateReplaceCost(replaceableRemoveCost, placeablePlaceCost) };
+        }
+        
+        private static int CalculateReplaceCost(int removeCost, int replacementCost)
+        {
+            return removeCost + replacementCost;
         }
     }
     
@@ -106,7 +111,6 @@ public class ReplaceRulesTests
     }
 
     [Fact]
-    //TODO: Reconsider this test
     //Conditions for player to remove object on cell are following:
     //Object must implement IReplaceable interface
     //Object must not belong to player
