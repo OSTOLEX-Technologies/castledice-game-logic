@@ -33,7 +33,7 @@ public static class ReplaceRules
             return false;
         }
         if (content is not IReplaceable replaceable) return false;
-        int replaceCost = CalculateReplaceCost(replaceable.GetReplaceCost(), 1); //One is a minimum possible replacement place cost.
+        int replaceCost = CalculateReplaceCost(replaceable.GetReplaceCost(), 1); // One is a minimum possible replacement place cost.
         int playerActionPoints = player.ActionPoints.Amount;
         return replaceCost <= playerActionPoints;
     }
