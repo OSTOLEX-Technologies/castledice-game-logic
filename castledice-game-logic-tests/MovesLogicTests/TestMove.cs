@@ -10,7 +10,7 @@ public class TestMove : AbstractMove
     {
     }
 
-    public override bool Accept(IMoveVisitor visitor)
+    public override T Accept<T>(IMoveVisitor<T> visitor)
     {
         throw new NotImplementedException();
     }

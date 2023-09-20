@@ -14,7 +14,7 @@ public sealed class PlaceMove : AbstractMove
         _contentToPlace = contentToPlace;
     }
 
-    public override bool Accept(IMoveVisitor visitor)
+    public override T Accept<T>(IMoveVisitor<T> visitor)
     {
         return visitor.VisitPlaceMove(this);
     }

@@ -16,7 +16,7 @@ public abstract class AbstractMove
         _position = position;
     }
 
-    public abstract bool Accept(IMoveVisitor visitor);
+    public abstract T Accept<T>(IMoveVisitor<T> visitor);
 
     protected bool Equals(AbstractMove other)
     {

@@ -8,7 +8,7 @@ public sealed class CaptureMove : AbstractMove
     {
     }
 
-    public override bool Accept(IMoveVisitor visitor)
+    public override T Accept<T>(IMoveVisitor<T> visitor)
     {
         return visitor.VisitCaptureMove(this);
     }

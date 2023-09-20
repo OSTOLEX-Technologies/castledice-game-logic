@@ -8,7 +8,7 @@ public sealed class UpgradeMove : AbstractMove
     {
     }
 
-    public override bool Accept(IMoveVisitor visitor)
+    public override T Accept<T>(IMoveVisitor<T> visitor)
     {
         return visitor.VisitUpgradeMove(this);
     }

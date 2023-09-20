@@ -29,6 +29,7 @@ public class Game
     private readonly MoveSaver _moveSaver;
     private readonly CellMovesSelector _cellMovesSelector;
     private readonly PossibleMovesSelector _possibleMovesSelector;
+    private readonly MoveCostCalculator _moveCostCalculator;
 
     //Actions history
     public ActionsHistory ActionsHistory => _actionsHistory;
@@ -92,7 +93,8 @@ public class Game
         _moveSaver = new MoveSaver(_actionsHistory);
         _cellMovesSelector = new CellMovesSelector(_board);
         _possibleMovesSelector = new PossibleMovesSelector(_board, placeablesFactory, placementListProvider);
-
+        _moveCostCalculator = new MoveCostCalculator(_board);
+        
         _gameOverChecker = new GameOverChecker(_board, _turnsSwitcher, _cellMovesSelector);
         
         GiveActionPointsToFirstPlayer();
@@ -167,6 +169,11 @@ public class Game
         _turnSwitchConditions.Add(condition);
     }
 
+    public int GetMoveCost(AbstractMove move)
+    {
+        return _moveCostCalculator.GetMoveCost(move);
+    }
+    
     public bool TryMakeMove(AbstractMove move)
     {
         if (!CanMakeMove(move))

@@ -14,7 +14,7 @@ public sealed class ReplaceMove : AbstractMove
         _replacement = replacement;
     }
 
-    public override bool Accept(IMoveVisitor visitor)
+    public override T Accept<T>(IMoveVisitor<T> visitor)
     {
         return visitor.VisitReplaceMove(this);
     }
