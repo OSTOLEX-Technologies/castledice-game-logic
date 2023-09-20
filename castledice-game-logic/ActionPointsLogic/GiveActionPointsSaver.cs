@@ -11,6 +11,6 @@ public class GiveActionPointsSaver
 
     public void SaveAction(GiveActionPointsAction action)
     {
-        _history.History.Add(action.GetSnapshot());
+        _history.AddActionSnapshot(action.GetSnapshot());
     }
 }

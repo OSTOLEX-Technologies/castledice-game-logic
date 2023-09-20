@@ -12,6 +12,10 @@ public class TreesSpawner : IContentSpawner
 
     public TreesSpawner(int minTreesCount, int maxTreesCount, int minDistanceBetweenTrees, ITreesFactory factory)
     {
+        if (minTreesCount > maxTreesCount)
+        {
+            throw new ArgumentException("Minimum trees count cannot be greater than maximum trees count!");
+        }
         _minTreesCount = minTreesCount;
         _maxTreesCount = maxTreesCount;
         _minDistanceBetweenTrees = minDistanceBetweenTrees;

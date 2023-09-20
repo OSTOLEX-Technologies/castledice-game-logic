@@ -15,41 +15,41 @@ namespace castledice_game_logic;
 /// </summary>
 public class Game
 {
-    public event EventHandler<Player>? GameOver;
+    public event EventHandler<AbstractMove>? MoveApplied; 
+    public event EventHandler<Player>? Win;
+    public event EventHandler? Draw;
 
-    private Board _board;
-    private UnitBranchesCutter _unitBranchesCutter;
-    private BoardUpdater _boardUpdater;
+    private readonly Board _board;
+    private readonly UnitBranchesCutter _unitBranchesCutter;
+    private readonly BoardUpdater _boardUpdater;
 
     //Moves logic
-    private MoveValidator _moveValidator;
-    private MoveApplier _moveApplier;
-    private MoveSaver _moveSaver;
-    private CellMovesSelector _cellMovesSelector;
-    private PossibleMovesSelector _possibleMovesSelector;
+    private readonly MoveValidator _moveValidator;
+    private readonly MoveApplier _moveApplier;
+    private readonly MoveSaver _moveSaver;
+    private readonly CellMovesSelector _cellMovesSelector;
+    private readonly PossibleMovesSelector _possibleMovesSelector;
 
     //Actions history
-    private ActionsHistory _actionsHistory;
+    public ActionsHistory ActionsHistory => _actionsHistory;
+    private readonly ActionsHistory _actionsHistory;
 
     //Action points logic
-    private Dictionary<Player, ActionPointsGiver> _actionPointsGivers;
-    private GiveActionPointsApplier _giveActionPointsApplier;
-    private GiveActionPointsSaver _giveActionPointsSaver;
+    private readonly Dictionary<Player, ActionPointsGiver> _actionPointsGivers;
+    private readonly GiveActionPointsApplier _giveActionPointsApplier;
+    private readonly GiveActionPointsSaver _giveActionPointsSaver;
 
     //Turns logic
-    private PlayersList _players;
-    private PlayerTurnsSwitcher _turnsSwitcher;
-    private List<ITurnSwitchCondition> _turnSwitchConditions = new();
-
-    //Factories
-    private IPlaceablesFactory _placeablesFactory;
-
-    //GameOver check
-    private GameOverChecker _gameOverChecker;
+    private readonly PlayersList _players;
+    private readonly PlayerTurnsSwitcher _turnsSwitcher;
+    private readonly List<ITurnSwitchCondition> _turnSwitchConditions = new();
+    
+    //Win check
+    private readonly GameOverChecker _gameOverChecker;
 
     //Penalties
-    private List<IPenalty> _penalties = new();
-    private PlayerKicker _playerKicker;
+    private readonly List<IPenalty> _penalties = new();
+    private readonly PlayerKicker _playerKicker;
 
     public ICurrentPlayerProvider CurrentPlayerProvider => _turnsSwitcher;
     public PlayerTurnsSwitcher TurnsSwitcher => _turnsSwitcher;
@@ -63,23 +63,38 @@ public class Game
         UnitsConfig unitsConfig,
         IPlacementListProvider placementListProvider)
     {
-
         _players = new PlayersList(players);
 
-        InitializeBoard(boardConfig);
+        _board = InitializeBoard(boardConfig);
         ValidateBoard();
 
         _actionsHistory = new ActionsHistory();
         _boardUpdater = new BoardUpdater(_board);
-        _gameOverChecker = new GameOverChecker(_board);
         _turnsSwitcher = new PlayerTurnsSwitcher(_players);
         _unitBranchesCutter = new UnitBranchesCutter(_board);
         _playerKicker = new PlayerKicker(_board);
 
-        InitializeActionPoints(randomConfig);
-        InitializePlaceablesFactory(unitsConfig);
-        InitializeMovesLogic(placementListProvider);
+        _actionPointsGivers = new Dictionary<Player, ActionPointsGiver>();
+        foreach (var player in _players)
+        {
+            var numbersGenerator = new NegentropyRandomNumberGenerator(randomConfig.MinActionPointsRoll,
+                randomConfig.MaxActionPointsRoll + 1,
+                randomConfig.ProbabilityPrecision);
+            _actionPointsGivers.Add(player, new ActionPointsGiver(numbersGenerator, player));
+        }
 
+        _giveActionPointsApplier = new GiveActionPointsApplier();
+        _giveActionPointsSaver = new GiveActionPointsSaver(_actionsHistory);
+        var knightFactory = new KnightsFactory(unitsConfig.KnightConfig);
+        IPlaceablesFactory placeablesFactory  = new UnitsFactory(knightFactory);
+        _moveApplier = new MoveApplier(_board);
+        _moveValidator = new MoveValidator(_board, _turnsSwitcher);
+        _moveSaver = new MoveSaver(_actionsHistory);
+        _cellMovesSelector = new CellMovesSelector(_board);
+        _possibleMovesSelector = new PossibleMovesSelector(_board, placeablesFactory, placementListProvider);
+
+        _gameOverChecker = new GameOverChecker(_board, _turnsSwitcher, _cellMovesSelector);
+        
         GiveActionPointsToFirstPlayer();
     }
 
@@ -93,46 +108,17 @@ public class Game
 
     #region Initialize methods
 
-    private void InitializeActionPoints(RandomConfig randomConfig)
+    private Board InitializeBoard(BoardConfig config)
     {
-        _actionPointsGivers = new Dictionary<Player, ActionPointsGiver>();
-        foreach (var player in _players)
-        {
-            var numbersGenerator = new NegentropyRandomNumberGenerator(randomConfig.MinActionPointsRoll,
-                randomConfig.MaxActionPointsRoll + 1,
-                randomConfig.ProbabilityPrecision);
-            _actionPointsGivers.Add(player, new ActionPointsGiver(numbersGenerator, player));
-        }
-
-        _giveActionPointsApplier = new GiveActionPointsApplier();
-        _giveActionPointsSaver = new GiveActionPointsSaver(_actionsHistory);
-    }
-
-    private void InitializePlaceablesFactory(UnitsConfig config)
-    {
-        var knightFactory = new KnightsFactory(config.KnightConfig);
-        _placeablesFactory = new UnitsFactory(knightFactory);
-    }
-
-    private void InitializeMovesLogic(IPlacementListProvider placementListProvider)
-    {
-        _moveApplier = new MoveApplier(_board);
-        _moveValidator = new MoveValidator(_board, _turnsSwitcher);
-        _moveSaver = new MoveSaver(_actionsHistory);
-        _cellMovesSelector = new CellMovesSelector(_board);
-        _possibleMovesSelector = new PossibleMovesSelector(_board, _placeablesFactory, placementListProvider);
-    }
-
-
-    private void InitializeBoard(BoardConfig config)
-    {
-        _board = new Board(config.CellType);
-        config.CellsGenerator.GenerateCells(_board);
+        var board = new Board(config.CellType);
+        config.CellsGenerator.GenerateCells(board);
         //TODO: Make sure that there is only one castle spawner and it is the first one in the list.
         foreach (var contentGenerator in config.ContentSpawners)
         {
-            contentGenerator.SpawnContent(_board);
+            contentGenerator.SpawnContent(board);
         }
+
+        return board;
     }
 
     #endregion
@@ -190,14 +176,22 @@ public class Game
 
         _moveApplier.ApplyMove(move);
         _moveSaver.SaveMove(move);
+        OnMoveApplied(move);
         CutUnitBranches();
         if (CheckGameOver())
         {
             ProcessGameOver();
         }
-
-        CheckTurns();
+        else
+        {
+            CheckTurns();
+        }
         return true;
+    }
+
+    private void OnMoveApplied(AbstractMove move)
+    {
+        MoveApplied?.Invoke(this, move);
     }
 
     private void CutUnitBranches()
@@ -220,8 +214,15 @@ public class Game
 
     private void ProcessGameOver()
     {
-        var winner = _gameOverChecker.GetWinner();
-        OnGameOver(winner);
+        if (_gameOverChecker.IsDraw())
+        {
+            OnDraw();
+        }
+        else
+        {
+            var winner = _gameOverChecker.GetWinner();
+            OnWin(winner);
+        }
     }
 
     public void CheckTurns()
@@ -238,6 +239,7 @@ public class Game
 
     private void SwitchTurn()
     {
+        _turnsSwitcher.GetCurrentPlayer().ActionPoints.Amount = 0;
         _turnsSwitcher.SwitchTurn();
         var currentPlayer = _turnsSwitcher.GetCurrentPlayer();
         var giveActionPointsAction = _actionPointsGivers[currentPlayer].GiveActionPoints();
@@ -258,10 +260,19 @@ public class Game
                 _players.KickPlayer(violator);
             }
         }
+        if (CheckGameOver())
+        {
+            ProcessGameOver();
+        }
     }
 
-protected virtual void OnGameOver(Player e)
+    protected virtual void OnWin(Player e)
     {
-        GameOver?.Invoke(this, e);
+        Win?.Invoke(this, e);
+    }
+
+    protected virtual void OnDraw()
+    {
+        Draw?.Invoke(this, EventArgs.Empty);
     }
 }

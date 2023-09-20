@@ -93,6 +93,6 @@ public class MoveSaverTests
         
         saver.SaveMove(move);
 
-        Assert.Contains(expectedSnapshot, history.History);
+        Assert.Contains(expectedSnapshot, history.GetHistory());
     }
 }

@@ -33,7 +33,7 @@ public static class ReplaceRules
             return false;
         }
         if (content is not IReplaceable replaceable) return false;
-        int replaceCost = replaceable.GetReplaceCost();
+        int replaceCost = CalculateReplaceCost(replaceable.GetReplaceCost(), 1); // One is a minimum possible replacement place cost.
         int playerActionPoints = player.ActionPoints.Amount;
         return replaceCost <= playerActionPoints;
     }
@@ -48,7 +48,7 @@ public static class ReplaceRules
         var replaceable = GetReplaceableOnPosition(board, position);
 
 
-        return replaceable.GetReplaceCost() + replacement.GetPlacementCost() - 1;
+        return CalculateReplaceCost(replaceable.GetReplaceCost(), replacement.GetPlacementCost());
     }
     
     private static IReplaceable GetReplaceableOnPosition(Board board, Vector2Int position)
@@ -61,5 +61,10 @@ public static class ReplaceRules
         }
 
         return replaceable;
+    }
+
+    private static int CalculateReplaceCost(int removeCost, int replaceablePlaceCost)
+    {
+        return removeCost + replaceablePlaceCost;
     }
 }
