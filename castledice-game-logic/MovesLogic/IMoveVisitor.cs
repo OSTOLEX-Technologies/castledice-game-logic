@@ -1,10 +1,10 @@
 ﻿namespace castledice_game_logic.MovesLogic;
 
-public interface IMoveVisitor
+public interface IMoveVisitor<out T>
 {
-    bool VisitPlaceMove(PlaceMove move);
-    bool VisitReplaceMove(ReplaceMove move);
-    bool VisitUpgradeMove(UpgradeMove move);
-    bool VisitCaptureMove(CaptureMove move);
-    bool VisitRemoveMove(RemoveMove move);
+    T VisitPlaceMove(PlaceMove move);
+    T VisitReplaceMove(ReplaceMove move);
+    T VisitUpgradeMove(UpgradeMove move);
+    T VisitCaptureMove(CaptureMove move);
+    T VisitRemoveMove(RemoveMove move);
 }

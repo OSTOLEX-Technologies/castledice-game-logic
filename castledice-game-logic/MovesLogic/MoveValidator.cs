@@ -3,7 +3,7 @@ using castledice_game_logic.TurnsLogic;
 
 namespace castledice_game_logic.MovesLogic;
 
-public class MoveValidator : IMoveVisitor
+public class MoveValidator : IMoveVisitor<bool>
 {
     private readonly Board _board;
     private readonly CellMovesSelector _cellMovesSelector;

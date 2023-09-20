@@ -3,7 +3,7 @@ using castledice_game_logic.MovesLogic.Rules;
 
 namespace castledice_game_logic.MovesLogic;
 
-public class MoveApplier : IMoveVisitor
+public class MoveApplier : IMoveVisitor<bool>
 {
     private readonly Board _board;
     

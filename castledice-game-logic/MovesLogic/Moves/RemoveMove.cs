@@ -9,7 +9,7 @@ public sealed class RemoveMove : AbstractMove
         
     }
 
-    public override bool Accept(IMoveVisitor visitor)
+    public override T Accept<T>(IMoveVisitor<T> visitor)
     {
         return visitor.VisitRemoveMove(this);
     }

@@ -11,7 +11,7 @@ public enum VisitMethodType
     Capture
 }
 
-public class MoveVisitorMock : IMoveVisitor
+public class MoveVisitorMock : IMoveVisitor<bool>
 {
     public VisitMethodType CalledMethodType { get; private set; }
     
