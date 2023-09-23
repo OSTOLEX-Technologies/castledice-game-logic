@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using castledice_game_logic;
 using castledice_game_logic.GameObjects;
 using CastleGO = castledice_game_logic.GameObjects.Castle;
 using static castledice_game_logic_tests.ObjectCreationUtility;
@@ -28,6 +29,30 @@ public class CastleTests
         var castle = new CastleGO(GetPlayer(), 1, 1, 1);
         
         Assert.True(castle is IPlaceBlocking);
+    }
+
+    [Theory]
+    [InlineData(1)]
+    [InlineData(2)]
+    [InlineData(3)]
+    [InlineData(4)]
+    public void GetMaxDurability_ShouldReturnDefaultDurability_IfCastleIsOwned(int defaultDurability)
+    {
+        var castle = new CastleGO(GetPlayer(), defaultDurability, 1, 1);
+        
+        Assert.Equal(defaultDurability, castle.GetMaxDurability());
+    }
+
+    [Theory]
+    [InlineData(1)]
+    [InlineData(2)]
+    [InlineData(3)]
+    [InlineData(4)]
+    public void GetMaxDurability_ShouldReturnFreeDurability_IfCastleIsFree(int freeDurability)
+    {
+        var castle = new CastleGO(new NullPlayer(), 2, freeDurability, 1);
+        
+        Assert.Equal(freeDurability, castle.GetMaxDurability());
     }
     
     [Fact]
