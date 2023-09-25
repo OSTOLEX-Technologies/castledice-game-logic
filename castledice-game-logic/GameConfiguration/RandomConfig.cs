@@ -4,7 +4,6 @@ public struct RandomConfig
 {
     public int MinActionPointsRoll { get; }
     public int MaxActionPointsRoll { get; }
-    
     public int ProbabilityPrecision { get; }
 
     public RandomConfig(int minActionPointsRoll, int maxActionPointsRoll, int probabilityPrecision)

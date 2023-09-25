@@ -1,4 +1,5 @@
 ﻿using castledice_game_logic.ActionPointsLogic;
+using castledice_game_logic.BoardGeneration.ContentGeneration;
 using castledice_game_logic.GameConfiguration;
 using castledice_game_logic.GameObjects;
 using castledice_game_logic.GameObjects.Factories;
@@ -110,11 +111,22 @@ public class Game
 
     #region Initialize methods
 
-    private Board InitializeBoard(BoardConfig config)
+    private static Board InitializeBoard(BoardConfig config)
     {
         var board = new Board(config.CellType);
         config.CellsGenerator.GenerateCells(board);
-        //TODO: Make sure that there is only one castle spawner and it is the first one in the list.
+        var spawners = config.ContentSpawners;
+        if (spawners.Count < 1 || spawners[0] is not CastlesSpawner)
+        {
+            throw new ArgumentException("First content spawner must be CastlesSpawner!");
+        }
+        for (int i = 1; i < spawners.Count; i++)
+        {
+            if (spawners[i] is CastlesSpawner)
+            {
+                throw new ArgumentException("There must be only one CastleSpawner!");
+            }
+        }
         foreach (var contentGenerator in config.ContentSpawners)
         {
             contentGenerator.SpawnContent(board);
@@ -234,13 +246,10 @@ public class Game
 
     public void CheckTurns()
     {
-        foreach (var condition in _turnSwitchConditions)
+        foreach (var condition in _turnSwitchConditions.Where(condition => condition.ShouldSwitchTurn()))
         {
-            if (condition.ShouldSwitchTurn())
-            {
-                SwitchTurn();
-                OnTurnSwitched?.Invoke(this, EventArgs.Empty);
-            }
+            SwitchTurn();
+            OnTurnSwitched?.Invoke(this, EventArgs.Empty);
         }
     }
 

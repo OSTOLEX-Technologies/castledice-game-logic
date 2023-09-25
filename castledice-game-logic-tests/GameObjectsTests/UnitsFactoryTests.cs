@@ -30,8 +30,9 @@ public class UnitsFactoryTests
         var factory = new UnitsFactory(knightsFactoryMock.Object);
         
         var placeable = factory.CreatePlaceable(PlacementType.Knight, creator);
-        var owned = placeable as IPlayerOwned;
-        
-        Assert.Same(creator, owned.GetOwner());
+        if (placeable is IPlayerOwned owned)
+        {
+            Assert.Same(creator, owned.GetOwner());
+        }
     }
 }

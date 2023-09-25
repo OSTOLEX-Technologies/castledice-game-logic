@@ -2,7 +2,7 @@
 
 public class UnitsFactory : IPlaceablesFactory
 {
-    private IKnightsFactory _knightsFactory;
+    private readonly IKnightsFactory _knightsFactory;
 
     public UnitsFactory(IKnightsFactory knightsFactory)
     {
