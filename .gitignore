@@ -500,6 +500,11 @@ $RECYCLE.BIN/
 **/.idea/**/modules.xml
 .idea
 
+*.html
+*.css
+*.js
+*.svg
+*.dcvr
 *.suo
 *.user
 .vs/

@@ -48,7 +48,7 @@ public class MoveApplierTests
                 {
                     Player = player, Replacement = replacement, Position = (0, 0)
                 }.Build();
-            int expectedActionPoints = 2;
+            int expectedActionPoints = 1;
 
             return new object[] { board, player, move, expectedActionPoints };
         }
@@ -246,7 +246,7 @@ public class MoveApplierTests
 
     [Fact]
     
-    //This test determines whether Capture method was called by checking Owner property of CapturableMock
+    //This test determines whether CaptureHit method was called by checking Owner property of CapturableMock
     public void ApplyMove_ShouldCallCaptureMethodOnCapturableObject_IfCaptureMoveApplied()
     {
         var board = GetFullNByNBoard(2);

@@ -2,13 +2,13 @@
 
 namespace castledice_game_logic.MovesLogic;
 
-public class UpgradeMove : AbstractMove
+public sealed class UpgradeMove : AbstractMove
 {
     public UpgradeMove(Player player, Vector2Int position) : base(player, position)
     {
     }
 
-    public override bool Accept(IMoveVisitor visitor)
+    public override T Accept<T>(IMoveVisitor<T> visitor)
     {
         return visitor.VisitUpgradeMove(this);
     }

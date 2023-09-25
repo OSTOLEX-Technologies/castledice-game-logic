@@ -2,13 +2,13 @@
 
 namespace castledice_game_logic.MovesLogic;
 
-public class CaptureMove : AbstractMove
+public sealed class CaptureMove : AbstractMove
 {
     public CaptureMove(Player player, Vector2Int position) : base(player, position)
     {
     }
 
-    public override bool Accept(IMoveVisitor visitor)
+    public override T Accept<T>(IMoveVisitor<T> visitor)
     {
         return visitor.VisitCaptureMove(this);
     }

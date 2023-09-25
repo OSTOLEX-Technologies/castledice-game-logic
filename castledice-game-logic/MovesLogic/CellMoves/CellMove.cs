@@ -4,10 +4,10 @@
 /// Class which contains reference to cell and type of move that can be
 /// performed on this cell.
 /// </summary>
-public class CellMove
+public sealed class CellMove
 {
-    private Cell _cell;
-    private MoveType _type;
+    private readonly Cell _cell;
+    private readonly MoveType _type;
 
     public Cell Cell => _cell;
     public MoveType MoveType => _type;
@@ -18,7 +18,7 @@ public class CellMove
         _type = type;
     }
 
-    protected bool Equals(CellMove other)
+    private bool Equals(CellMove other)
     {
         return _cell.Equals(other._cell) && _type == other._type;
     }

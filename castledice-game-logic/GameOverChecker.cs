@@ -1,18 +1,26 @@
 ﻿using castledice_game_logic.GameObjects;
+using castledice_game_logic.MovesLogic;
+using castledice_game_logic.TurnsLogic;
 
 namespace castledice_game_logic;
 
 public class GameOverChecker
 {
     private readonly Board _board;
+    private readonly ICurrentPlayerProvider _currentPlayerProvider;
+    private readonly CellMovesSelector _cellMovesSelector;
 
-    public GameOverChecker(Board board)
+    public GameOverChecker(Board board, ICurrentPlayerProvider currentPlayerProvider, CellMovesSelector cellMovesSelector)
     {
         _board = board;
+        _currentPlayerProvider = currentPlayerProvider;
+        _cellMovesSelector = cellMovesSelector;
     }
 
+
+    
     public bool IsGameOver(){
-        return !GetWinner().IsNull;
+        return !GetWinner().IsNull || IsDraw();
     }
     
     public Player GetWinner()
@@ -23,6 +31,14 @@ public class GameOverChecker
             return castlesOwners[0];
         }
         return new NullPlayer();
+    }
+    
+    public bool IsDraw()
+    {
+        var currentPlayer = _currentPlayerProvider.GetCurrentPlayer();
+        var currentPlayerMoves = _cellMovesSelector.SelectCellMoves(currentPlayer);
+        var currentPlayerActionPoints = currentPlayer.ActionPoints.Amount;
+        return currentPlayerActionPoints > 0 && currentPlayerMoves.Count == 0;
     }
     
     private List<Player> GetCastlesOwners()

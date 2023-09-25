@@ -48,10 +48,10 @@ public class BoardTests
     }
 
     [Fact]
-    public void AddCell_ShouldThrowIndexOutOfRangeException_IfNegativeIndexGiven()
+    public void AddCell_ShouldThrowArgumentException_IfNegativeIndexGiven()
     {
         var board = new Board(CellType.Square);
-        Assert.Throws<IndexOutOfRangeException>(() => board.AddCell(-1, -1));
+        Assert.Throws<ArgumentException>(() => board.AddCell(-1, -1));
     }
 
     [Fact]

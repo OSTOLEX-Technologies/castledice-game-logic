@@ -2,7 +2,7 @@
 
 public class GiveActionPointsSaver
 {
-    private ActionsHistory _history;
+    private readonly ActionsHistory _history;
 
     public GiveActionPointsSaver(ActionsHistory history)
     {
@@ -11,6 +11,6 @@ public class GiveActionPointsSaver
 
     public void SaveAction(GiveActionPointsAction action)
     {
-        _history.History.Add(action.GetSnapshot());
+        _history.AddActionSnapshot(action.GetSnapshot());
     }
 }

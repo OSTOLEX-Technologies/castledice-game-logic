@@ -11,7 +11,7 @@ public class GiveActionPointsApplierTests
         int initialAmount = 2;
         int increase = 3;
         int expectedAmount = 5;
-        var player = GetPlayer(actionPoints: 2);
+        var player = GetPlayer(actionPoints: initialAmount);
         var action = new GiveActionPointsAction(player, increase);
         var applier = new GiveActionPointsApplier();
         

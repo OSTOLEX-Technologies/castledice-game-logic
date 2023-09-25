@@ -27,23 +27,15 @@ public static class CaptureRules
 
     private static bool ContentCanBeCapturedByPlayer(Content content, Player player)
     {
-        if (content is IPlayerOwned)
+        if (content is IPlayerOwned playerOwned && playerOwned.GetOwner() == player)
         {
-            var playerOwned = content as IPlayerOwned;
-            if (playerOwned.GetOwner() == player)
-            {
-                return false;
-            }
+            return false;
         }
-        if (content is ICapturable)
-        {
-            var capturable = content as ICapturable;
-            int captureCost = capturable.GetCaptureCost(player);
-            bool canCapture = capturable.CanBeCaptured(player);
-            bool canAfford = captureCost <= player.ActionPoints.Amount;
-            return canCapture && canAfford;
-        }
-        return false;
+        if (content is not ICapturable capturable) return false;
+        int captureHitCost = capturable.GetCaptureHitCost(player);
+        bool canCapture = capturable.CanBeCaptured(player);
+        bool canAfford = captureHitCost <= player.ActionPoints.Amount;
+        return canCapture && canAfford;
     }
 
     public static int GetCaptureCost(Board board, Vector2Int position, Player player)
@@ -53,13 +45,13 @@ public static class CaptureRules
             throw new ArgumentException("No cell on position: " + position);
         }
         var capturable = GetCapturableOnPosition(board, position);
-        return capturable.GetCaptureCost(player);
+        return capturable.GetCaptureHitCost(player);
     }
 
     private static ICapturable GetCapturableOnPosition(Board board, Vector2Int position)
     {
         var cell = board[position];
-        var capturable = cell.GetContent().FirstOrDefault(c => c is ICapturable) as ICapturable;
+        var capturable = cell.GetContent().Find(c => c is ICapturable) as ICapturable;
         if (capturable == null)
         {
             throw new ArgumentException("No capturable on position: " + position);

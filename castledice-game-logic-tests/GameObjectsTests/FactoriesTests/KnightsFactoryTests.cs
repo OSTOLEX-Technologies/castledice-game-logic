@@ -12,7 +12,7 @@ public class KnightsFactoryTests
     [InlineData(2, 2)]
     public void GetKnight_ShouldReturnKnight_CreatedAccordingToConfig(int placementCost, int health)
     {
-        var config = new KnightConfig() { PlacementCost = placementCost, Health = health };
+        var config = new KnightConfig(placementCost, health);
         var factory = new KnightsFactory(config);
         
         var knight = factory.GetKnight(GetPlayer());
@@ -32,8 +32,8 @@ public class KnightsFactoryTests
         Assert.Same(owner, knight.GetOwner());
     }
 
-    private KnightConfig GetConfig(int placementCost = 1, int health = 2)
+    private static KnightConfig GetConfig(int placementCost = 1, int health = 2)
     {
-        return new KnightConfig() { PlacementCost = placementCost, Health = health };
+        return new KnightConfig(placementCost, health);
     }
 }

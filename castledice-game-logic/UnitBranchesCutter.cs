@@ -6,9 +6,9 @@ namespace castledice_game_logic;
 
 public class UnitBranchesCutter
 {
-    private Board _board;
-    private bool[,] _connectedFields; //Connectivity matrix that represents which cells with units are connected to player base.
-                                      //Should be set to false after each call of CutUnconnectedBranches method.
+    private readonly Board _board;
+    private readonly bool[,] _connectedFields; //Connectivity matrix that represents which cells with units are connected to player base.
+                                               //Should be set to false after each call of CutUnconnectedBranches method.
 
     public UnitBranchesCutter(Board board)
     {
@@ -82,12 +82,12 @@ public class UnitBranchesCutter
 
     private void CutContentOnCell(Cell cell, Player player)
     {
-        var playerOwned = cell.GetContent().FirstOrDefault(c => ContentChecker.ContentBelongsToPlayer(c, player));
+        var playerOwned = cell.GetContent().Find(c => ContentChecker.ContentBelongsToPlayer(c, player));
         if (playerOwned == null)
         {
             return;
         }
-        if (playerOwned is IReplaceable replaceable)
+        if (playerOwned is IReplaceable)
         {
             cell.RemoveContent(playerOwned);
         }
@@ -115,7 +115,7 @@ public class UnitBranchesCutter
     {
         foreach (var cell in _board)
         {
-            var replaceable = cell.GetContent().FirstOrDefault(c => ContentChecker.ContentBelongsToPlayer(c, player) && c is IReplaceable);
+            var replaceable = cell.GetContent().Find(c => ContentChecker.ContentBelongsToPlayer(c, player) && c is IReplaceable);
             if (replaceable == null)
             {
                 continue;
@@ -129,7 +129,7 @@ public class UnitBranchesCutter
     {
         foreach (var cell in _board)
         {
-            var capturable = cell.GetContent().FirstOrDefault(c => ContentChecker.ContentBelongsToPlayer(c, player) && 
+            var capturable = cell.GetContent().Find(c => ContentChecker.ContentBelongsToPlayer(c, player) && 
                                                                    c is ICapturable &&
                                                                    !ContentIsPlayerBase(c, player)) as ICapturable;
 
@@ -137,7 +137,7 @@ public class UnitBranchesCutter
         }
     }
 
-    private bool ContentIsPlayerBase(Content content, Player player)
+    private static bool ContentIsPlayerBase(Content content, Player player)
     {
         return content is Castle castle && castle.GetOwner() == player;
     }

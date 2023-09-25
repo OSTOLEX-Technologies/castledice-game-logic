@@ -2,6 +2,12 @@
 
 public struct KnightConfig
 {
-    public int PlacementCost;
-    public int Health;
+    public int PlacementCost { get; }
+    public int Health { get; }
+
+    public KnightConfig(int placementCost, int health)
+    {
+        PlacementCost = placementCost;
+        Health = health;
+    }
 }

@@ -1,9 +1,8 @@
 ﻿namespace castledice_game_logic.GameObjects;
 
-public class Content
+public abstract class Content
 {
-    public virtual void Update()
-    {
-        
-    }
+    public abstract void Update();
+
+    public abstract T Accept<T>(IContentVisitor<T> visitor);
 }

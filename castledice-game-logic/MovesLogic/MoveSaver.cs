@@ -2,9 +2,9 @@
 
 namespace castledice_game_logic.MovesLogic;
 
-public class MoveSaver : IMoveVisitor
+public class MoveSaver : IMoveVisitor<bool>
 {
-    private ActionsHistory _history;
+    private readonly ActionsHistory _history;
 
     public MoveSaver(ActionsHistory history)
     {
@@ -18,31 +18,31 @@ public class MoveSaver : IMoveVisitor
 
     public bool VisitPlaceMove(PlaceMove move)
     {
-        _history.History.Add(new PlaceMoveSnapshot(move));
+        _history.AddActionSnapshot(new PlaceMoveSnapshot(move));
         return true;
     }
 
     public bool VisitReplaceMove(ReplaceMove move)
     {
-        _history.History.Add(new ReplaceMoveSnapshot(move));
+        _history.AddActionSnapshot(new ReplaceMoveSnapshot(move));
         return true;
     }
 
     public bool VisitUpgradeMove(UpgradeMove move)
     {
-        _history.History.Add(new UpgradeMoveSnapshot(move));
+        _history.AddActionSnapshot(new UpgradeMoveSnapshot(move));
         return true;
     }
 
     public bool VisitCaptureMove(CaptureMove move)
     {
-        _history.History.Add(new CaptureMoveSnapshot(move));
+        _history.AddActionSnapshot(new CaptureMoveSnapshot(move));
         return true;
     }
 
     public bool VisitRemoveMove(RemoveMove move)
     {
-        _history.History.Add(new RemoveMoveSnapshot(move));
+        _history.AddActionSnapshot(new RemoveMoveSnapshot(move));
         return true;
     }
 }

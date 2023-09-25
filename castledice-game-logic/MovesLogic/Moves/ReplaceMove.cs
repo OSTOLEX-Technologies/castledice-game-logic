@@ -3,9 +3,9 @@ using castledice_game_logic.Math;
 
 namespace castledice_game_logic.MovesLogic;
 
-public class ReplaceMove : AbstractMove
+public sealed class ReplaceMove : AbstractMove
 {
-    private IPlaceable _replacement;
+    private readonly IPlaceable _replacement;
 
     public IPlaceable Replacement => _replacement;
     
@@ -14,7 +14,7 @@ public class ReplaceMove : AbstractMove
         _replacement = replacement;
     }
 
-    public override bool Accept(IMoveVisitor visitor)
+    public override T Accept<T>(IMoveVisitor<T> visitor)
     {
         return visitor.VisitReplaceMove(this);
     }

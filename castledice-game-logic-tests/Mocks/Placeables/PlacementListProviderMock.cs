@@ -5,7 +5,7 @@ namespace castledice_game_logic_tests.Mocks;
 
 public class PlacementListProviderMock : IPlacementListProvider
 {
-    public List<PlacementType> ListToReturn;
+    public List<PlacementType> ListToReturn = new();
     
     public List<PlacementType> GetPlacementList(Player player)
     {

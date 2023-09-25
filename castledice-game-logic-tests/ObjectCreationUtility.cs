@@ -16,9 +16,14 @@ namespace castledice_game_logic_tests;
 
 public static class ObjectCreationUtility
 {
-    public static CastleGO GetCastle(Player player, int durability = 3, int freeDurability = 1)
+    public static CastleGO GetCastle(Player player, int durability = 3, int freeDurability = 1, int captureHitCost = 1)
     {
-        return new CastleGO(player, durability, freeDurability);
+        return new CastleGO(player, durability, freeDurability, captureHitCost);
+    }
+
+    public static Knight GetKnight(Player player, int health = 3, int placementCost = 1)
+    {
+        return new Knight(player, placementCost, health);
     }
 
     public static PlayerUnitMock GetUnit(Player player)
@@ -77,15 +82,7 @@ public static class ObjectCreationUtility
         castlesFactoryMock.Setup(m => m.GetCastle(secondPlayer)).Returns(GetCastle(secondPlayer));
         var castlesSpawner = new CastlesSpawner(castlesPlacementData, castlesFactoryMock.Object);
         var cellType = CellType.Square;
-        var boardConfig = new BoardConfig()
-        {
-            CellsGenerator = cellsGenerator,
-            ContentSpawners = new List<IContentSpawner>()
-            {
-                castlesSpawner
-            },
-            CellType = cellType
-        };
+        var boardConfig = new BoardConfig(new List<IContentSpawner>() { castlesSpawner }, cellsGenerator, cellType);
         return boardConfig;
     }
     

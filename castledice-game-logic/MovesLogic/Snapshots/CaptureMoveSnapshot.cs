@@ -3,7 +3,7 @@
 namespace castledice_game_logic.MovesLogic.Snapshots;
 
 [Serializable]
-public class CaptureMoveSnapshot : AbstractMoveSnapshot
+public sealed class CaptureMoveSnapshot : AbstractMoveSnapshot
 {
     public override MoveType MoveType => MoveType.Capture;
     

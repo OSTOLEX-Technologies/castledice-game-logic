@@ -324,7 +324,7 @@ public class CellMovesSelectorTests
             var player = GetPlayer(actionPoints: 2);
             var playerUnit = new PlayerUnitMock(){Owner = player};
             var cellPosition = new Vector2Int(1, 1);
-            var capturable = new CapturableMock(){GetCaptureCostFunc = (p) => 6};
+            var capturable = new CapturableMock(){GetCaptureCostHitFunc = (p) => 6};
             board[0, 0].AddContent(playerUnit);
             board[cellPosition].AddContent(capturable);
 
@@ -335,7 +335,6 @@ public class CellMovesSelectorTests
         {
             var board = GetFullNByNBoard(3);
             var player = GetPlayer(actionPoints: 2);
-            var enemyPlayer = GetPlayer();
             var playerUnit = new PlayerUnitMock(){Owner = player};
             var cellPosition = new Vector2Int(1, 1);
             var capturable = new CapturableMock() { Owner = player };
@@ -478,7 +477,7 @@ public class CellMovesSelectorTests
         var player = GetPlayer(actionPoints: 6);
         var playerUnit = new PlayerUnitMock(){Owner = player};
         var enemyPlayer = GetPlayer();
-        var enemyCapturable = new CapturableMock(){Owner = enemyPlayer, CanCapture = true, GetCaptureCostFunc = (p) => 1};
+        var enemyCapturable = new CapturableMock(){Owner = enemyPlayer, CanCapture = true, GetCaptureCostHitFunc = (p) => 1};
         board[0, 0].AddContent(playerUnit);
         board[0, 1].AddContent(enemyCapturable);
         var cell = board[0, 1];

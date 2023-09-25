@@ -24,14 +24,13 @@ public static class PlaceRules
 
         var cell = board[position];
 
-        return !cell.HasContent(c => ContentIsPlaceBlocking(c));
+        return !cell.HasContent(ContentIsPlaceBlocking);
     }
 
     private static bool ContentIsPlaceBlocking(Content content)
     {
-        if (content is IPlaceBlocking)
+        if (content is IPlaceBlocking blocking)
         {
-            var blocking = content as IPlaceBlocking;
             return blocking.IsBlocking();
         }
         return false;

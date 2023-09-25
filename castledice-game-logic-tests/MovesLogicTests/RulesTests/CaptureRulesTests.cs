@@ -28,11 +28,11 @@ public class CaptureRulesTests
         {
             var board = GetFullNByNBoard(2);
             var player = GetPlayer(actionPoints: playerActionPoints);
-            Func<Player, int> getCostFunction = (p) => p.ActionPoints.Amount;
-            var capturable = new CapturableMock() { GetCaptureCostFunc = getCostFunction };
+            Func<Player, int> getCaptureCostHitFunc = (p) => p.ActionPoints.Amount;
+            var capturable = new CapturableMock() { GetCaptureCostHitFunc = getCaptureCostHitFunc };
             var position = new Vector2Int(1, 1);
             board[position].AddContent(capturable);
-            int expectedCost = capturable.GetCaptureCost(player);
+            int expectedCost = capturable.GetCaptureHitCost(player);
 
             return new object[] { board, position, player, expectedCost };
         }
@@ -41,8 +41,8 @@ public class CaptureRulesTests
         {
             var board = GetFullNByNBoard(2);
             var player = GetPlayer();
-            Func<Player, int> getCostFunction = (p) => costValue;
-            var capturable = new CapturableMock() { GetCaptureCostFunc = getCostFunction };
+            Func<Player, int> getCapthreHitCostFunction = (p) => costValue;
+            var capturable = new CapturableMock() { GetCaptureCostHitFunc = getCapthreHitCostFunction };
             var position = new Vector2Int(1, 1);
             board[position].AddContent(capturable);
             int expectedCost = costValue;

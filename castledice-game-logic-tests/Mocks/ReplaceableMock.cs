@@ -6,7 +6,7 @@ namespace castledice_game_logic_tests.Mocks;
 public class ReplaceableMock : Content, IReplaceable, IPlayerOwned, IPlaceBlocking
 {
     public int ReplaceCost;
-    public Player Owner;
+    public Player Owner = new NullPlayer();
 
     public int GetReplaceCost()
     {
@@ -21,5 +21,15 @@ public class ReplaceableMock : Content, IReplaceable, IPlayerOwned, IPlaceBlocki
     public bool IsBlocking()
     {
         return true;
+    }
+
+    public override void Update()
+    {
+        
+    }
+
+    public override T Accept<T>(IContentVisitor<T> visitor)
+    {
+        throw new NotImplementedException();
     }
 }

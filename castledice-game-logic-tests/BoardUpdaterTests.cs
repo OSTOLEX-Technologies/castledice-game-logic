@@ -17,6 +17,11 @@ public class BoardUpdaterTests
             WasUpdated = true;
             UpdatesCount++;
         }
+
+        public override T Accept<T>(IContentVisitor<T> visitor)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     private class UpdateBoardTestCases : IEnumerable<object[]>

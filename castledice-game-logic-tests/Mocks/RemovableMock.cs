@@ -21,4 +21,14 @@ public class RemovableMock : Content, IRemovable, IPlaceBlocking
     {
         return true;
     }
+
+    public override void Update()
+    {
+        
+    }
+
+    public override T Accept<T>(IContentVisitor<T> visitor)
+    {
+        throw new NotImplementedException();
+    }
 }

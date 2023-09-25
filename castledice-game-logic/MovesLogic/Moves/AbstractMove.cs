@@ -4,8 +4,8 @@ namespace castledice_game_logic.MovesLogic;
 
 public abstract class AbstractMove 
 {
-    protected Player _player;
-    protected Vector2Int _position;
+    private readonly Player _player;
+    private readonly Vector2Int _position;
 
     public Player Player => _player;
     public Vector2Int Position => _position;
@@ -16,7 +16,7 @@ public abstract class AbstractMove
         _position = position;
     }
 
-    public abstract bool Accept(IMoveVisitor visitor);
+    public abstract T Accept<T>(IMoveVisitor<T> visitor);
 
     protected bool Equals(AbstractMove other)
     {

@@ -8,9 +8,9 @@ public interface ITimer
     /// <param name="milliseconds"></param>
     void SetDuration(int milliseconds);
     
-    void Start();
+    void StartTimer();
     
-    void Stop();
+    void StopTimer();
     
     /// <summary>
     /// Returns true if the amount of passed time is bigger or equal to the duration that was set in SetDuration method
@@ -21,5 +21,5 @@ public interface ITimer
     /// <summary>
     /// Sets the amount of elapsed time to zero. Doesn't stop timer and doesn't resets duration that was set in SetDuration.
     /// </summary>
-    void Reset();
+    void ResetTimer();
 }

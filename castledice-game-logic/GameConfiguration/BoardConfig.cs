@@ -5,7 +5,14 @@ namespace castledice_game_logic.GameConfiguration;
 
 public struct BoardConfig
 {
-    public List<IContentSpawner> ContentSpawners;
-    public ICellsGenerator CellsGenerator;
-    public CellType CellType;
+    public List<IContentSpawner> ContentSpawners { get; }
+    public ICellsGenerator CellsGenerator { get; }
+    public CellType CellType { get; }
+
+    public BoardConfig(List<IContentSpawner> contentSpawners, ICellsGenerator cellsGenerator, CellType cellType)
+    {
+        ContentSpawners = contentSpawners;
+        CellsGenerator = cellsGenerator;
+        CellType = cellType;
+    }
 }

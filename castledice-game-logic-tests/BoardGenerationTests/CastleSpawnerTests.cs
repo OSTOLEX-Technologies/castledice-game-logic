@@ -38,7 +38,7 @@ public class CastleSpawnerTests
         };
     }
 
-    private ICastlesFactory GetFactory(Dictionary<Player, Vector2Int> castlesSpawnData)
+    private static ICastlesFactory GetFactory(Dictionary<Player, Vector2Int> castlesSpawnData)
     {
         var factoryMock = new Mock<ICastlesFactory>();
         foreach (var keyValuePair in castlesSpawnData)
@@ -76,7 +76,11 @@ public class CastleSpawnerTests
 
         foreach (var keyValuePair in castlesSpawnData)
         {
-            var castle = board[keyValuePair.Value].GetContent().FirstOrDefault(c => c is CastleGO) as CastleGO;
+            var castle = board[keyValuePair.Value].GetContent().Find(c => c is CastleGO) as CastleGO;
+            if (castle is null)
+            {
+                Assert.Fail("Castle is null on position: " + keyValuePair.Value);
+            }
             Assert.Same(keyValuePair.Key, castle.GetOwner());
         }
     }

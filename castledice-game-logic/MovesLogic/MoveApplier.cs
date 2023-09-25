@@ -3,10 +3,9 @@ using castledice_game_logic.MovesLogic.Rules;
 
 namespace castledice_game_logic.MovesLogic;
 
-//TODO: Ask if it is a good idea to make sub applier classes like UpgradeMoveApplier or PlaceMoveApplier to not validate SRP principle.
-public class MoveApplier : IMoveVisitor
+public class MoveApplier : IMoveVisitor<bool>
 {
-    private Board _board;
+    private readonly Board _board;
     
     public void ApplyMove(AbstractMove move)
     {
@@ -60,8 +59,8 @@ public class MoveApplier : IMoveVisitor
             throw new ArgumentException("Cannot apply replace move! Replacement type is not Content!");
         }
 
-        var replaceable = cell.GetContent().FirstOrDefault(c => c is IReplaceable) as IReplaceable;
-        if (replaceable == null)
+        var replaceableContent = cell.GetContent().Find(c => c is IReplaceable);
+        if (replaceableContent == null)
         {
             throw new ArgumentException("Cannot apply replace move! Cell has no IReplaceable objects!");
         }
@@ -69,7 +68,7 @@ public class MoveApplier : IMoveVisitor
         int replaceCost = ReplaceRules.GetReplaceCost(_board, move.Position, move.Replacement);
         player.ActionPoints.DecreaseActionPoints(replaceCost);
 
-        cell.RemoveContent(replaceable as Content);
+        cell.RemoveContent(replaceableContent);
         cell.AddContent(newContent);
     }
 
@@ -84,15 +83,15 @@ public class MoveApplier : IMoveVisitor
         var player = move.Player;
         var position = move.Position;
         var cell = _board[position];
-        var upgradeable = cell.GetContent().FirstOrDefault(c => c is IUpgradeable) as IUpgradeable;
-        if (upgradeable == null)
+        var upgradeableContent = cell.GetContent().Find(c => c is IUpgradeable) as IUpgradeable;
+        if (upgradeableContent == null)
         {
             throw new ArgumentException("Cannot apply upgrade move! Cell has no IUpgradeable objects!");
         }
-
-        int upgradeCost = upgradeable.GetUpgradeCost();
+        
+        int upgradeCost = upgradeableContent.GetUpgradeCost();
         player.ActionPoints.DecreaseActionPoints(upgradeCost);
-        upgradeable.Upgrade();
+        upgradeableContent.Upgrade();
     }
 
     public bool VisitCaptureMove(CaptureMove move)
@@ -105,12 +104,12 @@ public class MoveApplier : IMoveVisitor
     {
         var player = move.Player;
         var cell = _board[move.Position];
-        var capturable = cell.GetContent().FirstOrDefault(c => c is ICapturable) as ICapturable;
+        var capturable = cell.GetContent().Find(c => c is ICapturable) as ICapturable;
         if (capturable == null)
         {
             throw new ArgumentException("Cannot apply capture move! Cell has no ICapturable objects!");
         }
-        capturable.Capture(player);
+        capturable.CaptureHit(player);
     }
     
     public bool VisitRemoveMove(RemoveMove move)
@@ -123,13 +122,16 @@ public class MoveApplier : IMoveVisitor
     {
         var player = move.Player;
         var cell = _board[move.Position];
-        var removable = cell.GetContent().FirstOrDefault(c => c is IRemovable) as IRemovable;
+        var removable = cell.GetContent().Find(c => c is IRemovable) as IRemovable;
         if (removable == null)
         {
             throw new ArgumentException("Cannot apply remove move! Cell has no IRemovable objects!");
         }
         int removeCost = removable.GetRemoveCost();
         player.ActionPoints.DecreaseActionPoints(removeCost);
-        cell.RemoveContent(removable as Content);
+        if (removable is Content content)
+        {
+            cell.RemoveContent(content);
+        }
     }
 }

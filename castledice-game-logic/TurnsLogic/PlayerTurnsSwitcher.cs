@@ -4,7 +4,7 @@ public class PlayerTurnsSwitcher : ICurrentPlayerProvider
 {
     public event EventHandler? TurnSwitched; 
     
-    private PlayersList _players;
+    private readonly PlayersList _players;
     private int _current = 0;
 
     public PlayerTurnsSwitcher(PlayersList players)

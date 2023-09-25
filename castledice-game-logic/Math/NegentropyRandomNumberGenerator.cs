@@ -2,32 +2,32 @@
 
 public class NegentropyRandomNumberGenerator : IRandomNumberGenerator
 {
-    private Dictionary<int, float> _possibilities = new Dictionary<int, float>();
+    private Dictionary<int, float> _probabilities = new Dictionary<int, float>();
 
-    private int _precision = 100;
+    private readonly int _precision;
 
     public NegentropyRandomNumberGenerator(int minInclusive, int maxExclusive, int precision)
     {
         _precision = precision;
         for (int i = minInclusive; i < maxExclusive; i++)
         {
-            _possibilities.Add(i, _precision / (float)(maxExclusive - minInclusive));
+            _probabilities.Add(i, _precision / (float)(maxExclusive - minInclusive));
         }
     }
 
     public int GetNextRandom()
     {
-        var result = GetRandomFromPossibilities();
-        _possibilities = AdjustPossibilities(result);
+        var result = GetRandomFromProbabilities();
+        _probabilities = AdjustProbabilities(result);
         return result;
     }
 
-    private int GetRandomFromPossibilities()
+    private int GetRandomFromProbabilities()
     {
         var rnd = new Random();
         float randomValue = rnd.Next() / (float)int.MaxValue * _precision;
         float probabilitiesSum = 0f;
-        foreach (var probability in _possibilities)
+        foreach (var probability in _probabilities)
         {
             probabilitiesSum += probability.Value;
             if (randomValue < probabilitiesSum)
@@ -35,43 +35,38 @@ public class NegentropyRandomNumberGenerator : IRandomNumberGenerator
                 return probability.Key;
             }
         }
-        return _possibilities.Last().Key;
+        return _probabilities.Last().Key;
     }
 
-    private Dictionary<int, float> AdjustPossibilities(int lastResult)
+    private Dictionary<int, float> AdjustProbabilities(int lastResult)
     {
-        var others = GetPossibilitiesCopy();
+        var others = GetProbabilitiesCopy();
         others.Remove(lastResult);
         float raiseAmount = (float)_precision - ValuesSum(others);
         raiseAmount /= 2;
         int othersCount = others.Count;
-        foreach (var key in others.Keys)
+        var keys = others.Keys.ToList();
+        foreach (var key in keys)
         {
             others[key] += raiseAmount / othersCount;
         }
         float leftAmount = _precision - ValuesSum(others);
         others.Add(lastResult, leftAmount);
         return others;
-
     }
 
-    private Dictionary<int, float> GetPossibilitiesCopy()
+    private Dictionary<int, float> GetProbabilitiesCopy()
     {
-        Dictionary<int, float> copy = new Dictionary<int, float>();
-        foreach (var item in _possibilities)
+        var copy = new Dictionary<int, float>();
+        foreach (var probability in _probabilities)
         {
-            copy.Add(item.Key, item.Value);
+            copy.Add(probability.Key, probability.Value);
         }
         return copy;
     }
 
-    private float ValuesSum(Dictionary<int, float> possibilites)
+    private static float ValuesSum(Dictionary<int, float> probabilities)
     {
-        float sum = 0f;
-        foreach (var possibility in possibilites)
-        {
-            sum += possibility.Value;
-        }
-        return sum;
+        return probabilities.Sum(possibility => possibility.Value);
     }
 }

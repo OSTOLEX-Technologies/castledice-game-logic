@@ -37,6 +37,15 @@ public class PlayersListTests
     }
 
     [Fact]
+    public void AddPlayer_ShouldThrowArgumentException_IfAddingPlayerWithExistingId()
+    {
+        var playersList = new PlayersList(new List<Player>(){GetPlayer(id: 3)});
+        var player = GetPlayer(id: 3);
+
+        Assert.Throws<ArgumentException>(() => playersList.AddPlayer(player));
+    }
+
+    [Fact]
     public void KickPlayer_ShouldRemovePlayer()
     {
         var player = GetPlayer();
@@ -54,8 +63,8 @@ public class PlayersListTests
         var player = GetPlayer();
         var playersList = new PlayersList();
         playersList.AddPlayer(player);
-        Player kickedPlayer = null;
-        playersList.PlayerKicked += (sender, player) => kickedPlayer = player;
+        Player kickedPlayer = new NullPlayer();
+        playersList.PlayerKicked += (sender, playerFromEvent) => kickedPlayer = playerFromEvent;
         
         playersList.KickPlayer(player);
         
@@ -65,19 +74,19 @@ public class PlayersListTests
     [Theory]
     [InlineData(100)]
     [InlineData(-1)]
-    public void Indexer_ShouldThrowIndexOutOfRangeException_IfInvalidIndexGiven(int index)
+    public void Indexer_ShouldThrowArgumentException_IfInvalidIndexGiven(int index)
     {
         var playersList = new PlayersList();
         
-        Assert.Throws<IndexOutOfRangeException>(() => playersList[index]);
+        Assert.Throws<ArgumentException>(() => playersList[index]);
     }
     
     [Fact]
     public void Indexer_ShouldReturnPlayers_AccordingToAddPlayerOrder()
     {
         var playersList = new PlayersList();
-        var firstPlayer = GetPlayer();
-        var secondPlayer = GetPlayer();
+        var firstPlayer = GetPlayer(id: 1);
+        var secondPlayer = GetPlayer(id: 2);
         playersList.AddPlayer(firstPlayer);
         playersList.AddPlayer(secondPlayer);
         
@@ -88,8 +97,8 @@ public class PlayersListTests
     [Fact]
     public void Constructor_ShouldNotAddDuplicates_IfEnumerableWithDuplicatesGiven()
     {
-        var firstPlayer = GetPlayer();
-        var secondPlayer = GetPlayer();
+        var firstPlayer = GetPlayer(id: 1);
+        var secondPlayer = GetPlayer(id: 2);
         var enumerable = new List<Player>() { firstPlayer, firstPlayer, firstPlayer, secondPlayer};
         
         var playersList = new PlayersList(enumerable);
@@ -102,9 +111,11 @@ public class PlayersListTests
     public void Count_ShouldReturnPlayersCount()
     {
         var playersList = new PlayersList();
-        playersList.AddPlayer(GetPlayer());
-        playersList.AddPlayer(GetPlayer());
+        playersList.AddPlayer(GetPlayer(id: 1));
+        playersList.AddPlayer(GetPlayer(id: 2));
         
         Assert.Equal(2, playersList.Count);
     }
+    
+    
 }

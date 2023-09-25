@@ -2,7 +2,7 @@
 
 public class BoardUpdater
 {
-    private Board _board;
+    private readonly Board _board;
 
     public BoardUpdater(Board board)
     {

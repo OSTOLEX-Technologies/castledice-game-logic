@@ -12,7 +12,6 @@ namespace castledice_game_logic_tests;
 
 public class CellsPickingUtilityTests
 {
-    //TODO: Ask about better naming for test data classes
     public class ExcludeCellsAroundTestCases : IEnumerable<object[]>
     {
 
@@ -189,8 +188,7 @@ public class CellsPickingUtilityTests
             return new object[] { picker, cellPosition, radius, expectedIntersectionsCount };
         }
     }
-
-    //TODO: Ask if we can use entities such as AvailabilityMatrix (which do not really exist) in naming
+    
     [Fact]
     public void AvailabilityMatrix_ShouldHaveFalseValues_ForNonExistingCells()
     {
@@ -229,40 +227,137 @@ public class CellsPickingUtilityTests
         Assert.NotEqual(expectedMatrix, actualMatrix);
     }
 
-    [Fact]
-    public void ExcludeRows_ShouldSetAvailabilityMatrixRowsToFalse_ForGivenIndices()
+    [Theory]
+    [MemberData(nameof(ExcludeRowsTestCases))]
+    public void ExcludeRows_ShouldSetAvailabilityMatrixRowsToFalse_ForGivenIndices(int boardSize, bool[,] expectedMatrix, int[] indices)
     {
-        var board = GetFullNByNBoard(3);
+        var board = GetFullNByNBoard(boardSize);
         var cellPicker = new CellsPickingUtility(board);
-        var expectedMatrix = new bool[,]
-        {
-            { false, false, false },
-            { true, true, true },
-            { true, true, true },
-        };
-        cellPicker.ExcludeRows(0);
+        cellPicker.ExcludeRows(indices);
 
         var actualMatrix = cellPicker.GetAvailabilityMatrix();
         
         Assert.Equal(expectedMatrix, actualMatrix);
     }
 
-    [Fact]
-    public void ExcludeColumns_ShouldSetAvailabilityMatrixColumnsToFalse_ForGivenIndices()
+    public static IEnumerable<object[]> ExcludeRowsTestCases()
     {
-        var board = GetFullNByNBoard(3);
-        var cellPicker = new CellsPickingUtility(board);
-        var expectedMatrix = new bool[,]
+        yield return new object[]
         {
-            { false, true, true },
-            { false, true, true },
-            { false, true, true },
+            3,
+            new bool[,]
+            {
+                { false, false, false },
+                { true, true, true },
+                { true, true, true, }
+            },
+            new int[] { 0 }
         };
-        cellPicker.ExcludeColumns(0);
+        yield return new object[]
+        {
+            3,
+            new bool[,]
+            {
+                { true, true, true },
+                { true, true, true },
+                { true, true, true, }
+            },
+            new int[] { -1 }
+        };
+        yield return new object[]
+        {
+            3,
+            new bool[,]
+            {
+                { false, false, false },
+                { false, false, false },
+                { true, true, true, }
+            },
+            new int[] { -1, 0, 1 }
+        };
+        yield return new object[]
+        {
+            3,
+            new bool[,]
+            {
+                { false, false, false },
+                { false, false, false },
+                { false, false, false, }
+            },
+            new int[] { -1, 0, 1, 2 }
+        };
+        yield return new object[]
+        {
+            3,
+            new bool[,]
+            {
+                { true, true, true, },
+                { true, true, true, },
+                { false, false, false, }
+            },
+            new int[] { 2, 3 }
+        };
+    }
+
+    [Theory]
+    [MemberData(nameof(ExcludeColumnsTestCases))]
+    public void ExcludeColumns_ShouldSetAvailabilityMatrixColumnsToFalse_ForGivenIndices(int boardSize, bool[,] expectedMatrix, int[] indices)
+    {
+        var board = GetFullNByNBoard(boardSize);
+        var cellPicker = new CellsPickingUtility(board);
+        cellPicker.ExcludeColumns(indices);
 
         var actualMatrix = cellPicker.GetAvailabilityMatrix();
         
         Assert.Equal(expectedMatrix, actualMatrix);
+    }
+
+    public static IEnumerable<object[]> ExcludeColumnsTestCases()
+    {
+        yield return new object[]
+        {
+            3,
+            new bool[,]
+            {
+                { false, true, true },
+                { false, true, true },
+                { false, true, true, }
+            },
+            new int[] { 0 }
+        };
+        yield return new object[]
+        {
+            3,
+            new bool[,]
+            {
+                { true, true, true },
+                { true, true, true },
+                { true, true, true, }
+            },
+            new int[] { -1 }
+        };
+        yield return new object[]
+        {
+            3,
+            new bool[,]
+            {
+                { false, false, true },
+                { false, false, true },
+                { false, false, true, }
+            },
+            new int[] { -1, 0, 1 }
+        };
+        yield return new object[]
+        {
+            3,
+            new bool[,]
+            {
+                { true, true, false },
+                { true, true, false },
+                { true, true, false, }
+            },
+            new int[] { 2, 3 }
+        };
     }
     
     [Fact]
@@ -281,7 +376,7 @@ public class CellsPickingUtilityTests
         };
         var cellPicker = new CellsPickingUtility(board);
 
-        cellPicker.ExcludeCells(c => c.HasContent() == true);
+        cellPicker.ExcludeCells(c => c.HasContent());
         var actualMatrix = cellPicker.GetAvailabilityMatrix();
         
         Assert.Equal(expectedMatrix, actualMatrix);
@@ -324,8 +419,7 @@ public class CellsPickingUtilityTests
         
         Assert.Same(centralCell, actualCell);
     }
-
-    //TODO: Ask if it is a good idea to throw an exception in such situation
+    
     [Fact]
     public void PickRandom_ShouldThrowInvalidOperationException_IfNoCellsAvailable()
     {
@@ -408,8 +502,7 @@ public class CellsPickingUtilityTests
         
         Assert.Equal(expectedMatrix, actualMatrix);
     }
-
-    //TODO: Another test with questionable name
+    
     [Theory]
     [ClassData(typeof(CountIntersectionsForCellTestCases))]
     public void CountIntersectionsForCell_ShouldReturnValidIntersectionsNumber(CellsPickingUtility pickingUtility, Vector2Int cellPosition, 
@@ -534,7 +627,6 @@ public class CellsPickingUtilityTests
         Assert.Throws<InvalidOperationException>(() => picker.PickSmart(2));
     }
     
-    //TODO: Another strange moment to consider
     [Fact]
     public void PickSmart_ShouldReturnCell_ThatTakesLeastSpaceIfExcludeAroundPickedCalledAfter()
     {

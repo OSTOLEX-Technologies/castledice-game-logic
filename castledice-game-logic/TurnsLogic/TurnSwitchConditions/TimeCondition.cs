@@ -4,17 +4,32 @@ namespace castledice_game_logic.TurnsLogic;
 
 public class TimeCondition : ITurnSwitchCondition
 {
-    private ITimer _timer;
+    private readonly ITimer _timer;
     private bool _isStarted = false;
+    private readonly PlayerTurnsSwitcher _turnsSwitcher;
 
-    public TimeCondition(ITimer timer)
+    public TimeCondition(ITimer timer, int turnDuration, PlayerTurnsSwitcher turnSwitcher)
     {
         _timer = timer;
+        timer.SetDuration(turnDuration);
+        _turnsSwitcher = turnSwitcher;
+        _turnsSwitcher.TurnSwitched += OnTurnSwitched;
     }
+    
+    ~TimeCondition()
+    {
+        _turnsSwitcher.TurnSwitched -= OnTurnSwitched;
+    }
+
+    private void OnTurnSwitched(object sender, EventArgs e)
+    {
+        _timer.ResetTimer();
+    }
+
 
     public void Start()
     {
-        _timer.Start();
+        _timer.StartTimer();
         _isStarted = true;
     }
 
@@ -27,7 +42,7 @@ public class TimeCondition : ITurnSwitchCondition
 
         if (_timer.IsElapsed())
         {
-            _timer.Reset();
+            _timer.ResetTimer();
             return true;
         }
 

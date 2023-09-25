@@ -3,7 +3,7 @@
 namespace castledice_game_logic.MovesLogic.Snapshots;
 
 [Serializable]
-public class UpgradeMoveSnapshot : AbstractMoveSnapshot
+public sealed class UpgradeMoveSnapshot : AbstractMoveSnapshot
 {
     public UpgradeMoveSnapshot(UpgradeMove move) : base(move)
     {
