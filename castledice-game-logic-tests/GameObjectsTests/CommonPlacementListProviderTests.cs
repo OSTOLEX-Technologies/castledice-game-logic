@@ -9,7 +9,7 @@ public class CommonPlacementListProviderTests
     public void GetPlacementList_ShouldReturnPlacementList_GivenInConstructor()
     {
         var placementList = new List<PlacementType>() { PlacementType.Knight, PlacementType.Bridge };
-        var provider = new CommontPlacementListProvider(placementList);
+        var provider = new CommonPlacementListProvider(placementList);
 
         var actualList = provider.GetPlacementList(GetPlayer());
         

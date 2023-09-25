@@ -3,11 +3,11 @@
 /// <summary>
 /// This class determines common list of available placeables for every player.
 /// </summary>
-public class CommontPlacementListProvider : IPlacementListProvider
+public class CommonPlacementListProvider : IPlacementListProvider
 {
-    private List<PlacementType> _availablePlacementTypes;
+    private readonly List<PlacementType> _availablePlacementTypes;
 
-    public CommontPlacementListProvider(List<PlacementType> availablePlacementTypes)
+    public CommonPlacementListProvider(List<PlacementType> availablePlacementTypes)
     {
         _availablePlacementTypes = availablePlacementTypes;
     }
