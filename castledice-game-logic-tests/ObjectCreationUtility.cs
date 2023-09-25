@@ -16,9 +16,9 @@ namespace castledice_game_logic_tests;
 
 public static class ObjectCreationUtility
 {
-    public static CastleGO GetCastle(Player player, int durability = 3, int freeDurability = 1, int captureCost = 1)
+    public static CastleGO GetCastle(Player player, int durability = 3, int freeDurability = 1, int captureHitCost = 1)
     {
-        return new CastleGO(player, durability, freeDurability, captureCost);
+        return new CastleGO(player, durability, freeDurability, captureHitCost);
     }
 
     public static Knight GetKnight(Player player, int health = 3, int placementCost = 1)
