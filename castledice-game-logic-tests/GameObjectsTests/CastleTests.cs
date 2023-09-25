@@ -59,7 +59,8 @@ public class CastleTests
     public void GetDurability_ShouldReturnCastleDurability()
     {
         int durability = 3;
-        var castle = new CastleGO(GetPlayer(), durability, durability, 1);
+        int freeDurability = 1;
+        var castle = new CastleGO(GetPlayer(), durability, freeDurability, 1);
         
         Assert.Equal(durability, castle.GetDurability());
     }
@@ -118,18 +119,6 @@ public class CastleTests
         var actualCaptureCost = castle.GetCaptureCost(capturer);
         
         Assert.Equal(captureCost, actualCaptureCost);
-    }
-
-    [Fact]
-    public void GetCaptureCost_ShouldReturnCastleDurability_IfItIsLessThanCaptureCost()
-    {
-        var durability = 2;
-        var captureCost = 3;
-        var castle = new CastleGO(GetPlayer(), durability, 1, captureCost);
-        
-        var actualCaptureCost = castle.GetCaptureCost(GetPlayer());
-        
-        Assert.Equal(durability, actualCaptureCost);
     }
 
     [Fact]

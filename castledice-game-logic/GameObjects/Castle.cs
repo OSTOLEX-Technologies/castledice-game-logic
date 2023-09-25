@@ -50,7 +50,7 @@ public class Castle : Content, ICapturable, IPlayerOwned, IPlaceBlocking
         return _defaultDurability;
     }
 
-public int GetDurability()
+    public int GetDurability()
     {
         return _durability;
     }
@@ -84,7 +84,7 @@ public int GetDurability()
 
     public int GetCaptureCost(Player capturer)
     {
-        return _captureCost > _durability ? _durability : _captureCost;
+        return _captureCost;
     }
 
     public void Free()
