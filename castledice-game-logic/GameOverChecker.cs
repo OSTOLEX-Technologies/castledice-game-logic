@@ -37,8 +37,8 @@ public class GameOverChecker
     {
         var currentPlayer = _currentPlayerProvider.GetCurrentPlayer();
         var currentPlayerMoves = _cellMovesSelector.SelectCellMoves(currentPlayer);
-        var currenPlayerActionPoints = currentPlayer.ActionPoints.Amount;
-        return currenPlayerActionPoints > 0 && currentPlayerMoves.Count == 0;
+        var currentPlayerActionPoints = currentPlayer.ActionPoints.Amount;
+        return currentPlayerActionPoints > 0 && currentPlayerMoves.Count == 0;
     }
     
     private List<Player> GetCastlesOwners()
