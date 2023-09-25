@@ -109,7 +109,7 @@ public class MoveApplier : IMoveVisitor<bool>
         {
             throw new ArgumentException("Cannot apply capture move! Cell has no ICapturable objects!");
         }
-        capturable.Capture(player);
+        capturable.CaptureHit(player);
     }
     
     public bool VisitRemoveMove(RemoveMove move)

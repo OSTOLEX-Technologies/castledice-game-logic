@@ -10,17 +10,15 @@ public class CastlesFactoryTests
     [InlineData(3, 1, 1)]
     [InlineData(5, 2, 3)]
     [InlineData(2, 4, 2)]
-    // In this test durability (both free and standard) of the castle is checked by passing player with amount of action points
-    // that is definitely bigger than castle durability into GetCaptureCost method.
-    public void GetCastle_ShouldReturnCastle_CreatedAccordingToConfig(int durability, int freeDurability, int captureCost)
+    public void GetCastle_ShouldReturnCastle_CreatedAccordingToConfig(int durability, int freeDurability, int captureHitCost)
     {
-        var config = new CastleConfig(durability, freeDurability, captureCost);
+        var config = new CastleConfig(durability, freeDurability, captureHitCost);
         var factory = new CastlesFactory(config);
         
         var castle = factory.GetCastle(GetPlayer());
         
         Assert.Equal(durability, castle.GetDurability());
-        Assert.Equal(captureCost, castle.GetCaptureCost(GetPlayer()));
+        Assert.Equal(captureHitCost, castle.GetCaptureHitCost(GetPlayer()));
         castle.Free();
         Assert.Equal(freeDurability, castle.GetDurability());
     }
@@ -36,8 +34,8 @@ public class CastlesFactoryTests
         Assert.Same(owner, castle.GetOwner());
     }
     
-    private static CastleConfig GetConfig(int durability = 3, int freeDurability = 1, int captureCost = 1)
+    private static CastleConfig GetConfig(int durability = 3, int freeDurability = 1, int captureHitCost = 1)
     {
-        return new CastleConfig(durability, freeDurability, captureCost);
+        return new CastleConfig(durability, freeDurability, captureHitCost);
     }
 }

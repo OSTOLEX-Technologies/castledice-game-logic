@@ -32,9 +32,9 @@ public static class CaptureRules
             return false;
         }
         if (content is not ICapturable capturable) return false;
-        int captureCost = capturable.GetCaptureCost(player);
+        int captureHitCost = capturable.GetCaptureHitCost(player);
         bool canCapture = capturable.CanBeCaptured(player);
-        bool canAfford = captureCost <= player.ActionPoints.Amount;
+        bool canAfford = captureHitCost <= player.ActionPoints.Amount;
         return canCapture && canAfford;
     }
 
@@ -45,7 +45,7 @@ public static class CaptureRules
             throw new ArgumentException("No cell on position: " + position);
         }
         var capturable = GetCapturableOnPosition(board, position);
-        return capturable.GetCaptureCost(player);
+        return capturable.GetCaptureHitCost(player);
     }
 
     private static ICapturable GetCapturableOnPosition(Board board, Vector2Int position)

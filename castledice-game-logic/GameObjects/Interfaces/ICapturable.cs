@@ -2,11 +2,11 @@
 
 public interface ICapturable
 {
-    void Capture(Player capturer);
+    void CaptureHit(Player capturer);
 
     bool CanBeCaptured(Player capturer);
 
-    int GetCaptureCost(Player capturer);
+    int GetCaptureHitCost(Player capturer);
 
     void Free();
 }

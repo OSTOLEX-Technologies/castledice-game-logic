@@ -388,7 +388,7 @@ public class PossibleMovesSelectorTests
         var player = GetPlayer(actionPoints: 2);
         var enemy = GetPlayer();
         var playerUnit = new PlayerUnitMock() { Owner = player };
-        var enemyCapturable = new CapturableMock() { Owner = enemy, GetCaptureCostFunc = (p) => 6};
+        var enemyCapturable = new CapturableMock() { Owner = enemy, GetCaptureCostHitFunc = (p) => 6};
         var position = new Vector2Int(1, 1);
         board[0, 0].AddContent(playerUnit);
         board[position].AddContent(enemyCapturable);
@@ -407,7 +407,7 @@ public class PossibleMovesSelectorTests
         var player = GetPlayer();
         var enemy = GetPlayer(actionPoints: 6);
         var playerUnit = new PlayerUnitMock() { Owner = player };
-        var enemyCapturable = new CapturableMock() { Owner = enemy, GetCaptureCostFunc = (p) => 2};
+        var enemyCapturable = new CapturableMock() { Owner = enemy, GetCaptureCostHitFunc = (p) => 2};
         var position = new Vector2Int(1, 1);
         board[0, 0].AddContent(playerUnit);
         board[position].AddContent(enemyCapturable);

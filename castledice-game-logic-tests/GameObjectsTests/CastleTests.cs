@@ -111,14 +111,14 @@ public class CastleTests
     [InlineData(1)]
     [InlineData(2)]
     [InlineData(3)]
-    public void GetCaptureCost_ShouldReturnCaptureCost_GivenInConstructor(int captureCost)
+    public void GetCaptureHitCost_ShouldReturnCaptureCost_GivenInConstructor(int captureHitCost)
     {
         var capturer = GetPlayer(actionPoints: 4);
-        var castle = new CastleGO(GetPlayer(), 3, 1, captureCost);
+        var castle = new CastleGO(GetPlayer(), 3, 1, captureHitCost);
 
-        var actualCaptureCost = castle.GetCaptureCost(capturer);
+        var actualCaptureCost = castle.GetCaptureHitCost(capturer);
         
-        Assert.Equal(captureCost, actualCaptureCost);
+        Assert.Equal(captureHitCost, actualCaptureCost);
     }
 
     [Fact]
@@ -159,15 +159,15 @@ public class CastleTests
 
     [Fact]
     // In this test the amount of durability of castle is checked by passing player
-    // with amount of action points bigger than castle durability into GetCaptureCost method.
-    public void Capture_ShouldDoNothing_IfCapturerIsOwner()
+    // with amount of action points bigger than castle durability into GetCaptureHitCost method.
+    public void CaptureHit_ShouldDoNothing_IfCapturerIsOwner()
     {
         int capturerActionPoints = 5;
         int castleDurability = 3;
         var owner = GetPlayer(actionPoints: capturerActionPoints);
         var castle = new CastleGO(owner, castleDurability, 1, 1);
         
-        castle.Capture(owner);
+        castle.CaptureHit(owner);
         
         Assert.Equal(capturerActionPoints, owner.ActionPoints.Amount);
         Assert.Equal(castleDurability, castle.GetDurability());
@@ -176,41 +176,41 @@ public class CastleTests
     [Theory]
     [InlineData(5, 3, 2, 1)]
     [InlineData(3, 4, 3, 1)]
-    [InlineData(2, 5, 4, 3)]
-    public void Capture_ShouldReduceCapturerActionPoints_ByCaptureCost(int castleDurability, int capturerActionPoints, int captureCost, int expectedCapturerActionPoints)
+    [InlineData(2, 5, 4, 1)]
+    public void CaptureHit_ShouldReduceCapturerActionPoints_ByCaptureHitCost(int castleDurability, int capturerActionPoints, int captureHitCost, int expectedCapturerActionPoints)
     {
         var owner = GetPlayer();
         var capturer = GetPlayer(actionPoints: capturerActionPoints);
-        var castle = new CastleGO(owner, castleDurability, 1, captureCost);
+        var castle = new CastleGO(owner, castleDurability, 1, captureHitCost);
         
-        castle.Capture(capturer);
+        castle.CaptureHit(capturer);
         
         Assert.Equal(expectedCapturerActionPoints, capturer.ActionPoints.Amount);
     }
     
     [Fact]
-    public void Capture_ShouldSetCapturerAsOwner_IfCastleDurabilityGoesBelowZero()
+    public void CaptureHit_ShouldSetCapturerAsOwner_IfCastleDurabilityGoesBelowZero()
     {
         var owner = GetPlayer();
         var capturer = GetPlayer(actionPoints: 4);
         var castle = new CastleGO(owner, 1, 1, 2);
         
-        castle.Capture(capturer);
+        castle.CaptureHit(capturer);
         
         Assert.Same(capturer, castle.GetOwner());
     }
 
     [Fact]
-    //In this test durability of castle is checked by passing player with 6 action points to GetCaptureCost method.
-    public void Capture_ShouldSetDurabilityToDefault_IfCaptureIsSuccessful()
+    //In this test durability of castle is checked by passing player with 6 action points to GetCaptureHitCost method.
+    public void CaptureHit_ShouldSetDurabilityToDefault_IfCaptureIsSuccessful()
     {
         int expectedDurability = 5;
-        int captureCost = 5;
+        int captureHitCost = 5;
         var owner = GetPlayer();
         var firstCapturer = GetPlayer(actionPoints: 6);
-        var castle = new CastleGO(owner, expectedDurability, 1, captureCost);
+        var castle = new CastleGO(owner, expectedDurability, 1, captureHitCost);
 
-        castle.Capture(firstCapturer);
+        castle.CaptureHit(firstCapturer);
         var actualDurability = castle.GetDurability();
         
         Assert.Equal(expectedDurability, actualDurability);
@@ -235,9 +235,9 @@ public class CastleTests
     [Theory]
     [InlineData(0)]
     [InlineData(-1)]
-    public void Constructor_ShouldThrowArgumentException_IfNonPositiveCaptureCostGiven(int captureCost)
+    public void Constructor_ShouldThrowArgumentException_IfNonPositiveCaptureHitCostGiven(int captureHitCost)
     {
-        Assert.Throws<ArgumentException>(() => new CastleGO(GetPlayer(), 1, 1, captureCost));
+        Assert.Throws<ArgumentException>(() => new CastleGO(GetPlayer(), 1, 1, captureHitCost));
 
     }
 }

@@ -35,15 +35,15 @@ public class MoveCostCalculatorTests
             return new object[] { board, placeMove, placementCost };
         }
 
-        private static object[] GetCaptureMoveCase(Func<Player, int> getCaptureCostFunc)
+        private static object[] GetCaptureMoveCase(Func<Player, int> getCaptureHitCostFunc)
         {
             var board = GetFullNByNBoard(2);
             var player = GetPlayer();
             board[0, 0].AddContent(new PlayerUnitMock(){Owner = player});
-            var capturable = new CapturableMock() { GetCaptureCostFunc = getCaptureCostFunc };
+            var capturable = new CapturableMock() { GetCaptureCostHitFunc = getCaptureHitCostFunc };
             board[1, 1].AddContent(capturable);
             var captureMove = new CaptureMove(player, (1, 1));
-            return new object[] { board, captureMove, getCaptureCostFunc(player) };
+            return new object[] { board, captureMove, getCaptureHitCostFunc(player) };
         }
 
         private static object[] GetReplaceMoveCase(int replaceCost, int replacementCost)

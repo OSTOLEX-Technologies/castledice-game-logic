@@ -4,13 +4,13 @@ public struct CastleConfig
 {
     public int Durability { get; }
     public int FreeDurability { get; }
-    public int CaptureCost { get; }
+    public int CaptureHitCost { get; }
     
 
-    public CastleConfig(int durability, int freeDurability, int captureCost)
+    public CastleConfig(int durability, int freeDurability, int captureHitCost)
     {
         Durability = durability;
         FreeDurability = freeDurability;
-        CaptureCost = captureCost;
+        CaptureHitCost = captureHitCost;
     }
 }

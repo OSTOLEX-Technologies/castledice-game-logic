@@ -487,10 +487,10 @@ public class MoveValidatorTests
     }
 
     [Fact]
-    //Capture move is valid if it satisfies following conditions:
+    //CaptureHit move is valid if it satisfies following conditions:
     //Cell contains capturable object and this object belongs to enemy
     //At least one cell neighbour has player unit on it
-    //Player can capture the capturable object
+    //Player can perform capture hit and has enough action points.
     public void ValidateMove_ShouldReturnTrue_IfValidCaptureMove()
     {
         var player = GetPlayer();

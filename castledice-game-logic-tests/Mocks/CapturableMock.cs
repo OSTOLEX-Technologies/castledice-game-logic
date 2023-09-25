@@ -7,9 +7,9 @@ public class CapturableMock : Content, ICapturable, IPlayerOwned, IPlaceBlocking
 {
     public Player Owner = new NullPlayer();
     public bool CanCapture = true;
-    public Func<Player, int> GetCaptureCostFunc = (p) => 1;
+    public Func<Player, int> GetCaptureCostHitFunc = (p) => 1;
         
-    public void Capture(Player capturer)
+    public void CaptureHit(Player capturer)
     {
         Owner = capturer;
     }
@@ -19,9 +19,9 @@ public class CapturableMock : Content, ICapturable, IPlayerOwned, IPlaceBlocking
         return CanCapture;
     }
 
-    public int GetCaptureCost(Player capturer)
+    public int GetCaptureHitCost(Player capturer)
     {
-        return GetCaptureCostFunc(capturer);
+        return GetCaptureCostHitFunc(capturer);
     }
 
     public void Free()
