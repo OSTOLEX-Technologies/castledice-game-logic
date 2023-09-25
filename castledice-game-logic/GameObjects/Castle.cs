@@ -4,30 +4,55 @@ public class Castle : Content, ICapturable, IPlayerOwned, IPlaceBlocking
 {
     private Player _player;
     private int _durability;
+    private readonly int _captureCost;
     private readonly int _defaultDurability;
     private readonly int _freeDurability; //Durability of the castle that has no owner.
-    
+
     /// <summary>
     /// Parameters durability and freeDurability must be positive. Otherwise exception will be thrown.
     /// </summary>
     /// <param name="player"></param>
     /// <param name="durability"></param>
     /// <param name="freeDurability"></param>
+    /// <param name="captureCost"></param>
     /// <exception cref="ArgumentException"></exception>
-    public Castle(Player player, int durability, int freeDurability)
+    public Castle(Player player, int durability, int freeDurability, int captureCost)
     {
         if (durability <= 0)
         {
             throw new ArgumentException("Durability must be positive!");
         }
+
         if (freeDurability <= 0)
         {
             throw new ArgumentException("Free durability must be positive!");
         }
+
+        if (captureCost <= 0)
+        {
+            throw new ArgumentException("Capture cost must be positive!");
+        }
+
         _player = player;
         _durability = durability;
         _defaultDurability = durability;
         _freeDurability = freeDurability;
+        _captureCost = captureCost;
+    }
+
+    public int GetMaxDurability()
+    {
+        if (_player.IsNull)
+        {
+            return _freeDurability;
+        }
+
+        return _defaultDurability;
+    }
+
+    public int GetDurability()
+    {
+        return _durability;
     }
 
     public void Capture(Player capturer)
@@ -36,19 +61,16 @@ public class Castle : Content, ICapturable, IPlayerOwned, IPlaceBlocking
         {
             return;
         }
-        int capturerActionPoints = capturer.ActionPoints.Amount;
-        if (capturerActionPoints < _durability)
+        int captureCost = GetCaptureCost(capturer);
+        if (capturer.ActionPoints.Amount < captureCost)
         {
-            capturer.ActionPoints.DecreaseActionPoints(capturerActionPoints);
-            _durability -= capturerActionPoints;
+            return;
         }
-        else
-        {
-            capturer.ActionPoints.DecreaseActionPoints(_durability);
-            _durability = 0;
-            _player = capturer;
-            _durability = _defaultDurability;
-        }
+        capturer.ActionPoints.DecreaseActionPoints(captureCost);
+        _durability -= captureCost;
+        if (_durability > 0) return;
+        _player = capturer;
+        _durability = _defaultDurability;
     }
 
     public bool CanBeCaptured(Player capturer)
@@ -57,17 +79,12 @@ public class Castle : Content, ICapturable, IPlayerOwned, IPlaceBlocking
         {
             return false;
         }
-        return capturer.ActionPoints.Amount > 0;
+        return capturer.ActionPoints.Amount >= GetCaptureCost(capturer);
     }
 
     public int GetCaptureCost(Player capturer)
     {
-        int capturerActionPoints = capturer.ActionPoints.Amount;
-        if (capturerActionPoints < _durability)
-        {
-            return capturerActionPoints;
-        }
-        return _durability;
+        return _captureCost;
     }
 
     public void Free()

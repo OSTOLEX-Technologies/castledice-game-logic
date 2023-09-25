@@ -1,5 +1,6 @@
 ﻿namespace castledice_game_logic.Math;
 
+[Serializable]
 public struct Vector2Int
 {
     public readonly bool Equals(Vector2Int other)
