@@ -52,7 +52,7 @@ public class PlayersList : IEnumerable<Player>
         {
             if (i < 0 || i >= _players.Count)
             {
-                throw new ArgumentException("No player on index: " + i + " in players list!");
+                throw new ArgumentException("Invalid index: " + i + "!");
             }
             return _players[i];
         }
