@@ -115,18 +115,6 @@ public class Game
     {
         var board = new Board(config.CellType);
         config.CellsGenerator.GenerateCells(board);
-        var spawners = config.ContentSpawners;
-        if (spawners.Count < 1 || spawners[0] is not CastlesSpawner)
-        {
-            throw new ArgumentException("First content spawner must be CastlesSpawner!");
-        }
-        for (int i = 1; i < spawners.Count; i++)
-        {
-            if (spawners[i] is CastlesSpawner)
-            {
-                throw new ArgumentException("There must be only one CastleSpawner!");
-            }
-        }
         foreach (var contentGenerator in config.ContentSpawners)
         {
             contentGenerator.SpawnContent(board);
