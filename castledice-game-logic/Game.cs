@@ -176,10 +176,8 @@ public class Game
     
     public bool TryMakeMove(AbstractMove move)
     {
-        if (!CanMakeMove(move))
-        {
-            return false;
-        }
+        if (!CanMakeMove(move)) return false;
+        
 
         _moveApplier.ApplyMove(move);
         _moveSaver.SaveMove(move);
