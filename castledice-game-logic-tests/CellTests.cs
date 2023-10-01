@@ -84,6 +84,47 @@ public class CellTests
     }
 
     [Fact]
+    public void RemoveContent_ShouldInvokeContentRemoved_IfContentWasRemoved()
+    {
+        var cell = GetCell();
+        var content = GetCellContent();
+        cell.AddContent(content);
+        var contentRemovedInvoked = false;
+        cell.ContentRemoved += (sender, args) => contentRemovedInvoked = true;
+        
+        cell.RemoveContent(content);
+        
+        Assert.True(contentRemovedInvoked);
+    }
+
+    [Fact]
+    public void RemoveContent_ShouldNotInvokeContentRemoved_IfContentWasNotRemoved()
+    {
+        var cell = GetCell();
+        var content = GetCellContent();
+        var contentRemovedInvoked = false;
+        cell.ContentRemoved += (sender, args) => contentRemovedInvoked = true;
+        
+        cell.RemoveContent(content);
+        
+        Assert.False(contentRemovedInvoked);
+    }
+
+    [Fact]
+    public void ContentRemovedEvent_ShouldHaveRemovedContent_AsAnArgument()
+    {
+        var cell = GetCell();
+        var content = GetCellContent();
+        cell.AddContent(content);
+        Content? removedContent = null;
+        cell.ContentRemoved += (sender, args) => removedContent = args;
+        
+        cell.RemoveContent(content);
+        
+        Assert.Same(content, removedContent);
+    }
+
+    [Fact]
     public void HasContent_ShouldReturnTrue_IfSomeContentOnCellMeetsGivenCondition()
     {
         var cell = GetCell();
