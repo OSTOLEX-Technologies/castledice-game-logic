@@ -4,6 +4,7 @@ using castledice_game_logic_tests.Mocks;
 using castledice_game_logic.GameObjects;
 using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
+using castledice_game_logic.MovesLogic.Rules;
 using Moq;
 
 namespace castledice_game_logic_tests;
@@ -28,54 +29,63 @@ public class MoveApplierTests
 
         private static object[] PlaceMoveCase()
         {
+            int playerActionPoints = 6;
             var board = GetFullNByNBoard(2);
+            var movePosition = new Vector2Int(0, 0);
             var contentToPlace = new PlaceableMock() { Cost = 3 };
-            var player = GetPlayer(actionPoints: 6);
-            var move = new PlaceMoveBuilder() { Content = contentToPlace, Player = player, Position = (0, 0)}.Build();
-            int expectedActionPoints = 3;
+            var player = GetPlayer(actionPoints: playerActionPoints);
+            var move = new PlaceMoveBuilder() { Content = contentToPlace, Player = player, Position = movePosition}.Build();
+            int expectedActionPointsLast = playerActionPoints - PlaceRules.GetPlaceCost(contentToPlace);
 
-            return new object[] { board, player, move, expectedActionPoints };
+            return new object[] { board, player, move, expectedActionPointsLast };
         }
 
         private static object[] ReplaceMoveCase()
         {
+            int playerActionPoints = 6;
             var board = GetFullNByNBoard(2);
+            var movePosition = new Vector2Int(0, 0);
             var replaceable = new ReplaceableMock() { ReplaceCost = 3 };
-            var player = GetPlayer(actionPoints: 6);
+            var player = GetPlayer(actionPoints: playerActionPoints);
             var replacement = new PlaceableMock() { Cost = 2 };
-            board[0, 0].AddContent(replaceable);
+            board[movePosition].AddContent(replaceable);
             var move = new ReplaceMoveBuilder()
                 {
-                    Player = player, Replacement = replacement, Position = (0, 0)
+                    Player = player, Replacement = replacement, Position = movePosition
                 }.Build();
-            int expectedActionPoints = 1;
+            int expectedActionPointsLast = playerActionPoints - ReplaceRules.GetReplaceCost(board, move.Position, replacement);
 
-            return new object[] { board, player, move, expectedActionPoints };
+            return new object[] { board, player, move, expectedActionPointsLast };
         }
 
         private static object[] UpgradeMoveCase()
         {
+            int playerActionPoints = 6;
             var board = GetFullNByNBoard(2);
-            var player = GetPlayer(actionPoints: 6);
+            var movePosition = new Vector2Int(0, 0);
+            var player = GetPlayer(actionPoints: playerActionPoints);
             var upgradeable = new UpgradeableMock() { Owner = player, UpgradeCost = 4 };
-            board[0, 0].AddContent(upgradeable);
-            var move = new UpgradeMoveBuilder() { Player = player, Position = (0, 0) }.Build();
-            int expectedActionPoints = 2;
+            board[movePosition].AddContent(upgradeable);
+            var move = new UpgradeMoveBuilder() { Player = player, Position = movePosition }.Build();
+            int expectedActionPointsLast = playerActionPoints - UpgradeRules.GetUpgradeCost(board, move.Position);
             
-            return new object[] { board, player, move, expectedActionPoints };
+            return new object[] { board, player, move, expectedActionPointsLast };
         }
 
         private static object[] RemoveMoveCase()
         {
+            int playerActionPoints = 6;
             var board = GetFullNByNBoard(2);
-            var player = GetPlayer(actionPoints: 6);
+            var movePosition = new Vector2Int(0, 0);
+            var player = GetPlayer(actionPoints: playerActionPoints);
             var removable = new RemovableMock() { RemoveCost = 4};
-            board[0, 0].AddContent(removable);
-            var move = new RemoveMoveBuilder() { Player = player, Position = (0, 0) }.Build();
-            int expectedActionPoints = 2;
+            board[movePosition].AddContent(removable);
+            var move = new RemoveMoveBuilder() { Player = player, Position = movePosition }.Build();
+            int expectedActionPointsLast = playerActionPoints - RemoveRules.GetRemoveCost(board, move.Position);
             
-            return new object[] { board, player, move, expectedActionPoints };
+            return new object[] { board, player, move, expectedActionPointsLast };
         }
+        
     }
     
     [Fact]
@@ -124,14 +134,14 @@ public class MoveApplierTests
     [ClassData(typeof(MovesActionPointsDecreaseTestCases))]
     public void ApplyMove_ShouldDecreasePlayerActionPoints_AccordingToMove(
         Board board, Player player, AbstractMove move,
-        int expectedActionPoints)
+        int expectedActionPointsLast)
     {
         var applier = new MoveApplier(board);
         applier.ApplyMove(move);
 
         int actualActionPoints = player.ActionPoints.Amount;
         
-        Assert.Equal(expectedActionPoints, actualActionPoints);
+        Assert.Equal(expectedActionPointsLast, actualActionPoints);
     }
 
     [Fact]

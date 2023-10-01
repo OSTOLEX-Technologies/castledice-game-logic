@@ -6,6 +6,8 @@ namespace castledice_game_logic;
 
 public class Cell
 {
+    public event EventHandler<Content>? ContentRemoved;
+    
     private readonly List<Content> _content = new();
     private readonly Vector2Int _position;
 
@@ -28,7 +30,9 @@ public class Cell
 
     public bool RemoveContent(Content content)
     {
-        return _content.Remove(content);
+        if (!_content.Remove(content)) return false;
+        ContentRemoved?.Invoke(this, content);
+        return true;
     }
 
     public List<Content> GetContent()
