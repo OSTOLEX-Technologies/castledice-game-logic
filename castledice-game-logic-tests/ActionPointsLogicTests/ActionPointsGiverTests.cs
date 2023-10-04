@@ -11,27 +11,21 @@ public class ActionPointsGiverTests
     public void GiveActionPoints_ShouldReturnActionWithPlayer_GivenInConstructor()
     {
         var player = GetPlayer();
-        var randomizerMock = new Mock<IRandomNumberGenerator>();
-        randomizerMock.Setup(r => r.GetNextRandom()).Returns(6);
-        var randomizer = randomizerMock.Object;
-        var giver = new ActionPointsGiver(randomizer, player);
+        var giver = new ActionPointsGiver(player);
 
-        var action = giver.GiveActionPoints();
+        var action = giver.GiveActionPoints(3);
         
         Assert.Same(player, action.Player);
     }
 
     [Fact]
-    public void GiveActionPoints_ShouldUseRandomizer_GivenInConstructor()
+    public void GiveActionPoints_ShouldIncreasePlayerActionPoints_ByGivenAmount()
     {
         var player = GetPlayer();
         int expectedAmount = 6;
-        var randomizerMock = new Mock<IRandomNumberGenerator>();
-        randomizerMock.Setup(r => r.GetNextRandom()).Returns(expectedAmount);
-        var randomizer = randomizerMock.Object;
-        var giver = new ActionPointsGiver(randomizer, player);
+        var giver = new ActionPointsGiver(player);
 
-        var action = giver.GiveActionPoints();
+        var action = giver.GiveActionPoints(expectedAmount);
         
         Assert.Equal(expectedAmount, action.Amount);
     }

@@ -4,18 +4,15 @@ namespace castledice_game_logic.ActionPointsLogic;
 
 public class ActionPointsGiver
 {
-    private readonly IRandomNumberGenerator _numberGenerator;
     private readonly Player _player;
 
-    public ActionPointsGiver(IRandomNumberGenerator numberGenerator, Player player)
+    public ActionPointsGiver(Player player)
     {
-        _numberGenerator = numberGenerator;
         _player = player;
     }
 
-    public GiveActionPointsAction GiveActionPoints()
+    public GiveActionPointsAction GiveActionPoints(int amount)
     {
-        int number = _numberGenerator.GetNextRandom();
-        return new GiveActionPointsAction(_player, number);
+        return new GiveActionPointsAction(_player, amount);
     }
 }
