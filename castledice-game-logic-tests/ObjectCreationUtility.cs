@@ -16,6 +16,14 @@ namespace castledice_game_logic_tests;
 
 public static class ObjectCreationUtility
 {
+    
+    public static ITreesFactory GetTreesFactory()
+    {
+        var factoryMock = new Mock<ITreesFactory>();
+        factoryMock.Setup(f => f.GetTree()).Returns(new Tree(1, false));
+        return factoryMock.Object;
+    }
+    
     public static CastleGO GetCastle(Player player, int durability = 3, int freeDurability = 1, int captureHitCost = 1)
     {
         return new CastleGO(player, durability, freeDurability, captureHitCost);
