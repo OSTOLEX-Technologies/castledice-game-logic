@@ -61,7 +61,6 @@ public class Game
 
     public Game(List<Player> players,
         BoardConfig boardConfig,
-        RandomConfig randomConfig,
         UnitsConfig unitsConfig,
         IPlacementListProvider placementListProvider)
     {
@@ -79,10 +78,7 @@ public class Game
         _actionPointsGivers = new Dictionary<Player, ActionPointsGiver>();
         foreach (var player in _players)
         {
-            var numbersGenerator = new NegentropyRandomNumberGenerator(randomConfig.MinActionPointsRoll,
-                randomConfig.MaxActionPointsRoll + 1,
-                randomConfig.ProbabilityPrecision);
-            _actionPointsGivers.Add(player, new ActionPointsGiver(numbersGenerator, player));
+            _actionPointsGivers.Add(player, new ActionPointsGiver(player));
         }
 
         _giveActionPointsApplier = new GiveActionPointsApplier();
@@ -97,20 +93,18 @@ public class Game
         _moveCostCalculator = new MoveCostCalculator(_board);
         
         _gameOverChecker = new GameOverChecker(_board, _turnsSwitcher, _cellMovesSelector);
-        
-        GiveActionPointsToFirstPlayer();
-    }
-
-    private void GiveActionPointsToFirstPlayer()
-    {
-        var currentPlayer = _turnsSwitcher.GetCurrentPlayer();
-        var firstActionPointsGive = _actionPointsGivers[currentPlayer].GiveActionPoints();
-        _giveActionPointsApplier.ApplyAction(firstActionPointsGive);
-        _giveActionPointsSaver.SaveAction(firstActionPointsGive);
     }
 
     #region Initialize methods
 
+    public void GiveActionPointsToPlayer(int playerId, int amount)
+    {
+        var player = _players.FirstOrDefault(p => p.Id == playerId);
+        var giveActionPoints = _actionPointsGivers[player].GiveActionPoints(amount);
+        _giveActionPointsApplier.ApplyAction(giveActionPoints);
+        _giveActionPointsSaver.SaveAction(giveActionPoints);
+    }
+    
     private static Board InitializeBoard(BoardConfig config)
     {
         var board = new Board(config.CellType);
@@ -243,10 +237,6 @@ public class Game
     {
         _turnsSwitcher.GetCurrentPlayer().ActionPoints.Amount = 0;
         _turnsSwitcher.SwitchTurn();
-        var currentPlayer = _turnsSwitcher.GetCurrentPlayer();
-        var giveActionPointsAction = _actionPointsGivers[currentPlayer].GiveActionPoints();
-        _giveActionPointsApplier.ApplyAction(giveActionPointsAction);
-        _giveActionPointsSaver.SaveAction(giveActionPointsAction);
         _boardUpdater.UpdateBoard();
         ApplyPenalties();
     }
