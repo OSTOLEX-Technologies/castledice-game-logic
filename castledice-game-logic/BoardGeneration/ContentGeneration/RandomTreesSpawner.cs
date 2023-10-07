@@ -3,14 +3,14 @@ using castledice_game_logic.GameObjects.Factories;
 
 namespace castledice_game_logic.BoardGeneration.ContentGeneration;
 
-public class TreesSpawner : IContentSpawner
+public class RandomTreesSpawner : IContentSpawner
 {
     private readonly int _minTreesCount;
     private readonly int _maxTreesCount;
     private readonly int _minDistanceBetweenTrees;
     private readonly ITreesFactory _factory;
 
-    public TreesSpawner(int minTreesCount, int maxTreesCount, int minDistanceBetweenTrees, ITreesFactory factory)
+    public RandomTreesSpawner(int minTreesCount, int maxTreesCount, int minDistanceBetweenTrees, ITreesFactory factory)
     {
         if (minTreesCount > maxTreesCount)
         {
