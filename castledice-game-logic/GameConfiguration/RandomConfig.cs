@@ -1,6 +1,6 @@
 ﻿namespace castledice_game_logic.GameConfiguration;
 
-public struct RandomConfig
+public class RandomConfig
 {
     public int MinActionPointsRoll { get; }
     public int MaxActionPointsRoll { get; }

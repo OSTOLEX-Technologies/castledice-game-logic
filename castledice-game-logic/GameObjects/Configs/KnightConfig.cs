@@ -1,6 +1,6 @@
 ﻿namespace castledice_game_logic.GameObjects.Configs;
 
-public struct KnightConfig
+public class KnightConfig
 {
     public int PlacementCost { get; }
     public int Health { get; }

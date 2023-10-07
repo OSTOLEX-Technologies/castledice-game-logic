@@ -1,6 +1,6 @@
 ﻿namespace castledice_game_logic.GameObjects.Configs;
 
-public struct CastleConfig
+public class CastleConfig
 {
     public int Durability { get; }
     public int FreeDurability { get; }

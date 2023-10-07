@@ -3,7 +3,7 @@ using castledice_game_logic.BoardGeneration.ContentGeneration;
 
 namespace castledice_game_logic.GameConfiguration;
 
-public struct BoardConfig
+public class BoardConfig
 {
     public List<IContentSpawner> ContentSpawners { get; }
     public ICellsGenerator CellsGenerator { get; }

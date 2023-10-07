@@ -8,7 +8,7 @@ public class UnitsConfigTests
     [Fact]
     public void Properties_ShouldReturnObjects_GivenInConstructor()
     {
-        var knightsConfig = new KnightConfig();
+        var knightsConfig = new KnightConfig(1, 2);
         
         var unitsConfig = new UnitsConfig(knightsConfig);
         

@@ -1,6 +1,6 @@
 ﻿namespace castledice_game_logic.GameObjects.Configs;
 
-public struct TreeConfig
+public class TreeConfig
 {
     public int RemoveCost { get; }
     public bool CanBeRemoved { get; }
