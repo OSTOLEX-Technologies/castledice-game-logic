@@ -68,6 +68,7 @@ public class Castle : Content, ICapturable, IPlayerOwned, IPlaceBlocking
         }
         capturer.ActionPoints.DecreaseActionPoints(captureCost);
         _durability -= captureCost;
+        OnStateModified();
         if (_durability > 0) return;
         _player = capturer;
         _durability = _defaultDurability;
@@ -91,6 +92,7 @@ public class Castle : Content, ICapturable, IPlayerOwned, IPlaceBlocking
     {
         _player = new NullPlayer();
         _durability = _freeDurability;
+        OnStateModified();
     }
 
     public Player GetOwner()
