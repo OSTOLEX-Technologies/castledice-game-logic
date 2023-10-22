@@ -100,6 +100,18 @@ public class CastleTests
     }
 
     [Fact]
+    public void Free_ShouldInvokeStateModifiedEvent()
+    {
+        var eventInvoked = false;
+        var castle = new CastleGO(GetPlayer(), 3, 1, 1);
+        castle.StateModified += (sender, args) => eventInvoked = true;
+        
+        castle.Free();
+        
+        Assert.True(eventInvoked);
+    }
+
+    [Fact]
     public void IsBlocking_ShouldReturnTrue()
     {
         var castle = new CastleGO(GetPlayer(), 1, 1, 1);
@@ -158,19 +170,70 @@ public class CastleTests
     }
 
     [Fact]
-    // In this test the amount of durability of castle is checked by passing player
-    // with amount of action points bigger than castle durability into GetCaptureHitCost method.
-    public void CaptureHit_ShouldDoNothing_IfCapturerIsOwner()
+    public void CaptureHit_ShouldNotChangeDurability_IfCapturerIsOwner()
     {
-        int capturerActionPoints = 5;
         int castleDurability = 3;
-        var owner = GetPlayer(actionPoints: capturerActionPoints);
+        var owner = GetPlayer(actionPoints: 5);
         var castle = new CastleGO(owner, castleDurability, 1, 1);
         
         castle.CaptureHit(owner);
         
-        Assert.Equal(capturerActionPoints, owner.ActionPoints.Amount);
         Assert.Equal(castleDurability, castle.GetDurability());
+    }
+
+    [Fact]
+    public void CaptureHit_ShouldNotChangeCapturerActionPoints_IfCapturerIsOwner()
+    {
+        int capturerActionPoints = 5;
+        var owner = GetPlayer(actionPoints: capturerActionPoints);
+        var castle = new CastleGO(owner, 3, 1, 1);
+        
+        castle.CaptureHit(owner);
+        
+        Assert.Equal(capturerActionPoints, owner.ActionPoints.Amount);
+    }
+
+    [Fact]
+    public void CaptureHit_ShouldNotInvokeStateChangedEvent_IfCapturerIsOwner()
+    {
+        var eventInvoked = false;
+        var owner = GetPlayer(actionPoints: 5);
+        var castle = new CastleGO(owner, 3, 1, 1);
+        castle.StateModified += (sender, args) => eventInvoked = true;
+        
+        castle.CaptureHit(owner);
+        
+        Assert.False(eventInvoked);
+    }
+
+    [Fact]
+    public void CaptureHit_ShouldNotInvokeStateChangedEvent_IfCapturerHasNotEnoughActionPoints()
+    {
+        var captureHitCost = 3;
+        var capturerActionPoints = 1;
+        var eventInvoked = false;
+        var capturer = GetPlayer(actionPoints: capturerActionPoints);
+        var castle = new CastleGO(GetPlayer(), 3, 1, captureHitCost);
+        castle.StateModified += (sender, args) => eventInvoked = true;
+        
+        castle.CaptureHit(capturer);
+        
+        Assert.False(eventInvoked);
+    }
+    
+    [Fact]
+    public void CaptureHit_ShouldInvokeStateChangedEvent_IfCapturerHasEnoughActionPoints()
+    {
+        var captureHitCost = 3;
+        var capturerActionPoints = 5;
+        var eventInvoked = false;
+        var capturer = GetPlayer(actionPoints: capturerActionPoints);
+        var castle = new CastleGO(GetPlayer(), 3, 1, captureHitCost);
+        castle.StateModified += (sender, args) => eventInvoked = true;
+        
+        castle.CaptureHit(capturer);
+        
+        Assert.True(eventInvoked);
     }
 
     [Theory]

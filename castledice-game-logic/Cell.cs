@@ -7,6 +7,7 @@ namespace castledice_game_logic;
 public class Cell
 {
     public event EventHandler<Content>? ContentRemoved;
+    public event EventHandler<Content>? ContentAdded;
     
     private readonly List<Content> _content = new();
     private readonly Vector2Int _position;
@@ -26,6 +27,7 @@ public class Cell
     public void AddContent(Content content)
     {
         _content.Add(content);
+        ContentAdded?.Invoke(this, content);
     }
 
     public bool RemoveContent(Content content)

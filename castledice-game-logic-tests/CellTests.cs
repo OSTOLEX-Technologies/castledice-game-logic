@@ -125,6 +125,19 @@ public class CellTests
     }
 
     [Fact]
+    public void AddContent_ShouldInvokeContentAddedEvent_WithAddedContentAsAnArgument()
+    {
+        var cell = GetCell();
+        var content = GetCellContent();
+        Content? addedContent = null;
+        cell.ContentAdded += (sender, args) => addedContent = args;
+        
+        cell.AddContent(content);
+        
+        Assert.Same(content, addedContent);
+    }
+
+    [Fact]
     public void HasContent_ShouldReturnTrue_IfSomeContentOnCellMeetsGivenCondition()
     {
         var cell = GetCell();
