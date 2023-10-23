@@ -2,7 +2,7 @@
 
 public abstract class Content
 {
-    public event EventHandler? StateModified;
+    public event EventHandler<Content>? StateModified;
     
     public abstract void Update();
 
@@ -11,8 +11,8 @@ public abstract class Content
     /// <summary>
     /// This method should be invoked whenever the state of the content is modified.
     /// </summary>
-    protected virtual void OnStateModified()
+    protected void OnStateModified()
     {
-        StateModified?.Invoke(this, EventArgs.Empty);
+        StateModified?.Invoke(this, this);
     }
 }
