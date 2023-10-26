@@ -3,27 +3,27 @@ using castledice_game_logic.GameObjects.Decks;
 
 namespace castledice_game_logic_tests.GameObjectsTests.DecksTests;
 
-public class IndividualPlacementListProviderTests
+public class IndividualDecksListTests
 {
     [Fact]
-    public void GetPlacementList_ShouldReturnEmptyList_IfPlacementListForGivenIdIsAbsent()
+    public void GetDeck_ShouldReturnEmptyList_IfPlacementListForGivenIdIsAbsent()
     {
-        var placementListProvider = new IndividualPlacementListProvider(new Dictionary<int, List<PlacementType>>());
+        var placementListProvider = new IndividualDecksList(new Dictionary<int, List<PlacementType>>());
 
-        var list = placementListProvider.GetPlacementList(1);
+        var list = placementListProvider.GetDeck(1);
         
         Assert.Empty(list);
     }
 
     [Theory]
     [MemberData(nameof(IdToPlacementListCases))]
-    public void GetPlacementList_ShouldReturnAppropriatePlacementList_IfListForGivenIdExists(Dictionary<int, List<PlacementType>> idToPlacementList)
+    public void GetDeck_ShouldReturnAppropriatePlacementList_IfListForGivenIdExists(Dictionary<int, List<PlacementType>> idToPlacementList)
     {
-        var placementListProvider = new IndividualPlacementListProvider(idToPlacementList);
+        var placementListProvider = new IndividualDecksList(idToPlacementList);
 
         foreach (var id in idToPlacementList.Keys)
         {
-            var actualList = placementListProvider.GetPlacementList(id);
+            var actualList = placementListProvider.GetDeck(id);
             var expectedList = idToPlacementList[id];
             Assert.Same(expectedList, actualList);
         }

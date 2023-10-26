@@ -3,16 +3,16 @@
 /// <summary>
 /// This class determines common list of available placeables for every player.
 /// </summary>
-public class CommonPlacementListProvider : IPlacementListProvider
+public class CommonDecksList : IDecksList
 {
     private readonly List<PlacementType> _availablePlacementTypes;
 
-    public CommonPlacementListProvider(List<PlacementType> availablePlacementTypes)
+    public CommonDecksList(List<PlacementType> availablePlacementTypes)
     {
         _availablePlacementTypes = availablePlacementTypes;
     }
 
-    public List<PlacementType> GetPlacementList(int playerId)
+    public List<PlacementType> GetDeck(int playerId)
     {
         return _availablePlacementTypes;
     }

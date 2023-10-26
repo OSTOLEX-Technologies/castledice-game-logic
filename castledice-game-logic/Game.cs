@@ -61,7 +61,7 @@ public class Game
     public Game(List<Player> players,
         BoardConfig boardConfig,
         PlaceablesConfig placeablesConfig,
-        IPlacementListProvider placementListProvider)
+        IDecksList decksList)
     {
         _players = new PlayersList(players);
 
@@ -88,7 +88,7 @@ public class Game
         _moveValidator = new MoveValidator(_board, _turnsSwitcher);
         _moveSaver = new MoveSaver(_actionsHistory);
         _cellMovesSelector = new CellMovesSelector(_board);
-        _possibleMovesSelector = new PossibleMovesSelector(_board, placeablesFactory, placementListProvider);
+        _possibleMovesSelector = new PossibleMovesSelector(_board, placeablesFactory, decksList);
         _moveCostCalculator = new MoveCostCalculator(_board);
         
         _gameOverChecker = new GameOverChecker(_board, _turnsSwitcher, _cellMovesSelector);

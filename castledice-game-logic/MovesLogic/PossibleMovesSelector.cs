@@ -9,13 +9,13 @@ public class PossibleMovesSelector
 {
     private readonly Board _board;
     private readonly IPlaceablesFactory _placeablesFactory;
-    private readonly IPlacementListProvider _placementListProvider;
+    private readonly IDecksList _decksList;
 
-    public PossibleMovesSelector(Board board, IPlaceablesFactory placeablesFactory, IPlacementListProvider placementListProvider)
+    public PossibleMovesSelector(Board board, IPlaceablesFactory placeablesFactory, IDecksList decksList)
     {
         _board = board;
         _placeablesFactory = placeablesFactory;
-        _placementListProvider = placementListProvider;
+        _decksList = decksList;
     }
 
     public List<AbstractMove> GetPossibleMoves(Player player, Vector2Int position)
@@ -60,7 +60,7 @@ public class PossibleMovesSelector
     
     private List<AbstractMove> GetPlaceMoves(Player player, Cell cell)
     {
-        var placementTypes = _placementListProvider.GetPlacementList(player.Id);
+        var placementTypes = _decksList.GetDeck(player.Id);
         var moves = new List<AbstractMove>();
         foreach (var type in placementTypes)
         {
@@ -76,7 +76,7 @@ public class PossibleMovesSelector
 
     private List<AbstractMove> GetReplaceMoves(Player player, Cell cell)
     {
-        var placementTypes = _placementListProvider.GetPlacementList(player.Id);
+        var placementTypes = _decksList.GetDeck(player.Id);
         var moves = new List<AbstractMove>();
         foreach (var type in placementTypes)
         {

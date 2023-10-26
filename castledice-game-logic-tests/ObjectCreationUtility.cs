@@ -192,14 +192,14 @@ public static class ObjectCreationUtility
     {
         public Board Board = GetFullNByNBoard(3);
         public IPlaceablesFactory PlaceablesFactory = new PlaceableMocksFactory();
-        public IPlacementListProvider PlacementListProvider = new PlacementListProviderMock()
+        public IDecksList DecksList = new DecksListMock()
         {
             ListToReturn = new List<PlacementType>() { PlacementType.Knight , PlacementType.HeavyKnight}
         };
 
         public PossibleMovesSelector Build()
         {
-            return new PossibleMovesSelector(Board, PlaceablesFactory, PlacementListProvider);
+            return new PossibleMovesSelector(Board, PlaceablesFactory, DecksList);
         }
     }
 }
