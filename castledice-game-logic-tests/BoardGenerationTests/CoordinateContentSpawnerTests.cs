@@ -78,7 +78,8 @@ public class CoordinateContentSpawnerTests
             {
                 new((0, 0), GetCellContent()),
                 new((2, 1), GetCellContent())
-            }
+            },
+            boardWithAbsentCells
         };
     }
 
