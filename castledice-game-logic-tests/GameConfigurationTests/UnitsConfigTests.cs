@@ -10,7 +10,7 @@ public class UnitsConfigTests
     {
         var knightsConfig = new KnightConfig(1, 2);
         
-        var unitsConfig = new UnitsConfig(knightsConfig);
+        var unitsConfig = new PlaceablesConfig(knightsConfig);
         
         Assert.Equal(knightsConfig, unitsConfig.KnightConfig);
     }

@@ -1,10 +1,10 @@
 ﻿namespace castledice_game_logic.GameObjects.Factories;
 
-public class UnitsFactory : IPlaceablesFactory
+public class PlaceablesFactory : IPlaceablesFactory
 {
     private readonly IKnightsFactory _knightsFactory;
 
-    public UnitsFactory(IKnightsFactory knightsFactory)
+    public PlaceablesFactory(IKnightsFactory knightsFactory)
     {
         _knightsFactory = knightsFactory;
     }

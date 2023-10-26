@@ -6,14 +6,14 @@ using static castledice_game_logic_tests.ObjectCreationUtility;
 
 namespace castledice_game_logic_tests;
 
-public class UnitsFactoryTests
+public class PlaceablesFactoryTests
 {
     [Fact]
     public void CreatePlaceable_ShouldReturnKnight_IfKnightPlacementTypeIsGiven()
     {
         var knightsFactoryMock = new Mock<IKnightsFactory>();
         knightsFactoryMock.Setup(m => m.GetKnight(It.IsAny<Player>())).Returns(GetKnight(GetPlayer()));
-        var factory = new UnitsFactory(knightsFactoryMock.Object);
+        var factory = new PlaceablesFactory(knightsFactoryMock.Object);
         
         var placeable = factory.CreatePlaceable(PlacementType.Knight, GetPlayer());
         
@@ -27,7 +27,7 @@ public class UnitsFactoryTests
         var knightsFactoryMock = new Mock<IKnightsFactory>();
         var creator = GetPlayer();
         knightsFactoryMock.Setup(m => m.GetKnight(creator)).Returns(GetKnight(creator));
-        var factory = new UnitsFactory(knightsFactoryMock.Object);
+        var factory = new PlaceablesFactory(knightsFactoryMock.Object);
         
         var placeable = factory.CreatePlaceable(PlacementType.Knight, creator);
         if (placeable is IPlayerOwned owned)
