@@ -1,7 +1,7 @@
 ﻿using castledice_game_logic.GameObjects;
 using static castledice_game_logic_tests.ObjectCreationUtility;
 
-namespace castledice_game_logic_tests;
+namespace castledice_game_logic_tests.GameObjectsTests.DecksTests;
 
 public class CommonPlacementListProviderTests
 {
