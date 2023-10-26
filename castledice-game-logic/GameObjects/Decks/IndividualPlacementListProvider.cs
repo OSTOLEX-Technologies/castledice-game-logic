@@ -11,6 +11,11 @@ public class IndividualPlacementListProvider : IPlacementListProvider
 
     public List<PlacementType> GetPlacementList(int playerId)
     {
-        throw new NotImplementedException();
+        if (_idToPlacementList.ContainsKey(playerId))
+        {
+            return _idToPlacementList[playerId];
+        }
+        
+        return new List<PlacementType>();
     }
 }
