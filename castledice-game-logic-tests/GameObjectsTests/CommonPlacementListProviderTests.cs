@@ -11,7 +11,7 @@ public class CommonPlacementListProviderTests
         var placementList = new List<PlacementType>() { PlacementType.Knight, PlacementType.Bridge };
         var provider = new CommonPlacementListProvider(placementList);
 
-        var actualList = provider.GetPlacementList(GetPlayer());
+        var actualList = provider.GetPlacementList(GetPlayer().Id);
         
         Assert.Equal(placementList.Count, actualList.Count);
         foreach (var placementType in placementList)

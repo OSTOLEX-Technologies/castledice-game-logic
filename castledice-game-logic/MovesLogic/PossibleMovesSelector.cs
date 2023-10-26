@@ -60,7 +60,7 @@ public class PossibleMovesSelector
     
     private List<AbstractMove> GetPlaceMoves(Player player, Cell cell)
     {
-        var placementTypes = _placementListProvider.GetPlacementList(player);
+        var placementTypes = _placementListProvider.GetPlacementList(player.Id);
         var moves = new List<AbstractMove>();
         foreach (var type in placementTypes)
         {
@@ -76,7 +76,7 @@ public class PossibleMovesSelector
 
     private List<AbstractMove> GetReplaceMoves(Player player, Cell cell)
     {
-        var placementTypes = _placementListProvider.GetPlacementList(player);
+        var placementTypes = _placementListProvider.GetPlacementList(player.Id);
         var moves = new List<AbstractMove>();
         foreach (var type in placementTypes)
         {

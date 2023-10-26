@@ -5,5 +5,5 @@
 /// </summary>
 public interface IPlacementListProvider
 {
-    List<PlacementType> GetPlacementList(Player player);
+    List<PlacementType> GetPlacementList(int playerId);
 }

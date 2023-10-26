@@ -12,7 +12,7 @@ public class CommonPlacementListProvider : IPlacementListProvider
         _availablePlacementTypes = availablePlacementTypes;
     }
 
-    public List<PlacementType> GetPlacementList(Player player)
+    public List<PlacementType> GetPlacementList(int playerId)
     {
         return _availablePlacementTypes;
     }

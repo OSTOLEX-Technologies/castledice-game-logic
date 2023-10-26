@@ -7,7 +7,7 @@ public class PlacementListProviderMock : IPlacementListProvider
 {
     public List<PlacementType> ListToReturn = new();
     
-    public List<PlacementType> GetPlacementList(Player player)
+    public List<PlacementType> GetPlacementList(int playerId)
     {
         return ListToReturn;
     }
