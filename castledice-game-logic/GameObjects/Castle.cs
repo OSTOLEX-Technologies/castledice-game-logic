@@ -13,6 +13,7 @@ public class Castle : Content, ICapturable, IPlayerOwned, IPlaceBlocking
     /// </summary>
     /// <param name="player"></param>
     /// <param name="durability"></param>
+    /// <param name="maxDurability"></param>
     /// <param name="maxFreeDurability"></param>
     /// <param name="captureHitCost"></param>
     /// <exception cref="ArgumentException"></exception>
