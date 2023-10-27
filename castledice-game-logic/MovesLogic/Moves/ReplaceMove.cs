@@ -19,7 +19,7 @@ public sealed class ReplaceMove : AbstractMove
         return visitor.VisitReplaceMove(this);
     }
 
-    protected bool Equals(ReplaceMove other)
+    private bool Equals(ReplaceMove other)
     {
         return base.Equals(other) && _replacement.Equals(other._replacement);
     }
