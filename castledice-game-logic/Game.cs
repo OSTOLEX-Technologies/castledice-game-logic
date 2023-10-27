@@ -1,5 +1,4 @@
 ﻿using castledice_game_logic.ActionPointsLogic;
-using castledice_game_logic.BoardGeneration.ContentGeneration;
 using castledice_game_logic.GameConfiguration;
 using castledice_game_logic.GameObjects;
 using castledice_game_logic.GameObjects.Factories;
@@ -61,7 +60,7 @@ public class Game
 
     public Game(List<Player> players,
         BoardConfig boardConfig,
-        UnitsConfig unitsConfig,
+        PlaceablesConfig placeablesConfig,
         IPlacementListProvider placementListProvider)
     {
         _players = new PlayersList(players);
@@ -83,8 +82,8 @@ public class Game
 
         _giveActionPointsApplier = new GiveActionPointsApplier();
         _giveActionPointsSaver = new GiveActionPointsSaver(_actionsHistory);
-        var knightFactory = new KnightsFactory(unitsConfig.KnightConfig);
-        IPlaceablesFactory placeablesFactory  = new UnitsFactory(knightFactory);
+        var knightFactory = new KnightsFactory(placeablesConfig.KnightConfig);
+        IPlaceablesFactory placeablesFactory  = new PlaceablesFactory(knightFactory);
         _moveApplier = new MoveApplier(_board);
         _moveValidator = new MoveValidator(_board, _turnsSwitcher);
         _moveSaver = new MoveSaver(_actionsHistory);
@@ -143,13 +142,17 @@ public class Game
         return _board;
     }
 
-    public List<CellMove> GetCellMoves(Player player)
+    public List<CellMove> GetCellMoves(int playerId)
     {
+        var player = _players.FirstOrDefault(p => p.Id == playerId);
+        if (player == null) return new List<CellMove>();
         return _cellMovesSelector.SelectCellMoves(player);
     }
 
-    public List<AbstractMove> GetPossibleMoves(Player player, Vector2Int position)
+    public List<AbstractMove> GetPossibleMoves(int playerId, Vector2Int position)
     {
+        var player = _players.FirstOrDefault(p => p.Id == playerId);
+        if (player == null) return new List<AbstractMove>();
         return _possibleMovesSelector.GetPossibleMoves(player, position);
     }
 

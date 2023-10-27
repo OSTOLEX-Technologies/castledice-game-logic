@@ -2,11 +2,11 @@
 
 namespace castledice_game_logic.GameConfiguration;
 
-public class UnitsConfig
+public class PlaceablesConfig
 {
     public KnightConfig KnightConfig { get; }
 
-    public UnitsConfig(KnightConfig knightConfig)
+    public PlaceablesConfig(KnightConfig knightConfig)
     {
         KnightConfig = knightConfig;
     }
