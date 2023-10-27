@@ -10,17 +10,18 @@ public class CastlesFactoryTests
     [InlineData(3, 1, 1)]
     [InlineData(5, 2, 3)]
     [InlineData(2, 4, 2)]
-    public void GetCastle_ShouldReturnCastle_CreatedAccordingToConfig(int durability, int freeDurability, int captureHitCost)
+    public void GetCastle_ShouldReturnCastle_CreatedAccordingToConfig(int maxDurability, int maxFreeDurability, int captureHitCost)
     {
-        var config = new CastleConfig(durability, freeDurability, captureHitCost);
+        var config = new CastleConfig(maxDurability, maxFreeDurability, captureHitCost);
         var factory = new CastlesFactory(config);
         
         var castle = factory.GetCastle(GetPlayer());
         
-        Assert.Equal(durability, castle.GetDurability());
+        Assert.Equal(maxDurability, castle.GetDurability());
+        Assert.Equal(maxDurability, castle.GetMaxDurability());
         Assert.Equal(captureHitCost, castle.GetCaptureHitCost(GetPlayer()));
         castle.Free();
-        Assert.Equal(freeDurability, castle.GetDurability());
+        Assert.Equal(maxFreeDurability, castle.GetDurability());
     }
 
     [Fact]
