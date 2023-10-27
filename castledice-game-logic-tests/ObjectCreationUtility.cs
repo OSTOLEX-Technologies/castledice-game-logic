@@ -24,9 +24,9 @@ public static class ObjectCreationUtility
         return factoryMock.Object;
     }
     
-    public static CastleGO GetCastle(Player player, int durability = 3, int freeDurability = 1, int captureHitCost = 1)
+    public static CastleGO GetCastle(Player player, int durability = 3, int maxDurability = 3, int maxFreeDurability = 1, int captureHitCost = 1)
     {
-        return new CastleGO(player, durability, freeDurability, captureHitCost);
+        return new CastleGO(player, durability, maxDurability, maxFreeDurability, captureHitCost);
     }
 
     public static Knight GetKnight(Player player, int health = 3, int placementCost = 1)

@@ -5,25 +5,25 @@ public class Castle : Content, ICapturable, IPlayerOwned, IPlaceBlocking
     private Player _player;
     private int _durability;
     private readonly int _captureHitCost;
-    private readonly int _defaultDurability;
-    private readonly int _freeDurability; //Durability of the castle that has no owner.
+    private readonly int _maxDurability;
+    private readonly int _maxFreeDurability; //Durability of the castle that has no owner.
 
     /// <summary>
     /// Parameters durability and freeDurability must be positive. Otherwise exception will be thrown.
     /// </summary>
     /// <param name="player"></param>
     /// <param name="durability"></param>
-    /// <param name="freeDurability"></param>
+    /// <param name="maxFreeDurability"></param>
     /// <param name="captureHitCost"></param>
     /// <exception cref="ArgumentException"></exception>
-    public Castle(Player player, int durability, int freeDurability, int captureHitCost)
+    public Castle(Player player, int durability, int maxDurability, int maxFreeDurability, int captureHitCost)
     {
         if (durability <= 0)
         {
             throw new ArgumentException("Durability must be positive!");
         }
 
-        if (freeDurability <= 0)
+        if (maxFreeDurability <= 0)
         {
             throw new ArgumentException("Free durability must be positive!");
         }
@@ -35,8 +35,8 @@ public class Castle : Content, ICapturable, IPlayerOwned, IPlaceBlocking
 
         _player = player;
         _durability = durability;
-        _defaultDurability = durability;
-        _freeDurability = freeDurability;
+        _maxDurability = durability;
+        _maxFreeDurability = maxFreeDurability;
         _captureHitCost = captureHitCost;
     }
 
@@ -44,10 +44,10 @@ public class Castle : Content, ICapturable, IPlayerOwned, IPlaceBlocking
     {
         if (_player.IsNull)
         {
-            return _freeDurability;
+            return _maxFreeDurability;
         }
 
-        return _defaultDurability;
+        return _maxDurability;
     }
 
     public int GetDurability()
@@ -71,7 +71,7 @@ public class Castle : Content, ICapturable, IPlayerOwned, IPlaceBlocking
         OnStateModified();
         if (_durability > 0) return;
         _player = capturer;
-        _durability = _defaultDurability;
+        _durability = _maxDurability;
     }
 
     public bool CanBeCaptured(Player capturer)
@@ -91,7 +91,7 @@ public class Castle : Content, ICapturable, IPlayerOwned, IPlaceBlocking
     public void Free()
     {
         _player = new NullPlayer();
-        _durability = _freeDurability;
+        _durability = _maxFreeDurability;
         OnStateModified();
     }
 
