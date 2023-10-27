@@ -50,7 +50,7 @@ public class CastleTests
     [InlineData(4)]
     public void GetMaxDurability_ShouldReturnMaxFreeDurability_IfCastleIsFree(int freeDurability)
     {
-        var castle = new CastleGO(new NullPlayer(), 2,2, freeDurability, 1);
+        var castle = new CastleGO(new NullPlayer(), 1,2, freeDurability, 1);
         
         Assert.Equal(freeDurability, castle.GetMaxDurability());
     }
@@ -273,10 +273,10 @@ public class CastleTests
         int expectedDurability = 5;
         int captureHitCost = 5;
         var owner = GetPlayer();
-        var firstCapturer = GetPlayer(actionPoints: 6);
+        var capturer = GetPlayer(actionPoints: 6);
         var castle = new CastleGO(owner, 1, expectedDurability, 1, captureHitCost);
 
-        castle.CaptureHit(firstCapturer);
+        castle.CaptureHit(capturer);
         var actualDurability = castle.GetDurability();
         
         Assert.Equal(expectedDurability, actualDurability);

@@ -33,9 +33,24 @@ public class Castle : Content, ICapturable, IPlayerOwned, IPlaceBlocking
             throw new ArgumentException("CaptureHit cost must be positive!");
         }
 
+        if (maxDurability <= 0)
+        {
+            throw new ArgumentException("Max durability must be positive!");
+        }
+
+        if (durability > maxDurability && !player.IsNull)
+        {
+            throw new ArgumentException("Durability of owned castle must be less or equal to castle`s max durability!");
+        }
+
+        if (durability > maxFreeDurability && player.IsNull)
+        {
+            throw new ArgumentException("Durability of free castle must be less or equal to castle`s max free durability!");
+        }
+
         _player = player;
         _durability = durability;
-        _maxDurability = durability;
+        _maxDurability = maxDurability;
         _maxFreeDurability = maxFreeDurability;
         _captureHitCost = captureHitCost;
     }
