@@ -22,6 +22,7 @@ public class Game
     private readonly Board _board;
     private readonly UnitBranchesCutter _unitBranchesCutter;
     private readonly BoardUpdater _boardUpdater;
+    private readonly PlaceablesConfig _placeablesConfig;
 
     //Moves logic
     private readonly MoveValidator _moveValidator;
@@ -53,6 +54,7 @@ public class Game
     private readonly List<IPenalty> _penalties = new();
     private readonly PlayerKicker _playerKicker;
 
+    public PlaceablesConfig PlaceablesConfig => _placeablesConfig;
     public ICurrentPlayerProvider CurrentPlayerProvider => _turnsSwitcher;
     public PlayerTurnsSwitcher TurnsSwitcher => _turnsSwitcher;
 
@@ -66,6 +68,7 @@ public class Game
     {
         _players = new PlayersList(players);
         _decksList = decksList;
+        _placeablesConfig = placeablesConfig;
         _board = InitializeBoard(boardConfig);
         ValidateBoard();
 
