@@ -1,12 +1,22 @@
 ﻿using castledice_game_logic.GameObjects.Configs;
 using castledice_game_logic.GameObjects.Factories;
+using castledice_game_logic.GameObjects.Factories.Castles;
 using static castledice_game_logic_tests.ObjectCreationUtility;
 
 namespace castledice_game_logic_tests.FactoriesTests;
 
 public class CastlesFactoryTests
 {
-    [Theory]
+    [Fact]
+    public void ConfigProperty_ShouldReturnConfig_GivenInConstructor()
+    {
+        var expectedConfig = new CastleConfig(3, 3, 3);
+        var factory = new CastlesFactory(expectedConfig);
+        
+        Assert.Same(expectedConfig, factory.Config);
+    }
+
+[Theory]
     [InlineData(3, 1, 1)]
     [InlineData(5, 2, 3)]
     [InlineData(2, 4, 2)]
