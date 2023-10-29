@@ -7,6 +7,9 @@
 /// </summary>
 public class RectCellsGenerator : ICellsGenerator
 {
+    public int BoardLength => _boardLength;
+    public int BoardWidth => _boardWidth;
+    
     private readonly int _boardLength;
     private readonly int _boardWidth;
 
