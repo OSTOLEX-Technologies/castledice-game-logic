@@ -8,6 +8,23 @@ namespace castledice_game_logic_tests;
 
 public class RandomTreesSpawnerTests
 {
+    [Theory]
+    [InlineData(1, 1, 1)]
+    [InlineData(3, 2, 3)]
+    [InlineData(2, 1, 3)]
+    public void Properties_ShouldReturnValues_GivenInConstructor(int maxTreesCount, int minTreesCount,
+        int minDistanceBetweenTrees)
+    {
+        var expectedTreesFactory = new Mock<ITreesFactory>();
+        var treesSpawner = new RandomTreesSpawner(minTreesCount, maxTreesCount, minDistanceBetweenTrees,
+            expectedTreesFactory.Object);
+        
+        Assert.Equal(maxTreesCount, treesSpawner.MaxTreesCount);
+        Assert.Equal(minTreesCount, treesSpawner.MinTreesCount);
+        Assert.Equal(minDistanceBetweenTrees, treesSpawner.MinDistanceBetweenTrees);
+        Assert.Same(expectedTreesFactory.Object, treesSpawner.Factory);
+    }
+    
     [Fact]
     public void SpawnContent_ShouldSpawnExactNumberOfTrees_IfOneNumberRangeIsGiven()
     {
