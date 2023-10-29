@@ -30,6 +30,7 @@ public class Game
     private readonly CellMovesSelector _cellMovesSelector;
     private readonly PossibleMovesSelector _possibleMovesSelector;
     private readonly MoveCostCalculator _moveCostCalculator;
+    private readonly IDecksList _decksList;
 
     //Actions history
     public ActionsHistory ActionsHistory => _actionsHistory;
@@ -64,7 +65,7 @@ public class Game
         IDecksList decksList)
     {
         _players = new PlayersList(players);
-
+        _decksList = decksList;
         _board = InitializeBoard(boardConfig);
         ValidateBoard();
 
@@ -132,6 +133,16 @@ public class Game
         return _players.ToList();
     }
 
+    public List<int> GetAllPlayersIds()
+    {
+        return _players.Select(p => p.Id).ToList();
+    }
+
+    public List<PlacementType> GetPlayerDeck(int playerId)
+    {
+        return _decksList.GetDeck(playerId);
+    }
+    
     public Player GetCurrentPlayer()
     {
         return _turnsSwitcher.GetCurrentPlayer();
