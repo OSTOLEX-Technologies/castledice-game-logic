@@ -6,6 +6,13 @@ namespace castledice_game_logic.BoardGeneration.ContentGeneration;
 
 public class CastlesSpawner : IContentSpawner
 {
+    /// <summary>
+    /// This property returns a copy of the castles placements data. Do not try to modify it if you want to change the way how CastleSpawner spawns castles.
+    /// Create another CastlesSpawner instance instead.
+    /// </summary>
+    public Dictionary<Player, Vector2Int> CastlesPlacementsData => new(_castlesPlacementsData);
+    public ICastlesFactory Factory => _factory;
+
     private readonly Dictionary<Player, Vector2Int> _castlesPlacementsData;
     private readonly ICastlesFactory _factory;
 
