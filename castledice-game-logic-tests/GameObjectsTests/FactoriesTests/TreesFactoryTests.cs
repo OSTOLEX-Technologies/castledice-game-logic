@@ -1,7 +1,7 @@
 ﻿using castledice_game_logic.GameObjects.Configs;
-using castledice_game_logic.GameObjects.Factories;
+using castledice_game_logic.GameObjects.Factories.Trees;
 
-namespace castledice_game_logic_tests.FactoriesTests;
+namespace castledice_game_logic_tests.GameObjectsTests.FactoriesTests;
 
 public class TreesFactoryTests
 {
@@ -13,8 +13,18 @@ public class TreesFactoryTests
         var config = new TreeConfig(removeCost, canBeRemoved);
         var factory = new TreesFactory(config);
         var tree = factory.GetTree();
-        
+
         Assert.Equal(removeCost, tree.GetRemoveCost());
         Assert.Equal(canBeRemoved, tree.CanBeRemoved());
     }
+
+    [Fact]
+    public void ConfigProperty_ShouldReturnConfig_GivenInConstructor()
+    {
+        var expectedConfig = new TreeConfig(1, true);
+        var factory = new TreesFactory(expectedConfig);
+        
+        Assert.Same(expectedConfig, factory.Config);
+    }
+
 }
