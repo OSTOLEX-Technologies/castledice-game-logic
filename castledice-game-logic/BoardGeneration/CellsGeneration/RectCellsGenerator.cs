@@ -15,6 +15,14 @@ public class RectCellsGenerator : ICellsGenerator
 
     public RectCellsGenerator(int boardLength, int boardWidth)
     {
+        if (boardLength < 1)
+        {
+            throw new ArgumentException("Board length must be greater than zero.");
+        }
+        if (boardWidth < 1)
+        {
+            throw new ArgumentException("Board width must be greater than zero.");
+        }
         _boardLength = boardLength;
         _boardWidth = boardWidth;
     }
