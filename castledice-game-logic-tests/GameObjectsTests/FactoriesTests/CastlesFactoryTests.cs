@@ -1,9 +1,8 @@
 ﻿using castledice_game_logic.GameObjects.Configs;
-using castledice_game_logic.GameObjects.Factories;
 using castledice_game_logic.GameObjects.Factories.Castles;
 using static castledice_game_logic_tests.ObjectCreationUtility;
 
-namespace castledice_game_logic_tests.FactoriesTests;
+namespace castledice_game_logic_tests.GameObjectsTests.FactoriesTests;
 
 public class CastlesFactoryTests
 {
