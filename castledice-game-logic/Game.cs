@@ -141,9 +141,9 @@ public class Game
         return _players.Select(p => p.Id).ToList();
     }
 
-    public List<PlacementType> GetPlayerDeck(int playerId)
+    public IDecksList GetDecksList()
     {
-        return _decksList.GetDeck(playerId);
+        return _decksList;
     }
     
     public Player GetCurrentPlayer()
