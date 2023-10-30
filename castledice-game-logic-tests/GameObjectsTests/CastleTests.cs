@@ -11,23 +11,23 @@ public class CastleTests
     public void Castle_ShouldImplement_ICapturable()
     {
         var castle = new CastleGO(GetPlayer(), 1, 1, 1, 1);
-        
+
         Assert.True(castle is ICapturable);
     }
-    
+
     [Fact]
     public void Castle_ShouldImplement_IPlayerOwned()
     {
         var castle = new CastleGO(GetPlayer(), 1, 1, 1, 1);
-        
+
         Assert.True(castle is IPlayerOwned);
     }
-    
+
     [Fact]
     public void Castle_ShouldImplement_IPlaceBlocking()
     {
         var castle = new CastleGO(GetPlayer(), 1, 1, 1, 1);
-        
+
         Assert.True(castle is IPlaceBlocking);
     }
 
@@ -36,11 +36,11 @@ public class CastleTests
     [InlineData(2)]
     [InlineData(3)]
     [InlineData(4)]
-    public void GetMaxDurability_ShouldReturnMaxDurability_IfCastleIsOwned(int maxDurability)
+    public void GetCurrentMaxDurability_ShouldReturnMaxDurability_IfCastleIsOwned(int maxDurability)
     {
         var castle = new CastleGO(GetPlayer(), maxDurability, maxDurability, 1, 1);
-        
-        Assert.Equal(maxDurability, castle.GetMaxDurability());
+
+        Assert.Equal(maxDurability, castle.GetCurrentMaxDurability());
     }
 
     [Theory]
@@ -48,13 +48,13 @@ public class CastleTests
     [InlineData(2)]
     [InlineData(3)]
     [InlineData(4)]
-    public void GetMaxDurability_ShouldReturnMaxFreeDurability_IfCastleIsFree(int freeDurability)
+    public void GetCurrentMaxDurability_ShouldReturnMaxFreeDurability_IfCastleIsFree(int freeDurability)
     {
-        var castle = new CastleGO(new NullPlayer(), 1,2, freeDurability, 1);
-        
-        Assert.Equal(freeDurability, castle.GetMaxDurability());
+        var castle = new CastleGO(new NullPlayer(), 1, 2, freeDurability, 1);
+
+        Assert.Equal(freeDurability, castle.GetCurrentMaxDurability());
     }
-    
+
     [Theory]
     [InlineData(1, 3, 3)]
     [InlineData(2, 3, 3)]
@@ -63,8 +63,30 @@ public class CastleTests
     public void GetDurability_ShouldReturnCastleDurability(int durability, int maxDurability, int freeDurability)
     {
         var castle = new CastleGO(GetPlayer(), durability, maxDurability, freeDurability, 1);
-        
+
         Assert.Equal(durability, castle.GetDurability());
+    }
+
+    [Theory]
+    [InlineData(1)]
+    [InlineData(2)]
+    [InlineData(3)]
+    public void GetMaxDurability_ShouldReturnMaxDurability_GivenInConstructor(int maxDurability)
+    {
+        var castle = new CastleGO(GetPlayer(), 1, maxDurability, 1, 1);
+        
+        Assert.Equal(maxDurability, castle.GetMaxDurability());
+    }
+
+    [Theory]
+    [InlineData(1)]
+    [InlineData(2)]
+    [InlineData(3)]
+    public void GetMaxFreeDurability_ShouldReturnMaxFreeDurability_GivenInConstructor(int maxFreeDurability)
+    {
+        var castle = new CastleGO(new NullPlayer(), 1, 1, maxFreeDurability, 1);
+        
+        Assert.Equal(maxFreeDurability, castle.GetMaxFreeDurability());
     }
 
     [Fact]
@@ -127,12 +149,26 @@ public class CastleTests
     [InlineData(1)]
     [InlineData(2)]
     [InlineData(3)]
-    public void GetCaptureHitCost_ShouldReturnCaptureCost_GivenInConstructor(int captureHitCost)
+    public void GetCaptureHitCostWithPlayer_ShouldReturnCaptureCost_GivenInConstructor(int captureHitCost)
     {
         var capturer = GetPlayer(actionPoints: 4);
         var castle = new CastleGO(GetPlayer(), 3, 3, 1, captureHitCost);
 
         var actualCaptureCost = castle.GetCaptureHitCost(capturer);
+        
+        Assert.Equal(captureHitCost, actualCaptureCost);
+    }
+    
+    [Theory]
+    [InlineData(1)]
+    [InlineData(2)]
+    [InlineData(3)]
+    public void GetCaptureHitCost_ShouldReturnCaptureCost_GivenInConstructor(int captureHitCost)
+    {
+        var capturer = GetPlayer(actionPoints: 4);
+        var castle = new CastleGO(GetPlayer(), 3, 3, 1, captureHitCost);
+
+        var actualCaptureCost = castle.GetCaptureHitCost();
         
         Assert.Equal(captureHitCost, actualCaptureCost);
     }

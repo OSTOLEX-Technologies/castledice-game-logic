@@ -56,7 +56,12 @@ public class Castle : Content, ICapturable, IPlayerOwned, IPlaceBlocking
         _captureHitCost = captureHitCost;
     }
 
-    public int GetMaxDurability()
+    /// <summary>
+    /// Returns max durability if castle is occupied.
+    /// Returns max free durability if castle is free.
+    /// </summary>
+    /// <returns></returns>
+    public int GetCurrentMaxDurability()
     {
         if (_player.IsNull)
         {
@@ -64,6 +69,16 @@ public class Castle : Content, ICapturable, IPlayerOwned, IPlaceBlocking
         }
 
         return _maxDurability;
+    }
+
+    public int GetMaxDurability()
+    {
+        return _maxDurability;
+    }
+    
+    public int GetMaxFreeDurability()
+    {
+        return _maxFreeDurability;
     }
 
     public int GetDurability()
@@ -100,6 +115,11 @@ public class Castle : Content, ICapturable, IPlayerOwned, IPlaceBlocking
     }
 
     public int GetCaptureHitCost(Player capturer)
+    {
+        return GetCaptureHitCost();
+    }
+
+    public int GetCaptureHitCost()
     {
         return _captureHitCost;
     }

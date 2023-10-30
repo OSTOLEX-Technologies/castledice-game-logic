@@ -29,8 +29,7 @@ public class CastlesFactoryTests
         Assert.Equal(maxDurability, castle.GetDurability());
         Assert.Equal(maxDurability, castle.GetMaxDurability());
         Assert.Equal(captureHitCost, castle.GetCaptureHitCost(GetPlayer()));
-        castle.Free();
-        Assert.Equal(maxFreeDurability, castle.GetDurability());
+        Assert.Equal(maxFreeDurability, castle.GetMaxFreeDurability());
     }
 
     [Fact]
