@@ -2,7 +2,7 @@
 
 public class IndividualDecksList : IDecksList
 {
-    private Dictionary<int, List<PlacementType>> _idToPlacementList;
+    private readonly Dictionary<int, List<PlacementType>> _idToPlacementList;
 
     public IndividualDecksList(Dictionary<int, List<PlacementType>> idToPlacementList)
     {
