@@ -1,11 +1,13 @@
-﻿using castledice_game_logic.GameObjects;
+﻿using System.Runtime.CompilerServices;
+using castledice_game_logic.GameObjects;
 using castledice_game_logic.GameObjects.Factories;
 using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic.Rules;
 
+[assembly: InternalsVisibleTo("castledice-game-logic-tests")]
 namespace castledice_game_logic.MovesLogic;
 
-public class PossibleMovesSelector
+internal class PossibleMovesSelector
 {
     private readonly Board _board;
     private readonly IPlaceablesFactory _placeablesFactory;

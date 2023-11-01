@@ -188,7 +188,7 @@ public static class ObjectCreationUtility
         }
     }
 
-    public class PossibleMovesSelectorBuilder
+    internal class PossibleMovesSelectorBuilder
     {
         public Board Board = GetFullNByNBoard(3);
         public IPlaceablesFactory PlaceablesFactory = new PlaceableMocksFactory();

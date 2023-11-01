@@ -2,7 +2,7 @@
 
 namespace castledice_game_logic.MovesLogic;
 
-public class MoveCostCalculator : IMoveVisitor<int>
+internal class MoveCostCalculator : IMoveVisitor<int>
 {
     private readonly Board _board;
     
