@@ -32,6 +32,7 @@ public class Game
     private readonly PossibleMovesSelector _possibleMovesSelector;
     private readonly MoveCostCalculator _moveCostCalculator;
     private readonly IDecksList _decksList;
+    private readonly IPlaceablesFactory _placeablesFactory;
 
     //Actions history
     public ActionsHistory ActionsHistory => _actionsHistory;
@@ -54,9 +55,10 @@ public class Game
     private readonly List<IPenalty> _penalties = new();
     private readonly PlayerKicker _playerKicker;
 
-    public PlaceablesConfig PlaceablesConfig => _placeablesConfig;
-    public ICurrentPlayerProvider CurrentPlayerProvider => _turnsSwitcher;
-    public PlayerTurnsSwitcher TurnsSwitcher => _turnsSwitcher;
+    public virtual IPlaceablesFactory PlaceablesFactory => _placeablesFactory;
+    public virtual PlaceablesConfig PlaceablesConfig => _placeablesConfig;
+    public virtual ICurrentPlayerProvider CurrentPlayerProvider => _turnsSwitcher;
+    public virtual PlayerTurnsSwitcher TurnsSwitcher => _turnsSwitcher;
 
     //Events
     public event EventHandler? TurnSwitched;
@@ -87,12 +89,12 @@ public class Game
         _giveActionPointsApplier = new GiveActionPointsApplier();
         _giveActionPointsSaver = new GiveActionPointsSaver(_actionsHistory);
         var knightFactory = new KnightsFactory(placeablesConfig.KnightConfig);
-        IPlaceablesFactory placeablesFactory  = new PlaceablesFactory(knightFactory);
+        _placeablesFactory  = new PlaceablesFactory(knightFactory);
         _moveApplier = new MoveApplier(_board);
         _moveValidator = new MoveValidator(_board, _turnsSwitcher);
         _moveSaver = new MoveSaver(_actionsHistory);
         _cellMovesSelector = new CellMovesSelector(_board);
-        _possibleMovesSelector = new PossibleMovesSelector(_board, placeablesFactory, decksList);
+        _possibleMovesSelector = new PossibleMovesSelector(_board, _placeablesFactory, decksList);
         _moveCostCalculator = new MoveCostCalculator(_board);
         
         _gameOverChecker = new GameOverChecker(_board, _turnsSwitcher, _cellMovesSelector);
