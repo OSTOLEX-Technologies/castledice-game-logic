@@ -61,7 +61,7 @@ public class Game
     public virtual PlayerTurnsSwitcher TurnsSwitcher => _turnsSwitcher;
 
     //Events
-    public event EventHandler? TurnSwitched;
+    public event EventHandler<Game>? TurnSwitched;
 
     public Game(List<Player> players,
         BoardConfig boardConfig,
@@ -258,7 +258,7 @@ public class Game
         foreach (var condition in _turnSwitchConditions.Where(condition => condition.ShouldSwitchTurn()))
         {
             SwitchTurn();
-            TurnSwitched?.Invoke(this, EventArgs.Empty);
+            TurnSwitched?.Invoke(this, this);
         }
     }
 
