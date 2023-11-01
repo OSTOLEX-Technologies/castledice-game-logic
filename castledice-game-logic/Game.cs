@@ -152,6 +152,16 @@ public class Game
     {
         return _turnsSwitcher.GetCurrentPlayer();
     }
+    
+    public virtual Player GetPlayer(int playerId)
+    {
+        var player = _players.FirstOrDefault(p => p.Id == playerId);
+        if (player == null)
+        {
+            throw new ArgumentException("Player with id " + playerId + " does not exist!");
+        }
+        return player;
+    }
 
     public virtual Board GetBoard()
     {
