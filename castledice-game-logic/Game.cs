@@ -255,20 +255,18 @@ public class Game
 
     public virtual void CheckTurns()
     {
-        if (_turnSwitchConditions.Any(condition => condition.ShouldSwitchTurn()))
-        {
-            SwitchTurn();
-            TurnSwitched?.Invoke(this, this);
-        }
+        if (!_turnSwitchConditions.Any(condition => condition.ShouldSwitchTurn())) return;
+        SwitchTurn();
         //TODO: Add logic for resetting conditions
     }
 
-    private void SwitchTurn()
+    public void SwitchTurn()
     {
         _turnsSwitcher.GetCurrentPlayer().ActionPoints.Amount = 0;
         _turnsSwitcher.SwitchTurn();
         _boardUpdater.UpdateBoard();
         ApplyPenalties();
+        TurnSwitched?.Invoke(this, this);
     }
 
     private void ApplyPenalties()
