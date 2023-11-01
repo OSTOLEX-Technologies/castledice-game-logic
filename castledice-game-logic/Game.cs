@@ -16,8 +16,8 @@ namespace castledice_game_logic;
 public class Game
 {
     public event EventHandler<AbstractMove>? MoveApplied; 
-    public event EventHandler<Player>? Win;
-    public event EventHandler? Draw;
+    public event EventHandler<(Game, Player)>? Win;
+    public event EventHandler<Game>? Draw;
 
     private readonly Board _board;
     private readonly UnitBranchesCutter _unitBranchesCutter;
@@ -288,11 +288,11 @@ public class Game
 
     protected virtual void OnWin(Player e)
     {
-        Win?.Invoke(this, e);
+        Win?.Invoke(this, (this, e));
     }
 
     protected virtual void OnDraw()
     {
-        Draw?.Invoke(this, EventArgs.Empty);
+        Draw?.Invoke(this, this);
     }
 }
