@@ -2,14 +2,14 @@
 
 public class RandomConfig
 {
-    public int MinActionPointsRoll { get; }
-    public int MaxActionPointsRoll { get; }
-    public int ProbabilityPrecision { get; }
+    public int MinInclusive { get; }
+    public int MaxExclusive { get; }
+    public int Precision { get; }
 
-    public RandomConfig(int minActionPointsRoll, int maxActionPointsRoll, int probabilityPrecision)
+    public RandomConfig(int minInclusive, int maxExclusive, int precision)
     {
-        MinActionPointsRoll = minActionPointsRoll;
-        MaxActionPointsRoll = maxActionPointsRoll;
-        ProbabilityPrecision = probabilityPrecision;
+        MinInclusive = minInclusive;
+        MaxExclusive = maxExclusive;
+        Precision = precision;
     }
 }

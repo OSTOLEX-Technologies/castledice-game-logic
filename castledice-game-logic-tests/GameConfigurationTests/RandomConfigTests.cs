@@ -7,12 +7,12 @@ public class RandomConfigTests
     [Theory]
     [InlineData(1, 6, 100)]
     [InlineData(2, 18, 1000)]
-    public void Properties_ShouldReturnValues_GivenInConstructor(int minActionPointsRoll, int maxActionPointsRoll, int probabilityPrecision)
+    public void Properties_ShouldReturnValues_GivenInConstructor(int minInclusive, int maxExclusive, int precision)
     {
-        var randomConfig = new RandomConfig(minActionPointsRoll, maxActionPointsRoll, probabilityPrecision);
+        var randomConfig = new RandomConfig(minInclusive, maxExclusive, precision);
         
-        Assert.Equal(minActionPointsRoll, randomConfig.MinActionPointsRoll);
-        Assert.Equal(maxActionPointsRoll, randomConfig.MaxActionPointsRoll);
-        Assert.Equal(probabilityPrecision, randomConfig.ProbabilityPrecision);
+        Assert.Equal(minInclusive, randomConfig.MinInclusive);
+        Assert.Equal(maxExclusive, randomConfig.MaxExclusive);
+        Assert.Equal(precision, randomConfig.Precision);
     }
 }
