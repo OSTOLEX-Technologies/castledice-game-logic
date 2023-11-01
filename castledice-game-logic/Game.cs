@@ -102,7 +102,7 @@ public class Game
 
     #region Initialize methods
 
-    public void GiveActionPointsToPlayer(int playerId, int amount)
+    public virtual void GiveActionPointsToPlayer(int playerId, int amount)
     {
         var player = _players.FirstOrDefault(p => p.Id == playerId);
         var giveActionPoints = _actionPointsGivers[player].GiveActionPoints(amount);
