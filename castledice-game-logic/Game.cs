@@ -131,61 +131,61 @@ public class Game
         }
     }
 
-    public List<Player> GetAllPlayers()
+    public virtual List<Player> GetAllPlayers()
     {
         return _players.ToList();
     }
 
-    public List<int> GetAllPlayersIds()
+    public virtual List<int> GetAllPlayersIds()
     {
         return _players.Select(p => p.Id).ToList();
     }
 
-    public IDecksList GetDecksList()
+    public virtual IDecksList GetDecksList()
     {
         return _decksList;
     }
     
-    public Player GetCurrentPlayer()
+    public virtual Player GetCurrentPlayer()
     {
         return _turnsSwitcher.GetCurrentPlayer();
     }
 
-    public Board GetBoard()
+    public virtual Board GetBoard()
     {
         return _board;
     }
 
-    public List<CellMove> GetCellMoves(int playerId)
+    public virtual List<CellMove> GetCellMoves(int playerId)
     {
         var player = _players.FirstOrDefault(p => p.Id == playerId);
         if (player == null) return new List<CellMove>();
         return _cellMovesSelector.SelectCellMoves(player);
     }
 
-    public List<AbstractMove> GetPossibleMoves(int playerId, Vector2Int position)
+    public virtual List<AbstractMove> GetPossibleMoves(int playerId, Vector2Int position)
     {
         var player = _players.FirstOrDefault(p => p.Id == playerId);
         if (player == null) return new List<AbstractMove>();
         return _possibleMovesSelector.GetPossibleMoves(player, position);
     }
 
-    public void AddPenalty(IPenalty penalty)
+    public virtual void AddPenalty(IPenalty penalty)
     {
         _penalties.Add(penalty);
     }
 
-    public void AddTurnSwitchCondition(ITurnSwitchCondition condition)
+    public virtual void AddTurnSwitchCondition(ITurnSwitchCondition condition)
     {
         _turnSwitchConditions.Add(condition);
     }
 
-    public int GetMoveCost(AbstractMove move)
+    public virtual int GetMoveCost(AbstractMove move)
     {
         return _moveCostCalculator.GetMoveCost(move);
     }
     
-    public bool TryMakeMove(AbstractMove move)
+    public virtual bool TryMakeMove(AbstractMove move)
     {
         if (!CanMakeMove(move)) return false;
         
@@ -218,7 +218,7 @@ public class Game
         }
     }
 
-    public bool CanMakeMove(AbstractMove move)
+    public virtual bool CanMakeMove(AbstractMove move)
     {
         return _moveValidator.ValidateMove(move);
     }
@@ -241,7 +241,7 @@ public class Game
         }
     }
 
-    public void CheckTurns()
+    public virtual void CheckTurns()
     {
         foreach (var condition in _turnSwitchConditions.Where(condition => condition.ShouldSwitchTurn()))
         {
