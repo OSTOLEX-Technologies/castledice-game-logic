@@ -255,11 +255,12 @@ public class Game
 
     public virtual void CheckTurns()
     {
-        foreach (var condition in _turnSwitchConditions.Where(condition => condition.ShouldSwitchTurn()))
+        if (_turnSwitchConditions.Any(condition => condition.ShouldSwitchTurn()))
         {
             SwitchTurn();
             TurnSwitched?.Invoke(this, this);
         }
+        //TODO: Add logic for resetting conditions
     }
 
     private void SwitchTurn()
