@@ -286,12 +286,12 @@ public class Game
         }
     }
 
-    protected virtual void OnWin(Player e)
+    protected void OnWin(Player e)
     {
         Win?.Invoke(this, (this, e));
     }
 
-    protected virtual void OnDraw()
+    protected void OnDraw()
     {
         Draw?.Invoke(this, this);
     }
