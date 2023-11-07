@@ -30,13 +30,13 @@ public class PlayerActionPoints
         {
             throw new InvalidOperationException("Can't decrease action points, because they amount will be less than zero!");
         }
-        ActionPointsDecreased?.Invoke(this, amount);
         Amount -= amount;
+        ActionPointsDecreased?.Invoke(this, amount);
     }
 
     public void IncreaseActionPoints(int amount)
     {
-        ActionPointsIncreased?.Invoke(this, amount);
         Amount += amount;
+        ActionPointsIncreased?.Invoke(this, amount);
     }
 }
