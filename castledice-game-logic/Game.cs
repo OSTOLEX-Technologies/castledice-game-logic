@@ -217,7 +217,7 @@ public class Game
         return true;
     }
 
-    private void OnMoveApplied(AbstractMove move)
+    protected void OnMoveApplied(AbstractMove move)
     {
         MoveApplied?.Invoke(this, move);
     }
