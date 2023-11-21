@@ -14,4 +14,9 @@ public class ActionPointsCondition : ITurnSwitchCondition
         var currentPlayer = _currentPlayerProvider.GetCurrentPlayer();
         return currentPlayer.ActionPoints.Amount <= 0;
     }
+
+    public T Accept<T>(ITurnSwitchConditionVisitor<T> visitor)
+    {
+        return visitor.VisitActionPointsCondition(this);
+    }
 }

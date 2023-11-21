@@ -6,4 +6,5 @@
 public interface ITurnSwitchCondition
 {
     bool ShouldSwitchTurn();
+    T Accept<T>(ITurnSwitchConditionVisitor<T> visitor);
 }

@@ -48,4 +48,9 @@ public class TimeCondition : ITurnSwitchCondition
 
         return false;
     }
+
+    public T Accept<T>(ITurnSwitchConditionVisitor<T> visitor)
+    {
+        return visitor.VisitTimeCondition(this);
+    }
 }

@@ -73,4 +73,16 @@ public class TimeConditionTests
         
         Assert.False(timeCondition.ShouldSwitchTurn());
     }
+    
+    [Fact]
+    public void Accept_ShouldCallVisitTimeCondition_OnGivenVisitor()
+    {
+        var visitorMock = new Mock<ITurnSwitchConditionVisitor<bool>>();
+        var timerMock = new Mock<ITimer>();
+        var timeCondition = new TimeCondition(timerMock.Object, 10, GetTurnsSwitcher(GetPlayer()));
+        
+        timeCondition.Accept(visitorMock.Object);
+        
+        visitorMock.Verify(visitor => visitor.VisitTimeCondition(timeCondition));
+    }
 }

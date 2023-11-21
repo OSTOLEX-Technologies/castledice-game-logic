@@ -29,4 +29,16 @@ public class ActionPointsConditionTests
         
         Assert.True(switchCondition.ShouldSwitchTurn());
     }
+
+    [Fact]
+    public void Accept_ShouldCallVisitActionPointsCondition_OnGivenVisitor()
+    {
+        var visitorMock = new Mock<ITurnSwitchConditionVisitor<bool>>();
+        var currentPlayerProviderMock = new Mock<ICurrentPlayerProvider>();
+        var switchCondition = new ActionPointsCondition(currentPlayerProviderMock.Object);
+        
+        switchCondition.Accept(visitorMock.Object);
+        
+        visitorMock.Verify(visitor => visitor.VisitActionPointsCondition(switchCondition));
+    }
 }

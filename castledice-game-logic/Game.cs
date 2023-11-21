@@ -191,6 +191,16 @@ public class Game
     {
         _turnSwitchConditions.Add(condition);
     }
+    
+    public virtual void AddTurnSwitchConditionsList(List<ITurnSwitchCondition> conditions)
+    {
+        _turnSwitchConditions.AddRange(conditions);
+    }
+
+    public virtual List<ITurnSwitchCondition> GetTurnSwitchConditions()
+    {
+        return _turnSwitchConditions;
+    }
 
     public virtual int GetMoveCost(AbstractMove move)
     {
