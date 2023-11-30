@@ -1,0 +1,39 @@
+name: Build and Publish DLLs
+
+on:
+  push:
+    branches:
+      - develop
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build_and_publish:
+    name: Build and Publish
+    runs-on: windows-latest
+
+    steps:
+      # Checkout the repository
+      - uses: actions/checkout@v2
+
+      # Set up .NET Core with version 8
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '8.0'
+
+      # Install NuGet CLI
+      - name: Install NuGet CLI
+        run: |
+          dotnet tool install --global NuGet.CommandLine --version 5.12.0
+
+      # Build DLLs in Release configuration
+      - name: Build DLLs
+        run: dotnet build -c Release
+
+      # Publish DLLs to GitHub Packages
+      - name: Publish DLLs to GitHub Packages
+        run: |
+          echo "Publishing to GitHub Packages..."
+          nuget pack -Prop Configuration=Release
+          nuget push *.nupkg -Source "github" -ApiKey ${{ secrets.GITHUB_TOKEN }}
