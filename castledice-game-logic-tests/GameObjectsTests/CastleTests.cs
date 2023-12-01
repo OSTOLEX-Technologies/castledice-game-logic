@@ -31,6 +31,20 @@ public class CastleTests
         Assert.True(castle is IPlaceBlocking);
     }
 
+    [Fact]
+    public void CaptureHit_ShouldInvokeHitEvent_WithHitCostAsArgument()
+    {
+        var rnd = new Random();
+        var captureHitCost = rnd.Next(1, 6);
+        var castle = new CastleGO(GetPlayer(), 1, 1, 1, captureHitCost);
+        int actualHitCost = 0;
+        castle.Hit += (sender, cost) => actualHitCost = cost;
+        
+        castle.CaptureHit(GetPlayer(6));
+        
+        Assert.Equal(captureHitCost, actualHitCost);
+    }
+
     [Theory]
     [InlineData(1)]
     [InlineData(2)]

@@ -8,6 +8,8 @@ public class Castle : Content, ICapturable, IPlayerOwned, IPlaceBlocking
     private readonly int _maxDurability;
     private readonly int _maxFreeDurability; //Durability of the castle that has no owner.
 
+    public event EventHandler<int>? Hit; 
+
     /// <summary>
     /// Parameters durability and freeDurability must be positive. Otherwise exception will be thrown.
     /// </summary>
@@ -100,6 +102,7 @@ public class Castle : Content, ICapturable, IPlayerOwned, IPlaceBlocking
         capturer.ActionPoints.DecreaseActionPoints(captureCost);
         _durability -= captureCost;
         OnStateModified();
+        Hit?.Invoke(this, captureCost);
         if (_durability > 0) return;
         _player = capturer;
         _durability = _maxDurability;

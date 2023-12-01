@@ -267,7 +267,6 @@ public class Game
     {
         if (!_turnSwitchConditions.Any(condition => condition.ShouldSwitchTurn())) return;
         SwitchTurn();
-        //TODO: Add logic for resetting conditions
     }
 
     public void SwitchTurn()
