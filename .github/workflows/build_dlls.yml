@@ -2,14 +2,11 @@ name: Build and Publish DLLs
 
 on:
   push:
-    branches:
-      - develop
     tags:
       - "*"
 
 jobs:
   build_and_publish:
-    if: startsWith(github.ref, 'refs/tags/v*.*.*')
     runs-on: windows-latest
 
     steps:
