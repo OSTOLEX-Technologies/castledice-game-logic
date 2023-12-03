@@ -19,7 +19,7 @@ jobs:
         id: extract_version
         run: |
           $TAG="${{ github.ref_name }}"
-          if (-not ($TAG -match '^v\d+\.\d+\.\d+(\w*)$')) {
+          if (-not ($TAG -match '^v\d+\.\d+\.\d+.*?$')) {
             echo "Invalid tag format: $TAG"
             exit 1
           }
