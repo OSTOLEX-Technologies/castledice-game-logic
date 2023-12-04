@@ -7,5 +7,4 @@
 public interface ITsc
 {
     bool ShouldSwitchTurn();
-    T Accept<T>(ITurnSwitchConditionVisitor<T> visitor);
 }

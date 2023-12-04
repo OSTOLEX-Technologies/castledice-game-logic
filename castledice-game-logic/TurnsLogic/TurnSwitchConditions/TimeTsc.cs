@@ -48,9 +48,5 @@ public class TimeTsc : ITsc
 
         return false;
     }
-
-    public T Accept<T>(ITurnSwitchConditionVisitor<T> visitor)
-    {
-        return visitor.VisitTimeCondition(this);
-    }
+    
 }
