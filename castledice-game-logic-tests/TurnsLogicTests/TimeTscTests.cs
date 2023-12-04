@@ -1,12 +1,12 @@
 ﻿using castledice_game_logic_tests.Mocks;
 using castledice_game_logic.Time;
-using castledice_game_logic.TurnsLogic;
+using castledice_game_logic.TurnsLogic.TurnSwitchConditions;
 using Moq;
 using static castledice_game_logic_tests.ObjectCreationUtility;
 
-namespace castledice_game_logic_tests;
+namespace castledice_game_logic_tests.TurnsLogicTests;
 
-public class TimeConditionTests
+public class TimeTscTests
 {
     [Fact]
     public void ShouldSwitchTurn_ShouldReturnFalse_IfTimeIsNotElapsed()
@@ -14,7 +14,7 @@ public class TimeConditionTests
         var timerMock = new Mock<ITimer>();
         timerMock.Setup(t => t.IsElapsed()).Returns(false);
         var timer = timerMock.Object;
-        var timeCondition = new TimeCondition(timer, 10, GetTurnsSwitcher(GetPlayer()));
+        var timeCondition = new TimeTsc(timer, 10, GetTurnsSwitcher(GetPlayer()));
         timeCondition.Start();
         
         Assert.False(timeCondition.ShouldSwitchTurn());
@@ -26,7 +26,7 @@ public class TimeConditionTests
         var timerMock = new Mock<ITimer>();
         timerMock.Setup(t => t.IsElapsed()).Returns(true);
         var timer = timerMock.Object;
-        var timeCondition = new TimeCondition(timer, 10, GetTurnsSwitcher(GetPlayer()));
+        var timeCondition = new TimeTsc(timer, 10, GetTurnsSwitcher(GetPlayer()));
         timeCondition.Start();
 
         Assert.True(timeCondition.ShouldSwitchTurn());
@@ -38,7 +38,7 @@ public class TimeConditionTests
         var timerMock = new Mock<ITimer>();
         timerMock.Setup(t => t.IsElapsed()).Returns(true);
         var timer = timerMock.Object;
-        var timeCondition = new TimeCondition(timer, 30, GetTurnsSwitcher(GetPlayer()));
+        var timeCondition = new TimeTsc(timer, 30, GetTurnsSwitcher(GetPlayer()));
 
         Assert.False(timeCondition.ShouldSwitchTurn());
     }
@@ -48,7 +48,7 @@ public class TimeConditionTests
     {
         int duration = 10;
         var timer = new TickTimerMock();
-        var timeCondition = new TimeCondition(timer, duration, GetTurnsSwitcher(GetPlayer()));
+        var timeCondition = new TimeTsc(timer, duration, GetTurnsSwitcher(GetPlayer()));
         timeCondition.Start();
         
         timer.Tick(18);
@@ -65,7 +65,7 @@ public class TimeConditionTests
         int duration = 10;
         var timer = new TickTimerMock();
         var turnSwitcher = GetTurnsSwitcher(GetPlayer());
-        var timeCondition = new TimeCondition(timer, duration, turnSwitcher);
+        var timeCondition = new TimeTsc(timer, duration, turnSwitcher);
         timeCondition.Start();
         timer.Tick(18);
         
@@ -79,7 +79,7 @@ public class TimeConditionTests
     {
         var visitorMock = new Mock<ITurnSwitchConditionVisitor<bool>>();
         var timerMock = new Mock<ITimer>();
-        var timeCondition = new TimeCondition(timerMock.Object, 10, GetTurnsSwitcher(GetPlayer()));
+        var timeCondition = new TimeTsc(timerMock.Object, 10, GetTurnsSwitcher(GetPlayer()));
         
         timeCondition.Accept(visitorMock.Object);
         

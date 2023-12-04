@@ -6,6 +6,7 @@ using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
 using castledice_game_logic.Penalties;
 using castledice_game_logic.TurnsLogic;
+using castledice_game_logic.TurnsLogic.TurnSwitchConditions;
 
 namespace castledice_game_logic;
 
@@ -46,7 +47,7 @@ public class Game
     //Turns logic
     private readonly PlayersList _players;
     private readonly PlayerTurnsSwitcher _turnsSwitcher;
-    private readonly List<ITurnSwitchCondition> _turnSwitchConditions = new();
+    private readonly List<ITsc> _turnSwitchConditions = new();
     
     //Win check
     private readonly GameOverChecker _gameOverChecker;
@@ -187,17 +188,17 @@ public class Game
         _penalties.Add(penalty);
     }
 
-    public virtual void AddTurnSwitchCondition(ITurnSwitchCondition condition)
+    public virtual void AddTurnSwitchCondition(ITsc condition)
     {
         _turnSwitchConditions.Add(condition);
     }
     
-    public virtual void AddTurnSwitchConditionsList(List<ITurnSwitchCondition> conditions)
+    public virtual void AddTurnSwitchConditionsList(List<ITsc> conditions)
     {
         _turnSwitchConditions.AddRange(conditions);
     }
 
-    public virtual List<ITurnSwitchCondition> GetTurnSwitchConditions()
+    public virtual List<ITsc> GetTurnSwitchConditions()
     {
         return _turnSwitchConditions;
     }

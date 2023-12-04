@@ -1,14 +1,14 @@
 ﻿using castledice_game_logic.Time;
 
-namespace castledice_game_logic.TurnsLogic;
+namespace castledice_game_logic.TurnsLogic.TurnSwitchConditions;
 
-public class TimeCondition : ITurnSwitchCondition
+public class TimeTsc : ITsc
 {
     private readonly ITimer _timer;
     private bool _isStarted = false;
     private readonly PlayerTurnsSwitcher _turnsSwitcher;
 
-    public TimeCondition(ITimer timer, int turnDuration, PlayerTurnsSwitcher turnSwitcher)
+    public TimeTsc(ITimer timer, int turnDuration, PlayerTurnsSwitcher turnSwitcher)
     {
         _timer = timer;
         timer.SetDuration(turnDuration);
@@ -16,7 +16,7 @@ public class TimeCondition : ITurnSwitchCondition
         _turnsSwitcher.TurnSwitched += OnTurnSwitched;
     }
     
-    ~TimeCondition()
+    ~TimeTsc()
     {
         _turnsSwitcher.TurnSwitched -= OnTurnSwitched;
     }

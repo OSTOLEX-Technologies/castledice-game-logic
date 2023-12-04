@@ -2,7 +2,7 @@
 using castledice_game_logic.TurnsLogic;
 using static castledice_game_logic_tests.ObjectCreationUtility;
 
-namespace castledice_game_logic_tests;
+namespace castledice_game_logic_tests.TurnsLogicTests;
 
 public class PlayersListTests
 {

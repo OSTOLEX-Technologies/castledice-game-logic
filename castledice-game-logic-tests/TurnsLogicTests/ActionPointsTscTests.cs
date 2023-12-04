@@ -1,10 +1,11 @@
 ﻿using castledice_game_logic.TurnsLogic;
+using castledice_game_logic.TurnsLogic.TurnSwitchConditions;
 using Moq;
 
-namespace castledice_game_logic_tests;
+namespace castledice_game_logic_tests.TurnsLogicTests;
 using static ObjectCreationUtility;
 
-public class ActionPointsConditionTests
+public class ActionPointsTscTests
 {
     [Fact]
     public void ShouldSwitchTurn_ShouldReturnFalse_IfCurrentPlayerHasActionPoints()
@@ -13,7 +14,7 @@ public class ActionPointsConditionTests
         var currentPlayerProviderMock = new Mock<ICurrentPlayerProvider>();
         currentPlayerProviderMock.Setup(provider => provider.GetCurrentPlayer()).Returns(player);
         var currentPlayerProvider = currentPlayerProviderMock.Object;
-        var switchCondition = new ActionPointsCondition(currentPlayerProvider);
+        var switchCondition = new ActionPointsTsc(currentPlayerProvider);
         
         Assert.False(switchCondition.ShouldSwitchTurn());
     }
@@ -25,7 +26,7 @@ public class ActionPointsConditionTests
         var currentPlayerProviderMock = new Mock<ICurrentPlayerProvider>();
         currentPlayerProviderMock.Setup(provider => provider.GetCurrentPlayer()).Returns(player);
         var currentPlayerProvider = currentPlayerProviderMock.Object;
-        var switchCondition = new ActionPointsCondition(currentPlayerProvider);
+        var switchCondition = new ActionPointsTsc(currentPlayerProvider);
         
         Assert.True(switchCondition.ShouldSwitchTurn());
     }
@@ -35,7 +36,7 @@ public class ActionPointsConditionTests
     {
         var visitorMock = new Mock<ITurnSwitchConditionVisitor<bool>>();
         var currentPlayerProviderMock = new Mock<ICurrentPlayerProvider>();
-        var switchCondition = new ActionPointsCondition(currentPlayerProviderMock.Object);
+        var switchCondition = new ActionPointsTsc(currentPlayerProviderMock.Object);
         
         switchCondition.Accept(visitorMock.Object);
         

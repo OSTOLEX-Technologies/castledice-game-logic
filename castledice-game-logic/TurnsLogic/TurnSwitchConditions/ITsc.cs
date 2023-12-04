@@ -1,9 +1,10 @@
-﻿namespace castledice_game_logic.TurnsLogic;
+﻿namespace castledice_game_logic.TurnsLogic.TurnSwitchConditions;
 
 /// <summary>
+/// Tsc stands for Turn Switch Condition.
 /// This interface provides functionality for checking if turn should go to the next player.
 /// </summary>
-public interface ITurnSwitchCondition
+public interface ITsc
 {
     bool ShouldSwitchTurn();
     T Accept<T>(ITurnSwitchConditionVisitor<T> visitor);

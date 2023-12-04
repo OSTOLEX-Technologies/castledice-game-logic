@@ -1,7 +1,7 @@
-﻿namespace castledice_game_logic.TurnsLogic;
+﻿namespace castledice_game_logic.TurnsLogic.TurnSwitchConditions;
 
 public interface ITurnSwitchConditionVisitor<out T>
 {
-    T VisitActionPointsCondition(ActionPointsCondition actionPointsTsc);
-    T VisitTimeCondition(TimeCondition timeCondition);
+    T VisitActionPointsCondition(ActionPointsTsc actionPointsTsc);
+    T VisitTimeCondition(TimeTsc timeTsc);
 }
