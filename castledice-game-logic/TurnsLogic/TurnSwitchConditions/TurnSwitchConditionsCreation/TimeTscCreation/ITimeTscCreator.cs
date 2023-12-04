@@ -2,5 +2,5 @@
 
 public interface ITimeTscCreator
 {
-    
+    TimeTsc CreateTimeTsc();
 }

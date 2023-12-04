@@ -2,5 +2,5 @@
 
 public interface IActionPointsTscCreator
 {
-    
+    ActionPointsTsc CreateActionPointsTsc();
 }

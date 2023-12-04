@@ -7,12 +7,14 @@ public class TimeTsc : ITsc
     private readonly ITimer _timer;
     private bool _isStarted = false;
     private readonly PlayerTurnsSwitcher _turnsSwitcher;
+    private readonly int _turnDurationMilliseconds;
 
-    public TimeTsc(ITimer timer, int turnDuration, PlayerTurnsSwitcher turnSwitcher)
+    public TimeTsc(ITimer timer, int turnDurationMilliseconds, PlayerTurnsSwitcher turnSwitcher)
     {
         _timer = timer;
-        timer.SetDuration(turnDuration);
+        timer.SetDuration(turnDurationMilliseconds);
         _turnsSwitcher = turnSwitcher;
+        _turnDurationMilliseconds = turnDurationMilliseconds;
         _turnsSwitcher.TurnSwitched += OnTurnSwitched;
     }
     
