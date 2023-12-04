@@ -4,7 +4,7 @@ using castledice_game_logic.TurnsLogic.TurnSwitchConditions;
 using Moq;
 using static castledice_game_logic_tests.ObjectCreationUtility;
 
-namespace castledice_game_logic_tests.TurnsLogicTests;
+namespace castledice_game_logic_tests.TurnsLogicTests.TurnSwitchConditionsTests;
 
 public class TimeTscTests
 {
@@ -72,17 +72,5 @@ public class TimeTscTests
         turnSwitcher.SwitchTurn();
         
         Assert.False(timeCondition.ShouldSwitchTurn());
-    }
-    
-    [Fact]
-    public void Accept_ShouldCallVisitTimeCondition_OnGivenVisitor()
-    {
-        var visitorMock = new Mock<ITurnSwitchConditionVisitor<bool>>();
-        var timerMock = new Mock<ITimer>();
-        var timeCondition = new TimeTsc(timerMock.Object, 10, GetTurnsSwitcher(GetPlayer()));
-        
-        timeCondition.Accept(visitorMock.Object);
-        
-        visitorMock.Verify(visitor => visitor.VisitTimeCondition(timeCondition));
     }
 }

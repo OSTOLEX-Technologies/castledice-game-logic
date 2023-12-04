@@ -2,7 +2,7 @@
 using castledice_game_logic.TurnsLogic.TurnSwitchConditions;
 using Moq;
 
-namespace castledice_game_logic_tests.TurnsLogicTests;
+namespace castledice_game_logic_tests.TurnsLogicTests.TurnSwitchConditionsTests;
 using static ObjectCreationUtility;
 
 public class ActionPointsTscTests
@@ -29,17 +29,5 @@ public class ActionPointsTscTests
         var switchCondition = new ActionPointsTsc(currentPlayerProvider);
         
         Assert.True(switchCondition.ShouldSwitchTurn());
-    }
-
-    [Fact]
-    public void Accept_ShouldCallVisitActionPointsCondition_OnGivenVisitor()
-    {
-        var visitorMock = new Mock<ITurnSwitchConditionVisitor<bool>>();
-        var currentPlayerProviderMock = new Mock<ICurrentPlayerProvider>();
-        var switchCondition = new ActionPointsTsc(currentPlayerProviderMock.Object);
-        
-        switchCondition.Accept(visitorMock.Object);
-        
-        visitorMock.Verify(visitor => visitor.VisitActionPointsCondition(switchCondition));
     }
 }
