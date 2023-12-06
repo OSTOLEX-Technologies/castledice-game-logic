@@ -9,6 +9,7 @@ using castledice_game_logic.GameObjects.Factories;
 using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
 using castledice_game_logic.TurnsLogic;
+using castledice_game_logic.TurnsLogic.TurnSwitchConditions;
 using Moq;
 using CastleGO = castledice_game_logic.GameObjects.Castle;
 
@@ -16,6 +17,12 @@ namespace castledice_game_logic_tests;
 
 public static class ObjectCreationUtility
 {
+
+    public static ActionPointsTsc GetActionPointsTsc()
+    {
+        var currentPlayerProviderMock = new Mock<ICurrentPlayerProvider>();
+        return new ActionPointsTsc(currentPlayerProviderMock.Object);
+    }
     
     public static ITreesFactory GetTreesFactory()
     {
