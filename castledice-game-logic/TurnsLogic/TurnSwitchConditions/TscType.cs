@@ -3,5 +3,4 @@
 public enum TscType
 {
     SwitchByActionPoints,
-    SwitchByTime,
 }
