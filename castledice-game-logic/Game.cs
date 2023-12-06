@@ -7,6 +7,8 @@ using castledice_game_logic.MovesLogic;
 using castledice_game_logic.Penalties;
 using castledice_game_logic.TurnsLogic;
 using castledice_game_logic.TurnsLogic.TurnSwitchConditions;
+using castledice_game_logic.TurnsLogic.TurnSwitchConditions.TurnSwitchConditionsCreation;
+using castledice_game_logic.TurnsLogic.TurnSwitchConditions.TurnSwitchConditionsCreation.ActionPointsTscCreation;
 
 namespace castledice_game_logic;
 
@@ -67,7 +69,8 @@ public class Game
     public Game(List<Player> players,
         BoardConfig boardConfig,
         PlaceablesConfig placeablesConfig,
-        IDecksList decksList)
+        IDecksList decksList,
+        TurnSwitchConditionsConfig turnSwitchConditionsConfig)
     {
         _players = new PlayersList(players);
         _decksList = decksList;
@@ -97,6 +100,10 @@ public class Game
         _cellMovesSelector = new CellMovesSelector(_board);
         _possibleMovesSelector = new PossibleMovesSelector(_board, _placeablesFactory, decksList);
         _moveCostCalculator = new MoveCostCalculator(_board);
+        
+        var tscFactory = new TscFactory(new ActionPointsTscCreator(_turnsSwitcher));
+        var tscListCreator = new FactoryTscListCreator(tscFactory);
+        _turnSwitchConditions = tscListCreator.GetTscList(turnSwitchConditionsConfig.ConditionsToUse);
         
         _gameOverChecker = new GameOverChecker(_board, _turnsSwitcher, _cellMovesSelector);
     }
@@ -186,21 +193,6 @@ public class Game
     public virtual void AddPenalty(IPenalty penalty)
     {
         _penalties.Add(penalty);
-    }
-
-    public virtual void AddTurnSwitchCondition(ITsc condition)
-    {
-        _turnSwitchConditions.Add(condition);
-    }
-    
-    public virtual void AddTurnSwitchConditionsList(List<ITsc> conditions)
-    {
-        _turnSwitchConditions.AddRange(conditions);
-    }
-
-    public virtual List<ITsc> GetTurnSwitchConditions()
-    {
-        return _turnSwitchConditions;
     }
 
     public virtual int GetMoveCost(AbstractMove move)
