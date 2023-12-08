@@ -2,7 +2,12 @@
 
 namespace castledice_game_logic.GameConfiguration;
 
-public class TurnSwitchConditionsConfig
+public sealed class TurnSwitchConditionsConfig
 {
-    public List<TscType> ConditionsToUse { get; set; } = new();
+    public List<TscType> ConditionsToUse { get; }
+
+    public TurnSwitchConditionsConfig(List<TscType> conditionsToUse)
+    {
+        ConditionsToUse = conditionsToUse;
+    }
 }
