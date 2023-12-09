@@ -50,6 +50,7 @@ public class Game
     private readonly PlayersList _players;
     private readonly PlayerTurnsSwitcher _turnsSwitcher;
     private readonly List<ITsc> _turnSwitchConditions = new();
+    public TurnSwitchConditionsConfig TurnSwitchConditionsConfig { get; }
     
     //Win check
     private readonly GameOverChecker _gameOverChecker;
@@ -104,6 +105,7 @@ public class Game
         var tscFactory = new TscFactory(new ActionPointsTscCreator(_turnsSwitcher));
         var tscListCreator = new FactoryTscListCreator(tscFactory);
         _turnSwitchConditions = tscListCreator.GetTscList(turnSwitchConditionsConfig.ConditionsToUse);
+        TurnSwitchConditionsConfig = turnSwitchConditionsConfig;
         
         _gameOverChecker = new GameOverChecker(_board, _turnsSwitcher, _cellMovesSelector);
     }
