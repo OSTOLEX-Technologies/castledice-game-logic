@@ -8,6 +8,7 @@ using castledice_game_logic.GameObjects;
 using castledice_game_logic.GameObjects.Factories;
 using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
+using castledice_game_logic.Time;
 using castledice_game_logic.TurnsLogic;
 using castledice_game_logic.TurnsLogic.TurnSwitchConditions;
 using Moq;
@@ -108,7 +109,7 @@ public static class ObjectCreationUtility
             Amount = actionPoints,
         };
         var playerId = id;
-        return new Player(playerActionPoints, playerId);
+        return new Player(playerActionPoints, new NullPlayerTimer(), playerId);
     }
 
     
