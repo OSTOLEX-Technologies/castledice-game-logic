@@ -59,8 +59,6 @@ public class Game
     private readonly List<IPenalty> _penalties = new();
     private readonly PlayerKicker _playerKicker;
     
-    //Time
-    public TimersConfig TimersConfig { get; }
 
     public virtual IPlaceablesFactory PlaceablesFactory => _placeablesFactory;
     public virtual PlaceablesConfig PlaceablesConfig => _placeablesConfig;
@@ -74,7 +72,6 @@ public class Game
         BoardConfig boardConfig,
         PlaceablesConfig placeablesConfig,
         IDecksList decksList,
-        TimersConfig timersConfig,
         TurnSwitchConditionsConfig turnSwitchConditionsConfig)
     {
         _players = new PlayersList(players);
@@ -112,11 +109,10 @@ public class Game
         TurnSwitchConditionsConfig = turnSwitchConditionsConfig;
         
         _gameOverChecker = new GameOverChecker(_board, _turnsSwitcher, _cellMovesSelector);
-        
-        TimersConfig = timersConfig;
-        foreach (var player in players)
+
+        foreach (var player in _players)
         {
-            player.Timer.SetTimeLeft(timersConfig.GetTimeSpanForPlayer(player.Id));
+            player.Timer.TimeIsUp += OnTimeIsUp;
         }
     }
 
@@ -290,14 +286,25 @@ public class Game
             var violators = penalty.GetViolators();
             foreach (var violator in violators)
             {
-                _playerKicker.KickFromBoard(violator);
-                _players.KickPlayer(violator);
+                KickPlayer(violator);
             }
         }
         if (CheckGameOver())
         {
             ProcessGameOver();
         }
+    }
+
+    private void OnTimeIsUp()
+    {
+        var currentPlayer = _turnsSwitcher.GetCurrentPlayer();
+        KickPlayer(currentPlayer);
+    }
+    
+    private void KickPlayer(Player player)
+    {
+        _playerKicker.KickFromBoard(player);
+        _players.KickPlayer(player);
     }
 
     protected void OnWin(Player e)
