@@ -58,6 +58,9 @@ public class Game
     //Penalties
     private readonly List<IPenalty> _penalties = new();
     private readonly PlayerKicker _playerKicker;
+    
+    //Time
+    public TimersConfig TimersConfig { get; }
 
     public virtual IPlaceablesFactory PlaceablesFactory => _placeablesFactory;
     public virtual PlaceablesConfig PlaceablesConfig => _placeablesConfig;
@@ -71,6 +74,7 @@ public class Game
         BoardConfig boardConfig,
         PlaceablesConfig placeablesConfig,
         IDecksList decksList,
+        TimersConfig timersConfig,
         TurnSwitchConditionsConfig turnSwitchConditionsConfig)
     {
         _players = new PlayersList(players);
@@ -108,6 +112,12 @@ public class Game
         TurnSwitchConditionsConfig = turnSwitchConditionsConfig;
         
         _gameOverChecker = new GameOverChecker(_board, _turnsSwitcher, _cellMovesSelector);
+        
+        TimersConfig = timersConfig;
+        foreach (var player in players)
+        {
+            player.Timer.SetTimeLeft(timersConfig.GetTimeSpanForPlayer(player.Id));
+        }
     }
 
     #region Initialize methods

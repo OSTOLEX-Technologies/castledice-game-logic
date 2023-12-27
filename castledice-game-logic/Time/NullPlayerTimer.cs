@@ -19,5 +19,5 @@ public class NullPlayerTimer : IPlayerTimer
     {
     }
 
-    public event EventHandler<int>? TimeIsUp;
+    public event Action? TimeIsUp;
 }

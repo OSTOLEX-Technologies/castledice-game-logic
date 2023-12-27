@@ -6,5 +6,5 @@ public interface IPlayerTimer
     void Stop();
     TimeSpan GetTimeLeft();
     void SetTimeLeft(TimeSpan timeSpan);
-    event EventHandler<int> TimeIsUp;
+    event Action TimeIsUp;
 }
