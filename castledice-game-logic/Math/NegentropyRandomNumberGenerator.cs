@@ -2,12 +2,18 @@
 
 public class NegentropyRandomNumberGenerator : IRandomNumberGenerator
 {
+    public int MinInclusive { get; }
+    public int MaxExclusive { get; }
+    public int Precision => _precision;
+    
     private Dictionary<int, float> _probabilities = new Dictionary<int, float>();
 
     private readonly int _precision;
 
     public NegentropyRandomNumberGenerator(int minInclusive, int maxExclusive, int precision)
     {
+        MinInclusive = minInclusive;
+        MaxExclusive = maxExclusive;
         _precision = precision;
         for (int i = minInclusive; i < maxExclusive; i++)
         {

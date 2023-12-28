@@ -1,21 +1,23 @@
-﻿using castledice_game_logic.GameObjects;
+﻿using System.Runtime.CompilerServices;
+using castledice_game_logic.GameObjects;
 using castledice_game_logic.GameObjects.Factories;
 using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic.Rules;
 
+[assembly: InternalsVisibleTo("castledice-game-logic-tests")]
 namespace castledice_game_logic.MovesLogic;
 
-public class PossibleMovesSelector
+internal class PossibleMovesSelector
 {
     private readonly Board _board;
     private readonly IPlaceablesFactory _placeablesFactory;
-    private readonly IPlacementListProvider _placementListProvider;
+    private readonly IDecksList _decksList;
 
-    public PossibleMovesSelector(Board board, IPlaceablesFactory placeablesFactory, IPlacementListProvider placementListProvider)
+    public PossibleMovesSelector(Board board, IPlaceablesFactory placeablesFactory, IDecksList decksList)
     {
         _board = board;
         _placeablesFactory = placeablesFactory;
-        _placementListProvider = placementListProvider;
+        _decksList = decksList;
     }
 
     public List<AbstractMove> GetPossibleMoves(Player player, Vector2Int position)
@@ -60,7 +62,7 @@ public class PossibleMovesSelector
     
     private List<AbstractMove> GetPlaceMoves(Player player, Cell cell)
     {
-        var placementTypes = _placementListProvider.GetPlacementList(player);
+        var placementTypes = _decksList.GetDeck(player.Id);
         var moves = new List<AbstractMove>();
         foreach (var type in placementTypes)
         {
@@ -76,7 +78,7 @@ public class PossibleMovesSelector
 
     private List<AbstractMove> GetReplaceMoves(Player player, Cell cell)
     {
-        var placementTypes = _placementListProvider.GetPlacementList(player);
+        var placementTypes = _decksList.GetDeck(player.Id);
         var moves = new List<AbstractMove>();
         foreach (var type in placementTypes)
         {

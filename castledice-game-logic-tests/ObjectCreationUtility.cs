@@ -8,7 +8,9 @@ using castledice_game_logic.GameObjects;
 using castledice_game_logic.GameObjects.Factories;
 using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
+using castledice_game_logic.Time;
 using castledice_game_logic.TurnsLogic;
+using castledice_game_logic.TurnsLogic.TurnSwitchConditions;
 using Moq;
 using CastleGO = castledice_game_logic.GameObjects.Castle;
 
@@ -16,6 +18,12 @@ namespace castledice_game_logic_tests;
 
 public static class ObjectCreationUtility
 {
+
+    public static ActionPointsTsc GetActionPointsTsc()
+    {
+        var currentPlayerProviderMock = new Mock<ICurrentPlayerProvider>();
+        return new ActionPointsTsc(currentPlayerProviderMock.Object);
+    }
     
     public static ITreesFactory GetTreesFactory()
     {
@@ -24,9 +32,9 @@ public static class ObjectCreationUtility
         return factoryMock.Object;
     }
     
-    public static CastleGO GetCastle(Player player, int durability = 3, int freeDurability = 1, int captureHitCost = 1)
+    public static CastleGO GetCastle(Player player, int durability = 3, int maxDurability = 3, int maxFreeDurability = 1, int captureHitCost = 1)
     {
-        return new CastleGO(player, durability, freeDurability, captureHitCost);
+        return new CastleGO(player, durability, maxDurability, maxFreeDurability, captureHitCost);
     }
 
     public static Knight GetKnight(Player player, int health = 3, int placementCost = 1)
@@ -101,7 +109,7 @@ public static class ObjectCreationUtility
             Amount = actionPoints,
         };
         var playerId = id;
-        return new Player(playerActionPoints, playerId);
+        return new Player(playerActionPoints, new NullPlayerTimer(), playerId);
     }
 
     
@@ -188,18 +196,18 @@ public static class ObjectCreationUtility
         }
     }
 
-    public class PossibleMovesSelectorBuilder
+    internal class PossibleMovesSelectorBuilder
     {
         public Board Board = GetFullNByNBoard(3);
         public IPlaceablesFactory PlaceablesFactory = new PlaceableMocksFactory();
-        public IPlacementListProvider PlacementListProvider = new PlacementListProviderMock()
+        public IDecksList DecksList = new DecksListMock()
         {
             ListToReturn = new List<PlacementType>() { PlacementType.Knight , PlacementType.HeavyKnight}
         };
 
         public PossibleMovesSelector Build()
         {
-            return new PossibleMovesSelector(Board, PlaceablesFactory, PlacementListProvider);
+            return new PossibleMovesSelector(Board, PlaceablesFactory, DecksList);
         }
     }
 }

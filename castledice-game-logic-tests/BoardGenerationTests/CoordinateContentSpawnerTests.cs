@@ -114,4 +114,13 @@ public class CoordinateContentSpawnerTests
             }
         };
     }
+
+    [Fact]
+    public void ContentToCoordinatesProperty_ShouldReturnContentToCoordinateList_GivenInConstructor()
+    {
+        var list = new List<ContentToCoordinate>();
+        var spawner = new CoordinateContentSpawner(list);
+        
+        Assert.Same(list, spawner.ContentToCoordinates);
+    }
 }

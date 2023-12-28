@@ -1,10 +1,11 @@
 ﻿using castledice_game_logic.GameObjects.Configs;
 
-namespace castledice_game_logic.GameObjects.Factories;
+namespace castledice_game_logic.GameObjects.Factories.Trees;
 
 public class TreesFactory : ITreesFactory
 {
-    private TreeConfig _config;
+    public TreeConfig Config => _config;
+    private readonly TreeConfig _config;
     
     public TreesFactory(TreeConfig config)
     {

@@ -61,7 +61,7 @@ public class GameOverCheckerTests
             var board = GetFullNByNBoard(2);
             var player = GetPlayer();
             board[0, 0].AddContent(GetCastle(player));
-            board[1, 1].AddContent(GetCastle(new NullPlayer()));
+            board[1, 1].AddContent(GetCastle(new NullPlayer(), durability: 1));
             var currentPlayerProvider = GetCurrentPlayerProvider(player);
             return new object[] { board, true, currentPlayerProvider };
         }

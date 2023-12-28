@@ -1,9 +1,11 @@
-﻿using castledice_game_logic.GameObjects;
+﻿using System.Runtime.CompilerServices;
+using castledice_game_logic.GameObjects;
 using castledice_game_logic.MovesLogic.Rules;
 
+[assembly: InternalsVisibleTo("castledice-game-logic-tests")]
 namespace castledice_game_logic.MovesLogic;
 
-public class MoveApplier : IMoveVisitor<bool>
+internal class MoveApplier : IMoveVisitor<bool>
 {
     private readonly Board _board;
     

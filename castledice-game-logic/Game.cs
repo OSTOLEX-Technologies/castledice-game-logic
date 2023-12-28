@@ -6,6 +6,9 @@ using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
 using castledice_game_logic.Penalties;
 using castledice_game_logic.TurnsLogic;
+using castledice_game_logic.TurnsLogic.TurnSwitchConditions;
+using castledice_game_logic.TurnsLogic.TurnSwitchConditions.TurnSwitchConditionsCreation;
+using castledice_game_logic.TurnsLogic.TurnSwitchConditions.TurnSwitchConditionsCreation.ActionPointsTscCreation;
 
 namespace castledice_game_logic;
 
@@ -16,12 +19,13 @@ namespace castledice_game_logic;
 public class Game
 {
     public event EventHandler<AbstractMove>? MoveApplied; 
-    public event EventHandler<Player>? Win;
-    public event EventHandler? Draw;
+    public event EventHandler<(Game, Player)>? Win;
+    public event EventHandler<Game>? Draw;
 
     private readonly Board _board;
     private readonly UnitBranchesCutter _unitBranchesCutter;
     private readonly BoardUpdater _boardUpdater;
+    private readonly PlaceablesConfig _placeablesConfig;
 
     //Moves logic
     private readonly MoveValidator _moveValidator;
@@ -30,6 +34,8 @@ public class Game
     private readonly CellMovesSelector _cellMovesSelector;
     private readonly PossibleMovesSelector _possibleMovesSelector;
     private readonly MoveCostCalculator _moveCostCalculator;
+    private readonly IDecksList _decksList;
+    private readonly IPlaceablesFactory _placeablesFactory;
 
     //Actions history
     public ActionsHistory ActionsHistory => _actionsHistory;
@@ -43,7 +49,8 @@ public class Game
     //Turns logic
     private readonly PlayersList _players;
     private readonly PlayerTurnsSwitcher _turnsSwitcher;
-    private readonly List<ITurnSwitchCondition> _turnSwitchConditions = new();
+    private readonly List<ITsc> _turnSwitchConditions = new();
+    public TurnSwitchConditionsConfig TurnSwitchConditionsConfig { get; }
     
     //Win check
     private readonly GameOverChecker _gameOverChecker;
@@ -51,20 +58,25 @@ public class Game
     //Penalties
     private readonly List<IPenalty> _penalties = new();
     private readonly PlayerKicker _playerKicker;
+    
 
-    public ICurrentPlayerProvider CurrentPlayerProvider => _turnsSwitcher;
-    public PlayerTurnsSwitcher TurnsSwitcher => _turnsSwitcher;
+    public virtual IPlaceablesFactory PlaceablesFactory => _placeablesFactory;
+    public virtual PlaceablesConfig PlaceablesConfig => _placeablesConfig;
+    public virtual ICurrentPlayerProvider CurrentPlayerProvider => _turnsSwitcher;
+    public virtual PlayerTurnsSwitcher TurnsSwitcher => _turnsSwitcher;
 
     //Events
-    public event EventHandler? TurnSwitched;
+    public event EventHandler<Game>? TurnSwitched;
 
     public Game(List<Player> players,
         BoardConfig boardConfig,
         PlaceablesConfig placeablesConfig,
-        IPlacementListProvider placementListProvider)
+        IDecksList decksList,
+        TurnSwitchConditionsConfig turnSwitchConditionsConfig)
     {
         _players = new PlayersList(players);
-
+        _decksList = decksList;
+        _placeablesConfig = placeablesConfig;
         _board = InitializeBoard(boardConfig);
         ValidateBoard();
 
@@ -83,20 +95,30 @@ public class Game
         _giveActionPointsApplier = new GiveActionPointsApplier();
         _giveActionPointsSaver = new GiveActionPointsSaver(_actionsHistory);
         var knightFactory = new KnightsFactory(placeablesConfig.KnightConfig);
-        IPlaceablesFactory placeablesFactory  = new PlaceablesFactory(knightFactory);
+        _placeablesFactory  = new PlaceablesFactory(knightFactory);
         _moveApplier = new MoveApplier(_board);
         _moveValidator = new MoveValidator(_board, _turnsSwitcher);
         _moveSaver = new MoveSaver(_actionsHistory);
         _cellMovesSelector = new CellMovesSelector(_board);
-        _possibleMovesSelector = new PossibleMovesSelector(_board, placeablesFactory, placementListProvider);
+        _possibleMovesSelector = new PossibleMovesSelector(_board, _placeablesFactory, decksList);
         _moveCostCalculator = new MoveCostCalculator(_board);
         
+        var tscFactory = new TscFactory(new ActionPointsTscCreator(_turnsSwitcher));
+        var tscListCreator = new FactoryTscListCreator(tscFactory);
+        _turnSwitchConditions = tscListCreator.GetTscList(turnSwitchConditionsConfig.ConditionsToUse);
+        TurnSwitchConditionsConfig = turnSwitchConditionsConfig;
+        
         _gameOverChecker = new GameOverChecker(_board, _turnsSwitcher, _cellMovesSelector);
+
+        foreach (var player in _players)
+        {
+            player.Timer.TimeIsUp += OnTimeIsUp;
+        }
     }
 
     #region Initialize methods
 
-    public void GiveActionPointsToPlayer(int playerId, int amount)
+    public virtual void GiveActionPointsToPlayer(int playerId, int amount)
     {
         var player = _players.FirstOrDefault(p => p.Id == playerId);
         var giveActionPoints = _actionPointsGivers[player].GiveActionPoints(amount);
@@ -127,51 +149,66 @@ public class Game
         }
     }
 
-    public List<Player> GetAllPlayers()
+    public virtual List<Player> GetAllPlayers()
     {
         return _players.ToList();
     }
 
-    public Player GetCurrentPlayer()
+    public virtual List<int> GetAllPlayersIds()
+    {
+        return _players.Select(p => p.Id).ToList();
+    }
+
+    public virtual IDecksList GetDecksList()
+    {
+        return _decksList;
+    }
+    
+    public virtual Player GetCurrentPlayer()
     {
         return _turnsSwitcher.GetCurrentPlayer();
     }
+    
+    public virtual Player GetPlayer(int playerId)
+    {
+        var player = _players.FirstOrDefault(p => p.Id == playerId);
+        if (player == null)
+        {
+            throw new ArgumentException("Player with id " + playerId + " does not exist!");
+        }
+        return player;
+    }
 
-    public Board GetBoard()
+    public virtual Board GetBoard()
     {
         return _board;
     }
 
-    public List<CellMove> GetCellMoves(int playerId)
+    public virtual List<CellMove> GetCellMoves(int playerId)
     {
         var player = _players.FirstOrDefault(p => p.Id == playerId);
         if (player == null) return new List<CellMove>();
         return _cellMovesSelector.SelectCellMoves(player);
     }
 
-    public List<AbstractMove> GetPossibleMoves(int playerId, Vector2Int position)
+    public virtual List<AbstractMove> GetPossibleMoves(int playerId, Vector2Int position)
     {
         var player = _players.FirstOrDefault(p => p.Id == playerId);
         if (player == null) return new List<AbstractMove>();
         return _possibleMovesSelector.GetPossibleMoves(player, position);
     }
 
-    public void AddPenalty(IPenalty penalty)
+    public virtual void AddPenalty(IPenalty penalty)
     {
         _penalties.Add(penalty);
     }
 
-    public void AddTurnSwitchCondition(ITurnSwitchCondition condition)
-    {
-        _turnSwitchConditions.Add(condition);
-    }
-
-    public int GetMoveCost(AbstractMove move)
+    public virtual int GetMoveCost(AbstractMove move)
     {
         return _moveCostCalculator.GetMoveCost(move);
     }
     
-    public bool TryMakeMove(AbstractMove move)
+    public virtual bool TryMakeMove(AbstractMove move)
     {
         if (!CanMakeMove(move)) return false;
         
@@ -191,7 +228,7 @@ public class Game
         return true;
     }
 
-    private void OnMoveApplied(AbstractMove move)
+    protected void OnMoveApplied(AbstractMove move)
     {
         MoveApplied?.Invoke(this, move);
     }
@@ -204,7 +241,7 @@ public class Game
         }
     }
 
-    public bool CanMakeMove(AbstractMove move)
+    public virtual bool CanMakeMove(AbstractMove move)
     {
         return _moveValidator.ValidateMove(move);
     }
@@ -227,21 +264,19 @@ public class Game
         }
     }
 
-    public void CheckTurns()
+    public virtual void CheckTurns()
     {
-        foreach (var condition in _turnSwitchConditions.Where(condition => condition.ShouldSwitchTurn()))
-        {
-            SwitchTurn();
-            TurnSwitched?.Invoke(this, EventArgs.Empty);
-        }
+        if (!_turnSwitchConditions.Any(condition => condition.ShouldSwitchTurn())) return;
+        SwitchTurn();
     }
 
-    private void SwitchTurn()
+    public void SwitchTurn()
     {
         _turnsSwitcher.GetCurrentPlayer().ActionPoints.Amount = 0;
         _turnsSwitcher.SwitchTurn();
         _boardUpdater.UpdateBoard();
         ApplyPenalties();
+        TurnSwitched?.Invoke(this, this);
     }
 
     private void ApplyPenalties()
@@ -251,8 +286,7 @@ public class Game
             var violators = penalty.GetViolators();
             foreach (var violator in violators)
             {
-                _playerKicker.KickFromBoard(violator);
-                _players.KickPlayer(violator);
+                KickPlayer(violator);
             }
         }
         if (CheckGameOver())
@@ -261,13 +295,25 @@ public class Game
         }
     }
 
-    protected virtual void OnWin(Player e)
+    private void OnTimeIsUp()
     {
-        Win?.Invoke(this, e);
+        var currentPlayer = _turnsSwitcher.GetCurrentPlayer();
+        KickPlayer(currentPlayer);
+    }
+    
+    private void KickPlayer(Player player)
+    {
+        _playerKicker.KickFromBoard(player);
+        _players.KickPlayer(player);
     }
 
-    protected virtual void OnDraw()
+    protected void OnWin(Player e)
     {
-        Draw?.Invoke(this, EventArgs.Empty);
+        Win?.Invoke(this, (this, e));
+    }
+
+    protected void OnDraw()
+    {
+        Draw?.Invoke(this, this);
     }
 }

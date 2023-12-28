@@ -30,7 +30,7 @@ public class PossibleMovesSelectorTests
         {
             var player = GetPlayer(actionPoints: 6);
             var position = new Vector2Int(1, 1);
-            var listProvider = new PlacementListProviderMock() { ListToReturn = new List<PlacementType>() { PlacementType.Knight } };
+            var listProvider = new DecksListMock() { ListToReturn = new List<PlacementType>() { PlacementType.Knight } };
             var knight = new PlaceableMock() { PlacementTypeToReturn = PlacementType.Knight };
             var factory = new PlaceableMocksFactory()
             { 
@@ -50,7 +50,7 @@ public class PossibleMovesSelectorTests
         {
             var player = GetPlayer(actionPoints: 6);
             var position = new Vector2Int(1, 1);
-            var listProvider = new PlacementListProviderMock()
+            var listProvider = new DecksListMock()
             {
                 ListToReturn = new List<PlacementType>()
                 {
@@ -83,7 +83,7 @@ public class PossibleMovesSelectorTests
         {
             var player = GetPlayer(actionPoints: 6);
             var position = new Vector2Int(1, 1);
-            var listProvider = new PlacementListProviderMock()
+            var listProvider = new DecksListMock()
             {
                 ListToReturn = new List<PlacementType>()
                 {
@@ -117,7 +117,7 @@ public class PossibleMovesSelectorTests
         {
             var player = GetPlayer(actionPoints: 2);
             var position = new Vector2Int(1, 1);
-            var listProvider = new PlacementListProviderMock()
+            var listProvider = new DecksListMock()
             {
                 ListToReturn = new List<PlacementType>()
                 {
@@ -163,7 +163,7 @@ public class PossibleMovesSelectorTests
         {
             var player = GetPlayer(actionPoints: 6);
             var position = new Vector2Int(1, 1);
-            var listProvider = new PlacementListProviderMock() { ListToReturn = new List<PlacementType>() { PlacementType.Knight } };
+            var listProvider = new DecksListMock() { ListToReturn = new List<PlacementType>() { PlacementType.Knight } };
             var knight = new PlaceableMock() { PlacementTypeToReturn = PlacementType.Knight };
             var factory = new PlaceableMocksFactory()
             { 
@@ -184,7 +184,7 @@ public class PossibleMovesSelectorTests
         {
             var player = GetPlayer(actionPoints: 6);
             var position = new Vector2Int(1, 1);
-            var listProvider = new PlacementListProviderMock()
+            var listProvider = new DecksListMock()
             {
                 ListToReturn = new List<PlacementType>()
                 {
@@ -218,7 +218,7 @@ public class PossibleMovesSelectorTests
         {
             var player = GetPlayer(actionPoints: 2);
             var position = new Vector2Int(1, 1);
-            var listProvider = new PlacementListProviderMock()
+            var listProvider = new DecksListMock()
             {
                 ListToReturn = new List<PlacementType>()
                 {
@@ -237,7 +237,7 @@ public class PossibleMovesSelectorTests
         {
             var player = GetPlayer(actionPoints: 6);
             var position = new Vector2Int(1, 1);
-            var listProvider = new PlacementListProviderMock()
+            var listProvider = new DecksListMock()
             {
                 ListToReturn = new List<PlacementType>()
                 {
@@ -272,7 +272,7 @@ public class PossibleMovesSelectorTests
         {
             var player = GetPlayer(actionPoints: 4);
             var position = new Vector2Int(1, 1);
-            var listProvider = new PlacementListProviderMock()
+            var listProvider = new DecksListMock()
             {
                 ListToReturn = new List<PlacementType>()
                 {
@@ -422,7 +422,7 @@ public class PossibleMovesSelectorTests
     [Theory]
     [ClassData(typeof(GetPossiblePlaceMovesTestCases))]
     public void GetPossibleMoves_ShouldReturnListOfPossiblePlaceMoves_IfNoObstaclesOnPosition(Player player, 
-        IPlacementListProvider listProvider, 
+        IDecksList list, 
         IPlaceablesFactory factory,
         Vector2Int position,  
         List<AbstractMove> expectedList)
@@ -430,7 +430,7 @@ public class PossibleMovesSelectorTests
         var board = GetFullNByNBoard(2);
         var playerUnit = new PlayerUnitMock() { Owner = player };
         board[0, 0].AddContent(playerUnit);
-        var possibleMovesSelector = new PossibleMovesSelector(board, factory, listProvider);
+        var possibleMovesSelector = new PossibleMovesSelector(board, factory, list);
         
         var actualList = possibleMovesSelector.GetPossibleMoves(player, position);
         
@@ -445,7 +445,7 @@ public class PossibleMovesSelectorTests
     [ClassData(typeof(GetPossibleReplaceMovesTestCases))]
     public void GetPossibleMoves_ShouldReturnListOfPossibleReplaceMoves_IfEnemyReplaceableOnPosition(Player player,
         Content enemyReplaceable,
-        IPlacementListProvider listProvider, 
+        IDecksList list, 
         IPlaceablesFactory factory,
         Vector2Int position,  
         List<AbstractMove> expectedList)
@@ -454,7 +454,7 @@ public class PossibleMovesSelectorTests
         var playerUnit = new PlayerUnitMock() { Owner = player };
         board[0, 0].AddContent(playerUnit);
         board[position].AddContent(enemyReplaceable);
-        var possibleMovesSelector = new PossibleMovesSelector(board, factory, listProvider);
+        var possibleMovesSelector = new PossibleMovesSelector(board, factory, list);
         
         var actualList = possibleMovesSelector.GetPossibleMoves(player, position);
         

@@ -2,6 +2,8 @@
 
 public class CoordinateContentSpawner : IContentSpawner
 {
+    public List<ContentToCoordinate> ContentToCoordinates => _contentToCoordinates;
+    
     private readonly List<ContentToCoordinate> _contentToCoordinates;
 
     public CoordinateContentSpawner(List<ContentToCoordinate> contentToCoordinates)

@@ -1,7 +1,6 @@
-﻿using castledice_game_logic;
-using castledice_game_logic.TurnsLogic;
+﻿using castledice_game_logic.TurnsLogic;
 
-namespace castledice_game_logic_tests;
+namespace castledice_game_logic_tests.TurnsLogicTests;
 using static ObjectCreationUtility;
 
 

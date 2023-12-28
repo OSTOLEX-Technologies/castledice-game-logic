@@ -7,12 +7,12 @@ public class CaslteConfigTests
     [Theory]
     [InlineData(3, 1, 1)]
     [InlineData(4, 2, 2)]
-    public void Properties_ShouldReturnValues_GivenInConstructor(int durability, int freeDurability, int captureHitCost)
+    public void Properties_ShouldReturnValues_GivenInConstructor(int maxDurability, int maxFreeDurability, int captureHitCost)
     {
-        var castleConfig = new CastleConfig(durability, freeDurability, captureHitCost);
+        var castleConfig = new CastleConfig(maxDurability, maxFreeDurability, captureHitCost);
         
-        Assert.Equal(durability, castleConfig.Durability);
-        Assert.Equal(freeDurability, castleConfig.FreeDurability);
+        Assert.Equal(maxDurability, castleConfig.MaxDurability);
+        Assert.Equal(maxFreeDurability, castleConfig.MaxFreeDurability);
         Assert.Equal(captureHitCost, castleConfig.CaptureHitCost);
     }
 }

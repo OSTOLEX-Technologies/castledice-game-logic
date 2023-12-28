@@ -3,7 +3,7 @@
 /// <summary>
 /// Placement list providers are classes that determine which placement types are available for given player.
 /// </summary>
-public interface IPlacementListProvider
+public interface IDecksList
 {
-    List<PlacementType> GetPlacementList(Player player);
+    List<PlacementType> GetDeck(int playerId);
 }

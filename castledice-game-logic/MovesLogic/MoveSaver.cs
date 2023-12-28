@@ -2,7 +2,7 @@
 
 namespace castledice_game_logic.MovesLogic;
 
-public class MoveSaver : IMoveVisitor<bool>
+internal class MoveSaver : IMoveVisitor<bool>
 {
     private readonly ActionsHistory _history;
 

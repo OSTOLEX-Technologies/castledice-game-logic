@@ -1,10 +1,10 @@
-﻿namespace castledice_game_logic.TurnsLogic;
+﻿namespace castledice_game_logic.TurnsLogic.TurnSwitchConditions;
 
-public class ActionPointsCondition : ITurnSwitchCondition
+public class ActionPointsTsc : ITsc
 {
     private readonly ICurrentPlayerProvider _currentPlayerProvider;
 
-    public ActionPointsCondition(ICurrentPlayerProvider currentPlayerProvider)
+    public ActionPointsTsc(ICurrentPlayerProvider currentPlayerProvider)
     {
         _currentPlayerProvider = currentPlayerProvider;
     }

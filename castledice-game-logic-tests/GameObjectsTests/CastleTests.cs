@@ -10,37 +10,39 @@ public class CastleTests
     [Fact]
     public void Castle_ShouldImplement_ICapturable()
     {
-        var castle = new CastleGO(GetPlayer(), 1, 1, 1);
-        
+        var castle = new CastleGO(GetPlayer(), 1, 1, 1, 1);
+
         Assert.True(castle is ICapturable);
     }
-    
+
     [Fact]
     public void Castle_ShouldImplement_IPlayerOwned()
     {
-        var castle = new CastleGO(GetPlayer(), 1, 1, 1);
-        
+        var castle = new CastleGO(GetPlayer(), 1, 1, 1, 1);
+
         Assert.True(castle is IPlayerOwned);
     }
-    
+
     [Fact]
     public void Castle_ShouldImplement_IPlaceBlocking()
     {
-        var castle = new CastleGO(GetPlayer(), 1, 1, 1);
-        
+        var castle = new CastleGO(GetPlayer(), 1, 1, 1, 1);
+
         Assert.True(castle is IPlaceBlocking);
     }
 
-    [Theory]
-    [InlineData(1)]
-    [InlineData(2)]
-    [InlineData(3)]
-    [InlineData(4)]
-    public void GetMaxDurability_ShouldReturnDefaultDurability_IfCastleIsOwned(int defaultDurability)
+    [Fact]
+    public void CaptureHit_ShouldInvokeHitEvent_WithHitCostAsArgument()
     {
-        var castle = new CastleGO(GetPlayer(), defaultDurability, 1, 1);
+        var rnd = new Random();
+        var captureHitCost = rnd.Next(1, 6);
+        var castle = new CastleGO(GetPlayer(), 1, 1, 1, captureHitCost);
+        int actualHitCost = 0;
+        castle.Hit += (sender, cost) => actualHitCost = cost;
         
-        Assert.Equal(defaultDurability, castle.GetMaxDurability());
+        castle.CaptureHit(GetPlayer(6));
+        
+        Assert.Equal(captureHitCost, actualHitCost);
     }
 
     [Theory]
@@ -48,28 +50,64 @@ public class CastleTests
     [InlineData(2)]
     [InlineData(3)]
     [InlineData(4)]
-    public void GetMaxDurability_ShouldReturnFreeDurability_IfCastleIsFree(int freeDurability)
+    public void GetCurrentMaxDurability_ShouldReturnMaxDurability_IfCastleIsOwned(int maxDurability)
     {
-        var castle = new CastleGO(new NullPlayer(), 2, freeDurability, 1);
-        
-        Assert.Equal(freeDurability, castle.GetMaxDurability());
+        var castle = new CastleGO(GetPlayer(), maxDurability, maxDurability, 1, 1);
+
+        Assert.Equal(maxDurability, castle.GetCurrentMaxDurability());
     }
-    
-    [Fact]
-    public void GetDurability_ShouldReturnCastleDurability()
+
+    [Theory]
+    [InlineData(1)]
+    [InlineData(2)]
+    [InlineData(3)]
+    [InlineData(4)]
+    public void GetCurrentMaxDurability_ShouldReturnMaxFreeDurability_IfCastleIsFree(int freeDurability)
     {
-        int durability = 3;
-        int freeDurability = 1;
-        var castle = new CastleGO(GetPlayer(), durability, freeDurability, 1);
-        
+        var castle = new CastleGO(new NullPlayer(), 1, 2, freeDurability, 1);
+
+        Assert.Equal(freeDurability, castle.GetCurrentMaxDurability());
+    }
+
+    [Theory]
+    [InlineData(1, 3, 3)]
+    [InlineData(2, 3, 3)]
+    [InlineData(3, 3, 3)]
+    [InlineData(4, 5, 3)]
+    public void GetDurability_ShouldReturnCastleDurability(int durability, int maxDurability, int freeDurability)
+    {
+        var castle = new CastleGO(GetPlayer(), durability, maxDurability, freeDurability, 1);
+
         Assert.Equal(durability, castle.GetDurability());
+    }
+
+    [Theory]
+    [InlineData(1)]
+    [InlineData(2)]
+    [InlineData(3)]
+    public void GetMaxDurability_ShouldReturnMaxDurability_GivenInConstructor(int maxDurability)
+    {
+        var castle = new CastleGO(GetPlayer(), 1, maxDurability, 1, 1);
+        
+        Assert.Equal(maxDurability, castle.GetMaxDurability());
+    }
+
+    [Theory]
+    [InlineData(1)]
+    [InlineData(2)]
+    [InlineData(3)]
+    public void GetMaxFreeDurability_ShouldReturnMaxFreeDurability_GivenInConstructor(int maxFreeDurability)
+    {
+        var castle = new CastleGO(new NullPlayer(), 1, 1, maxFreeDurability, 1);
+        
+        Assert.Equal(maxFreeDurability, castle.GetMaxFreeDurability());
     }
 
     [Fact]
     public void GetOwner_ShouldReturnPlayer_ThatWasGivenInConstructor()
     {
         var player = GetPlayer();
-        var castle = new CastleGO(player, 1, 1, 1);
+        var castle = new CastleGO(player, 1,1, 1, 1);
 
         var owner = castle.GetOwner();
         
@@ -79,19 +117,21 @@ public class CastleTests
     [Fact]
     public void Free_ShouldRemoveCastleOwner()
     {
-        var castle = new CastleGO(GetPlayer(), 3, 1, 1);
+        var castle = new CastleGO(GetPlayer(), 3, 3,1, 1);
         
         castle.Free();
         
         Assert.True(castle.GetOwner().IsNull);
     }
 
-    [Fact]
+    [Theory]
+    [InlineData(1)]
+    [InlineData(2)]
+    [InlineData(3)]
     //Free durability - is a durability of the castle that has no owner.
-    public void Free_ShouldSetDurability_ToFreeDurabilityValue()
+    public void Free_ShouldSetDurability_ToMaxFreeDurabilityValue(int freeDurability)
     {
-        int freeDurability = 3;
-        var castle = new CastleGO(GetPlayer(), 2, freeDurability, 1);
+        var castle = new CastleGO(GetPlayer(), 2, 2,freeDurability, 1);
         
         castle.Free();
         int actualDurability = castle.GetDurability();
@@ -103,7 +143,7 @@ public class CastleTests
     public void Free_ShouldInvokeStateModifiedEvent()
     {
         var eventInvoked = false;
-        var castle = new CastleGO(GetPlayer(), 3, 1, 1);
+        var castle = new CastleGO(GetPlayer(), 3, 3, 1, 1);
         castle.StateModified += (sender, args) => eventInvoked = true;
         
         castle.Free();
@@ -114,7 +154,7 @@ public class CastleTests
     [Fact]
     public void IsBlocking_ShouldReturnTrue()
     {
-        var castle = new CastleGO(GetPlayer(), 1, 1, 1);
+        var castle = new CastleGO(GetPlayer(), 1, 1, 1, 1);
         
         Assert.True(castle.IsBlocking());
     }
@@ -123,12 +163,26 @@ public class CastleTests
     [InlineData(1)]
     [InlineData(2)]
     [InlineData(3)]
+    public void GetCaptureHitCostWithPlayer_ShouldReturnCaptureCost_GivenInConstructor(int captureHitCost)
+    {
+        var capturer = GetPlayer(actionPoints: 4);
+        var castle = new CastleGO(GetPlayer(), 3, 3, 1, captureHitCost);
+
+        var actualCaptureCost = castle.GetCaptureHitCost(capturer);
+        
+        Assert.Equal(captureHitCost, actualCaptureCost);
+    }
+    
+    [Theory]
+    [InlineData(1)]
+    [InlineData(2)]
+    [InlineData(3)]
     public void GetCaptureHitCost_ShouldReturnCaptureCost_GivenInConstructor(int captureHitCost)
     {
         var capturer = GetPlayer(actionPoints: 4);
-        var castle = new CastleGO(GetPlayer(), 3, 1, captureHitCost);
+        var castle = new CastleGO(GetPlayer(), 3, 3, 1, captureHitCost);
 
-        var actualCaptureCost = castle.GetCaptureHitCost(capturer);
+        var actualCaptureCost = castle.GetCaptureHitCost();
         
         Assert.Equal(captureHitCost, actualCaptureCost);
     }
@@ -137,7 +191,7 @@ public class CastleTests
     public void CanBeCaptured_ShouldReturnFalse_IfCapturerIsOwner()
     {
         var player = GetPlayer();
-        var castle = new CastleGO(player, 3, 1, 1);
+        var castle = new CastleGO(player, 3, 3, 1, 1);
         
         Assert.False(castle.CanBeCaptured(player));
     }
@@ -146,7 +200,7 @@ public class CastleTests
     public void CanBeCaptured_ShouldReturnFalse_IfCapturerHasNoActionPoints()
     {
         var capturer = GetPlayer(actionPoints: 0);
-        var castle = new CastleGO(GetPlayer(), 3, 1, 1);
+        var castle = new CastleGO(GetPlayer(), 3, 3, 1, 1);
         
         Assert.False(castle.CanBeCaptured(capturer));
     }
@@ -155,7 +209,7 @@ public class CastleTests
     public void CanBeCaptured_ShouldReturnFalse_IfCapturerHasNotEnoughActionPoints()
     {
         var capturer = GetPlayer(actionPoints: 2);
-        var castle = new CastleGO(GetPlayer(), 3, 1, 3);
+        var castle = new CastleGO(GetPlayer(), 3, 3, 1, 3);
         
         Assert.False(castle.CanBeCaptured(capturer));
     }
@@ -164,7 +218,7 @@ public class CastleTests
     public void CanBeCaptured_ShouldReturnTrue_IfCapturerHasEnoughActionPoints()
     {
         var capturer = GetPlayer(actionPoints: 3);
-        var castle = new CastleGO(GetPlayer(), 3, 1, 2);
+        var castle = new CastleGO(GetPlayer(), 3, 3, 1, 2);
         
         Assert.True(castle.CanBeCaptured(capturer));
     }
@@ -174,7 +228,7 @@ public class CastleTests
     {
         int castleDurability = 3;
         var owner = GetPlayer(actionPoints: 5);
-        var castle = new CastleGO(owner, castleDurability, 1, 1);
+        var castle = new CastleGO(owner, castleDurability, castleDurability, 1, 1);
         
         castle.CaptureHit(owner);
         
@@ -186,7 +240,7 @@ public class CastleTests
     {
         int capturerActionPoints = 5;
         var owner = GetPlayer(actionPoints: capturerActionPoints);
-        var castle = new CastleGO(owner, 3, 1, 1);
+        var castle = new CastleGO(owner, 3, 3, 1, 1);
         
         castle.CaptureHit(owner);
         
@@ -198,7 +252,7 @@ public class CastleTests
     {
         var eventInvoked = false;
         var owner = GetPlayer(actionPoints: 5);
-        var castle = new CastleGO(owner, 3, 1, 1);
+        var castle = new CastleGO(owner, 3, 3, 1, 1);
         castle.StateModified += (sender, args) => eventInvoked = true;
         
         castle.CaptureHit(owner);
@@ -213,7 +267,7 @@ public class CastleTests
         var capturerActionPoints = 1;
         var eventInvoked = false;
         var capturer = GetPlayer(actionPoints: capturerActionPoints);
-        var castle = new CastleGO(GetPlayer(), 3, 1, captureHitCost);
+        var castle = new CastleGO(GetPlayer(), 3, 3, 1, captureHitCost);
         castle.StateModified += (sender, args) => eventInvoked = true;
         
         castle.CaptureHit(capturer);
@@ -228,7 +282,7 @@ public class CastleTests
         var capturerActionPoints = 5;
         var eventInvoked = false;
         var capturer = GetPlayer(actionPoints: capturerActionPoints);
-        var castle = new CastleGO(GetPlayer(), 3, 1, captureHitCost);
+        var castle = new CastleGO(GetPlayer(), 3, 3, 1, captureHitCost);
         castle.StateModified += (sender, args) => eventInvoked = true;
         
         castle.CaptureHit(capturer);
@@ -244,7 +298,7 @@ public class CastleTests
     {
         var owner = GetPlayer();
         var capturer = GetPlayer(actionPoints: capturerActionPoints);
-        var castle = new CastleGO(owner, castleDurability, 1, captureHitCost);
+        var castle = new CastleGO(owner, castleDurability, castleDurability, 1, captureHitCost);
         
         castle.CaptureHit(capturer);
         
@@ -252,11 +306,11 @@ public class CastleTests
     }
     
     [Fact]
-    public void CaptureHit_ShouldSetCapturerAsOwner_IfCastleDurabilityGoesBelowZero()
+    public void CaptureHit_ShouldSetCapturerAsOwner_IfCastleDurabilityGoesBelowOrEqualZero()
     {
         var owner = GetPlayer();
         var capturer = GetPlayer(actionPoints: 4);
-        var castle = new CastleGO(owner, 1, 1, 2);
+        var castle = new CastleGO(owner, 1, 1, 1, 2);
         
         castle.CaptureHit(capturer);
         
@@ -264,16 +318,15 @@ public class CastleTests
     }
 
     [Fact]
-    //In this test durability of castle is checked by passing player with 6 action points to GetCaptureHitCost method.
-    public void CaptureHit_ShouldSetDurabilityToDefault_IfCaptureIsSuccessful()
+    public void CaptureHit_ShouldSetDurabilityToMax_IfCaptureIsSuccessful()
     {
         int expectedDurability = 5;
         int captureHitCost = 5;
         var owner = GetPlayer();
-        var firstCapturer = GetPlayer(actionPoints: 6);
-        var castle = new CastleGO(owner, expectedDurability, 1, captureHitCost);
+        var capturer = GetPlayer(actionPoints: 6);
+        var castle = new CastleGO(owner, 1, expectedDurability, 1, captureHitCost);
 
-        castle.CaptureHit(firstCapturer);
+        castle.CaptureHit(capturer);
         var actualDurability = castle.GetDurability();
         
         Assert.Equal(expectedDurability, actualDurability);
@@ -284,7 +337,7 @@ public class CastleTests
     [InlineData(-1)]
     public void Constructor_ShouldThrowArgumentException_IfNonPositiveDurabilityGiven(int durability)
     {
-        Assert.Throws<ArgumentException>(() => new CastleGO(GetPlayer(), durability, 1, 1));
+        Assert.Throws<ArgumentException>(() => new CastleGO(GetPlayer(), durability, 1, 1, 1));
     }
     
     [Theory]
@@ -292,7 +345,7 @@ public class CastleTests
     [InlineData(-1)]
     public void Constructor_ShouldThrowArgumentException_IfNonPositiveFreeDurabilityGiven(int freeDurability)
     {
-        Assert.Throws<ArgumentException>(() => new CastleGO(GetPlayer(), 1, freeDurability, 1));
+        Assert.Throws<ArgumentException>(() => new CastleGO(GetPlayer(), 1, 1, freeDurability, 1));
     }
 
     [Theory]
@@ -300,7 +353,27 @@ public class CastleTests
     [InlineData(-1)]
     public void Constructor_ShouldThrowArgumentException_IfNonPositiveCaptureHitCostGiven(int captureHitCost)
     {
-        Assert.Throws<ArgumentException>(() => new CastleGO(GetPlayer(), 1, 1, captureHitCost));
+        Assert.Throws<ArgumentException>(() => new CastleGO(GetPlayer(), 1, 1,1, captureHitCost));
 
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-1)]
+    public void Constructor_ShouldThrowArgumentException_IfNonPositiveMaxDurabilityGiven(int maxDurability)
+    {
+        Assert.Throws<ArgumentException>(() => new CastleGO(GetPlayer(), 1, maxDurability, 1, 1));
+    }
+    
+    [Fact]
+    public void Constructor_ShouldThrowArgumentException_IfGivenDurabilityIsBiggerThanMaxAndPlayerIsNotNull()
+    {
+        Assert.Throws<ArgumentException>(() => new CastleGO(GetPlayer(), 4, 3, 1, 1));
+    }
+
+    [Fact]
+    public void Constructor_ShouldThrowArgumentException_IfGivenDurabilityIsBiggerThanMaxFreeDurabilityAndPlayerIsNull()
+    {
+        Assert.Throws<ArgumentException>(() => new CastleGO(new NullPlayer(), 3, 3, 2, 1));
     }
 }

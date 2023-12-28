@@ -5,6 +5,11 @@ namespace castledice_game_logic.BoardGeneration.ContentGeneration;
 
 public class RandomTreesSpawner : IContentSpawner
 {
+    public int MinTreesCount => _minTreesCount;
+    public int MaxTreesCount => _maxTreesCount;
+    public int MinDistanceBetweenTrees => _minDistanceBetweenTrees;
+    public ITreesFactory Factory => _factory;
+    
     private readonly int _minTreesCount;
     private readonly int _maxTreesCount;
     private readonly int _minDistanceBetweenTrees;

@@ -2,15 +2,15 @@
 
 public class CastleConfig
 {
-    public int Durability { get; }
-    public int FreeDurability { get; }
+    public int MaxDurability { get; }
+    public int MaxFreeDurability { get; }
     public int CaptureHitCost { get; }
     
 
-    public CastleConfig(int durability, int freeDurability, int captureHitCost)
+    public CastleConfig(int maxDurability, int maxFreeDurability, int captureHitCost)
     {
-        Durability = durability;
-        FreeDurability = freeDurability;
+        MaxDurability = maxDurability;
+        MaxFreeDurability = maxFreeDurability;
         CaptureHitCost = captureHitCost;
     }
 }
