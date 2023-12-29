@@ -103,14 +103,14 @@ public static class ObjectCreationUtility
         return boardConfig;
     }
     
-    public static Player GetPlayer(int id = 0, int actionPoints = 6)
+    public static Player GetPlayer(int id = 0, int actionPoints = 6, params PlacementType[] deck)
     {
         var playerActionPoints = new PlayerActionPoints
         {
             Amount = actionPoints,
         };
         var playerId = id;
-        return new Player(playerActionPoints, new NullPlayerTimer(), playerId);
+        return new Player(playerActionPoints, new NullPlayerTimer(), deck.ToList(), playerId);
     }
 
     
