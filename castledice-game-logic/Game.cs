@@ -99,7 +99,9 @@ public class Game
         _moveValidator = new MoveValidator(_board, _turnsSwitcher);
         _moveSaver = new MoveSaver(_actionsHistory);
         _cellMovesSelector = new CellMovesSelector(_board);
-        _possibleMovesSelector = new PossibleMovesSelector(_board, _placeablesFactory, null);
+        var decksDictionary = _players.ToDictionary(player => player.Id, player => player.Deck.ToList());
+        _decksList = new IndividualDecksList(decksDictionary);
+        _possibleMovesSelector = new PossibleMovesSelector(_board, _placeablesFactory, _decksList);
         _moveCostCalculator = new MoveCostCalculator(_board);
         
         var tscFactory = new TscFactory(new ActionPointsTscCreator(_turnsSwitcher));
