@@ -1,6 +1,6 @@
 ﻿namespace castledice_game_logic.GameObjects.Decks;
 
-public class IndividualDecksList : IDecksList
+internal class IndividualDecksList : IDecksList
 {
     private readonly Dictionary<int, List<PlacementType>> _idToPlacementList;
 

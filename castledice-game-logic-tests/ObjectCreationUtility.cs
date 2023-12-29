@@ -5,6 +5,7 @@ using castledice_game_logic.BoardGeneration.CellsGeneration;
 using castledice_game_logic.BoardGeneration.ContentGeneration;
 using castledice_game_logic.GameConfiguration;
 using castledice_game_logic.GameObjects;
+using castledice_game_logic.GameObjects.Decks;
 using castledice_game_logic.GameObjects.Factories;
 using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;

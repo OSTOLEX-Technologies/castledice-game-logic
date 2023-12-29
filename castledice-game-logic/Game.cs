@@ -1,6 +1,7 @@
 ﻿using castledice_game_logic.ActionPointsLogic;
 using castledice_game_logic.GameConfiguration;
 using castledice_game_logic.GameObjects;
+using castledice_game_logic.GameObjects.Decks;
 using castledice_game_logic.GameObjects.Factories;
 using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
@@ -71,11 +72,9 @@ public class Game
     public Game(List<Player> players,
         BoardConfig boardConfig,
         PlaceablesConfig placeablesConfig,
-        IDecksList decksList,
         TurnSwitchConditionsConfig turnSwitchConditionsConfig)
     {
         _players = new PlayersList(players);
-        _decksList = decksList;
         _placeablesConfig = placeablesConfig;
         _board = InitializeBoard(boardConfig);
         ValidateBoard();
@@ -100,7 +99,7 @@ public class Game
         _moveValidator = new MoveValidator(_board, _turnsSwitcher);
         _moveSaver = new MoveSaver(_actionsHistory);
         _cellMovesSelector = new CellMovesSelector(_board);
-        _possibleMovesSelector = new PossibleMovesSelector(_board, _placeablesFactory, decksList);
+        _possibleMovesSelector = new PossibleMovesSelector(_board, _placeablesFactory, null);
         _moveCostCalculator = new MoveCostCalculator(_board);
         
         var tscFactory = new TscFactory(new ActionPointsTscCreator(_turnsSwitcher));
@@ -157,11 +156,6 @@ public class Game
     public virtual List<int> GetAllPlayersIds()
     {
         return _players.Select(p => p.Id).ToList();
-    }
-
-    public virtual IDecksList GetDecksList()
-    {
-        return _decksList;
     }
     
     public virtual Player GetCurrentPlayer()
