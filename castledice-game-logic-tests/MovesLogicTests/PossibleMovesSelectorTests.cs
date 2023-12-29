@@ -2,6 +2,7 @@
 using castledice_game_logic;
 using castledice_game_logic_tests.Mocks;
 using castledice_game_logic.GameObjects;
+using castledice_game_logic.GameObjects.Decks;
 using castledice_game_logic.GameObjects.Factories;
 using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
@@ -421,7 +422,7 @@ public class PossibleMovesSelectorTests
 
     [Theory]
     [ClassData(typeof(GetPossiblePlaceMovesTestCases))]
-    public void GetPossibleMoves_ShouldReturnListOfPossiblePlaceMoves_IfNoObstaclesOnPosition(Player player, 
+    internal void GetPossibleMoves_ShouldReturnListOfPossiblePlaceMoves_IfNoObstaclesOnPosition(Player player, 
         IDecksList list, 
         IPlaceablesFactory factory,
         Vector2Int position,  
@@ -443,7 +444,7 @@ public class PossibleMovesSelectorTests
     
     [Theory]
     [ClassData(typeof(GetPossibleReplaceMovesTestCases))]
-    public void GetPossibleMoves_ShouldReturnListOfPossibleReplaceMoves_IfEnemyReplaceableOnPosition(Player player,
+    internal void GetPossibleMoves_ShouldReturnListOfPossibleReplaceMoves_IfEnemyReplaceableOnPosition(Player player,
         Content enemyReplaceable,
         IDecksList list, 
         IPlaceablesFactory factory,
