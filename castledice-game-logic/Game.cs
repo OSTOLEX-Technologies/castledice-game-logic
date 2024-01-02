@@ -19,9 +19,9 @@ namespace castledice_game_logic;
 /// </summary>
 public class Game
 {
-    public event EventHandler<AbstractMove>? MoveApplied; 
-    public event EventHandler<(Game, Player)>? Win;
-    public event EventHandler<Game>? Draw;
+    public virtual event EventHandler<AbstractMove>? MoveApplied; 
+    public virtual event EventHandler<(Game, Player)>? Win;
+    public virtual event EventHandler<Game>? Draw;
 
     private readonly Board _board;
     private readonly UnitBranchesCutter _unitBranchesCutter;
@@ -67,7 +67,7 @@ public class Game
     public virtual PlayerTurnsSwitcher TurnsSwitcher => _turnsSwitcher;
 
     //Events
-    public event EventHandler<Game>? TurnSwitched;
+    public virtual event EventHandler<Game>? TurnSwitched;
 
     public Game(List<Player> players,
         BoardConfig boardConfig,
@@ -271,7 +271,7 @@ public class Game
         SwitchTurn();
     }
 
-    public void SwitchTurn()
+    public virtual void SwitchTurn()
     {
         _turnsSwitcher.GetCurrentPlayer().ActionPoints.Amount = 0;
         _turnsSwitcher.SwitchTurn();
