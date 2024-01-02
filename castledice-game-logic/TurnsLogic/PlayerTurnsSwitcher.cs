@@ -1,6 +1,6 @@
 ﻿namespace castledice_game_logic.TurnsLogic;
 
-public class PlayerTurnsSwitcher : ICurrentPlayerProvider
+public class PlayerTurnsSwitcher : ICurrentPlayerProvider, IPreviousPlayerProvider
 {
     public event EventHandler? TurnSwitched; 
     
@@ -29,5 +29,15 @@ public class PlayerTurnsSwitcher : ICurrentPlayerProvider
             _current = 0;
         }
         TurnSwitched?.Invoke(this, EventArgs.Empty);
+    }
+
+    public Player GetPreviousPlayer()
+    {
+        var previous = _current - 1;
+        if (previous < 0)
+        {
+            previous = _players.Count - 1;
+        }
+        return _players[previous];
     }
 }
