@@ -160,6 +160,11 @@ public class Game
         return _players.Select(p => p.Id).ToList();
     }
     
+    // public virtual Player GetPreviousPlayer()
+    // {
+    //     return _turnsSwitcher.GetPreviousPlayer();
+    // }
+    
     public virtual Player GetCurrentPlayer()
     {
         return _turnsSwitcher.GetCurrentPlayer();
