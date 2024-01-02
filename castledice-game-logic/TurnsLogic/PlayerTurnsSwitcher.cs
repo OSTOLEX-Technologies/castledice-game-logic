@@ -33,6 +33,11 @@ public class PlayerTurnsSwitcher : ICurrentPlayerProvider, IPreviousPlayerProvid
 
     public Player GetPreviousPlayer()
     {
-        throw new NotImplementedException();
+        var previous = _current - 1;
+        if (previous < 0)
+        {
+            previous = _players.Count - 1;
+        }
+        return _players[previous];
     }
 }
