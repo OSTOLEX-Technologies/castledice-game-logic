@@ -55,6 +55,7 @@ public class StopwatchPlayerTimer : IPlayerTimer
     
     private void OnTimeElapsed(object sender, ElapsedEventArgs e)
     {
+        _timeLeft = TimeSpan.Zero;
         _isRunning = false;
         _stopwatch.Stop();
         _timer.Stop();

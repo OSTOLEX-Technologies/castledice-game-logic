@@ -300,6 +300,7 @@ public class Game
     {
         var currentPlayer = _turnsSwitcher.GetCurrentPlayer();
         KickPlayer(currentPlayer);
+        CheckGameOver();
     }
     
     private void KickPlayer(Player player)

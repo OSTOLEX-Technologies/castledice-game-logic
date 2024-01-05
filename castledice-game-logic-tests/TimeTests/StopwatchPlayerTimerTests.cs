@@ -105,4 +105,18 @@ public class StopwatchPlayerTimerTests
         
         Assert.True(isInvoked);
     }
+    
+    [Fact]
+    public void GetTimeLeft_ShouldReturnZero_AfterTimeIsUp()
+    {
+        var rnd = new Random();
+        var timeSpan = TimeSpan.FromMilliseconds(rnd.Next(100, 300));
+        var stopwatchPlayerTimer = new StopwatchPlayerTimer(timeSpan);
+        
+        stopwatchPlayerTimer.Start();
+        Thread.Sleep(timeSpan.Add(TimeSpan.FromMilliseconds(100)));
+        var actualTimeSpan = stopwatchPlayerTimer.GetTimeLeft();
+        
+        Assert.Equal(TimeSpan.Zero, actualTimeSpan);
+    }
 }
