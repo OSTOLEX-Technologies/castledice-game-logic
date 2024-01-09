@@ -90,6 +90,35 @@ public class PlayerTurnsSwitcherTests
         Assert.Throws<ArgumentException>(() => new PlayerTurnsSwitcher(playersList));
     }
 
+    [Fact]
+    public void GetPreviousPlayer_ShouldReturnPlayerBeforeCurrent()
+    {
+        var playersList = GetPlayersList(4);
+        var currentPlayerIndex = 2;
+        var turnsSwitcher = new PlayerTurnsSwitcher(new PlayersList(playersList));
+        for (int i = 0; i < currentPlayerIndex; i++)
+        {
+            turnsSwitcher.SwitchTurn();
+        }
+        
+        var actualPlayer = turnsSwitcher.GetPreviousPlayer();
+        var expectedPlayer = playersList[currentPlayerIndex - 1];
+        
+        Assert.Same(expectedPlayer, actualPlayer);
+    }
+    
+    [Fact]
+    public void GetPreviousPlayer_ShouldReturnLastPlayer_IfCurrentIsFirst()
+    {
+        var playersList = GetPlayersList(4);
+        var turnsSwitcher = new PlayerTurnsSwitcher(new PlayersList(playersList));
+        
+        var actualPlayer = turnsSwitcher.GetPreviousPlayer();
+        var expectedPlayer = playersList[^1];
+        
+        Assert.Same(expectedPlayer, actualPlayer);
+    }
+
     private static PlayersList GetPlayersList(int playersCount)
     {
         var list = new PlayersList();
