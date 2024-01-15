@@ -216,8 +216,8 @@ public class Game
 
         _moveApplier.ApplyMove(move);
         _moveSaver.SaveMove(move);
-        OnMoveApplied(move);
         CutUnitBranches();
+        OnMoveApplied(move);
         if (CheckGameOver())
         {
             ProcessGameOver();
