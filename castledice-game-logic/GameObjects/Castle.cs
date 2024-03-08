@@ -93,6 +93,11 @@ public class Castle : Content, ICapturable, IPlayerOwned, IPlaceBlocking
         _durability = _freeDurability;
     }
 
+    public int CaptureHitsLeft(Player capturer)
+    {
+        return _durability;
+    }
+
     public Player GetOwner()
     {
         return _player;

@@ -216,6 +216,49 @@ public class CastleTests
         Assert.Equal(expectedDurability, actualDurability);
     }
 
+    [Fact]
+    public void CaptureHitsLeft_ShouldReturnCastleMaxDurability_IfItWasNotHitBefore()
+    {
+        var castleMaxDurability = new Random().Next(1, 10);
+        var capturer = GetPlayer(actionPoints: 5);
+        var castle = new CastleGO(GetPlayer(), castleMaxDurability, 1, 1);
+        
+        var actualCaptureHitsLeft = castle.CaptureHitsLeft(capturer);
+        
+        Assert.Equal(castleMaxDurability, actualCaptureHitsLeft);
+    }
+
+    [Fact]
+    public void CaptureHitsLeft_ShouldReturnActualDurability_IfCastleWasHitBefore()
+    {
+        var expectedCaptureHitsLeft = new Random().Next(2, 10);
+        var castleMaxDurability = expectedCaptureHitsLeft + 1;
+        var captureHitCost = 1;
+        var capturer = GetPlayer(actionPoints: 5);
+        var castle = new CastleGO(GetPlayer(), castleMaxDurability, 1, captureHitCost);
+        
+        castle.CaptureHit(capturer);
+        var actualCaptureHitsLeft = castle.CaptureHitsLeft(capturer);
+        
+        Assert.Equal(expectedCaptureHitsLeft, actualCaptureHitsLeft);
+    }
+
+    [Fact]
+    public void CaptureHitsLeft_ShouldReturnMaxDurability_AfterCastleWasCaptured()
+    {
+        var castleMaxDurability = new Random().Next(2, 6);
+        var capturer = GetPlayer(actionPoints: 6);
+        var castle = new CastleGO(GetPlayer(), castleMaxDurability, 1, 1);
+
+        for (int i = 0; i < castleMaxDurability; i++)
+        {
+            castle.CaptureHit(capturer); 
+        }
+        var actualCaptureHitsLeft = castle.CaptureHitsLeft(capturer);
+        
+        Assert.Equal(castleMaxDurability, actualCaptureHitsLeft);
+    }
+
     [Theory]
     [InlineData(0)]
     [InlineData(-1)]
