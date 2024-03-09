@@ -1,6 +1,7 @@
 ﻿using castledice_game_logic.ActionPointsLogic;
 using castledice_game_logic.GameConfiguration;
 using castledice_game_logic.GameObjects;
+using castledice_game_logic.GameObjects.Decks;
 using castledice_game_logic.GameObjects.Factories;
 using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
@@ -18,9 +19,9 @@ namespace castledice_game_logic;
 /// </summary>
 public class Game
 {
-    public event EventHandler<AbstractMove>? MoveApplied; 
-    public event EventHandler<(Game, Player)>? Win;
-    public event EventHandler<Game>? Draw;
+    public virtual event EventHandler<AbstractMove>? MoveApplied; 
+    public virtual event EventHandler<(Game, Player)>? Win;
+    public virtual event EventHandler<Game>? Draw;
 
     private readonly Board _board;
     private readonly UnitBranchesCutter _unitBranchesCutter;
@@ -66,16 +67,14 @@ public class Game
     public virtual PlayerTurnsSwitcher TurnsSwitcher => _turnsSwitcher;
 
     //Events
-    public event EventHandler<Game>? TurnSwitched;
+    public virtual event EventHandler<Game>? TurnSwitched;
 
     public Game(List<Player> players,
         BoardConfig boardConfig,
         PlaceablesConfig placeablesConfig,
-        IDecksList decksList,
         TurnSwitchConditionsConfig turnSwitchConditionsConfig)
     {
         _players = new PlayersList(players);
-        _decksList = decksList;
         _placeablesConfig = placeablesConfig;
         _board = InitializeBoard(boardConfig);
         ValidateBoard();
@@ -100,7 +99,9 @@ public class Game
         _moveValidator = new MoveValidator(_board, _turnsSwitcher);
         _moveSaver = new MoveSaver(_actionsHistory);
         _cellMovesSelector = new CellMovesSelector(_board);
-        _possibleMovesSelector = new PossibleMovesSelector(_board, _placeablesFactory, decksList);
+        var decksDictionary = _players.ToDictionary(player => player.Id, player => player.Deck.ToList());
+        _decksList = new IndividualDecksList(decksDictionary);
+        _possibleMovesSelector = new PossibleMovesSelector(_board, _placeablesFactory, _decksList);
         _moveCostCalculator = new MoveCostCalculator(_board);
         
         var tscFactory = new TscFactory(new ActionPointsTscCreator(_turnsSwitcher));
@@ -158,10 +159,10 @@ public class Game
     {
         return _players.Select(p => p.Id).ToList();
     }
-
-    public virtual IDecksList GetDecksList()
+    
+    public virtual Player GetPreviousPlayer()
     {
-        return _decksList;
+        return _turnsSwitcher.GetPreviousPlayer();
     }
     
     public virtual Player GetCurrentPlayer()
@@ -215,8 +216,8 @@ public class Game
 
         _moveApplier.ApplyMove(move);
         _moveSaver.SaveMove(move);
-        OnMoveApplied(move);
         CutUnitBranches();
+        OnMoveApplied(move);
         if (CheckGameOver())
         {
             ProcessGameOver();
@@ -270,7 +271,7 @@ public class Game
         SwitchTurn();
     }
 
-    public void SwitchTurn()
+    public virtual void SwitchTurn()
     {
         _turnsSwitcher.GetCurrentPlayer().ActionPoints.Amount = 0;
         _turnsSwitcher.SwitchTurn();
@@ -299,6 +300,10 @@ public class Game
     {
         var currentPlayer = _turnsSwitcher.GetCurrentPlayer();
         KickPlayer(currentPlayer);
+        if (CheckGameOver())
+        {
+            ProcessGameOver();
+        }
     }
     
     private void KickPlayer(Player player)

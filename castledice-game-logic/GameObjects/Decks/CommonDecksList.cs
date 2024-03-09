@@ -1,9 +1,11 @@
-﻿namespace castledice_game_logic.GameObjects;
+﻿using castledice_game_logic.GameObjects.Decks;
+
+namespace castledice_game_logic.GameObjects;
 
 /// <summary>
 /// This class determines common list of available placeables for every player.
 /// </summary>
-public class CommonDecksList : IDecksList
+internal class CommonDecksList : IDecksList
 {
     private readonly List<PlacementType> _availablePlacementTypes;
 
