@@ -179,7 +179,6 @@ public class CastleTests
     [InlineData(3)]
     public void GetCaptureHitCost_ShouldReturnCaptureCost_GivenInConstructor(int captureHitCost)
     {
-        var capturer = GetPlayer(actionPoints: 4);
         var castle = new CastleGO(GetPlayer(), 3, 3, 1, captureHitCost);
 
         var actualCaptureCost = castle.GetCaptureHitCost();
@@ -337,7 +336,7 @@ public class CastleTests
     {
         var castleMaxDurability = new Random().Next(1, 10);
         var capturer = GetPlayer(actionPoints: 5);
-        var castle = new CastleGO(GetPlayer(), castleMaxDurability, 1, 1);
+        var castle = new CastleGO(GetPlayer(), castleMaxDurability, castleMaxDurability, castleMaxDurability, 1);
         
         var actualCaptureHitsLeft = castle.CaptureHitsLeft(capturer);
         
@@ -351,7 +350,7 @@ public class CastleTests
         var castleMaxDurability = expectedCaptureHitsLeft + 1;
         var captureHitCost = 1;
         var capturer = GetPlayer(actionPoints: 5);
-        var castle = new CastleGO(GetPlayer(), castleMaxDurability, 1, captureHitCost);
+        var castle = new CastleGO(GetPlayer(), castleMaxDurability, castleMaxDurability, castleMaxDurability, captureHitCost);
         
         castle.CaptureHit(capturer);
         var actualCaptureHitsLeft = castle.CaptureHitsLeft(capturer);
@@ -364,7 +363,7 @@ public class CastleTests
     {
         var castleMaxDurability = new Random().Next(2, 6);
         var capturer = GetPlayer(actionPoints: 6);
-        var castle = new CastleGO(GetPlayer(), castleMaxDurability, 1, 1);
+        var castle = new CastleGO(GetPlayer(), castleMaxDurability, castleMaxDurability, castleMaxDurability, 1);
 
         for (int i = 0; i < castleMaxDurability; i++)
         {
