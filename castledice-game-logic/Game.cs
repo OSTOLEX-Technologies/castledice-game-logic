@@ -159,7 +159,7 @@ public class Game
     {
         return _players.Select(p => p.Id).ToList();
     }
-    
+  
     public virtual Player GetPreviousPlayer()
     {
         return _turnsSwitcher.GetPreviousPlayer();
