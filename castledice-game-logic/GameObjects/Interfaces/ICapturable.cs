@@ -9,4 +9,10 @@ public interface ICapturable
     int GetCaptureHitCost(Player capturer);
 
     void Free();
+    /// <summary>
+    /// This methods returns how many hits are left to capture this object.
+    /// </summary>
+    /// <param name="capturer"></param>
+    /// <returns></returns>
+    int CaptureHitsLeft(Player capturer);
 }
