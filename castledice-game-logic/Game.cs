@@ -43,7 +43,7 @@ public class Game
     private readonly ActionsHistory _actionsHistory;
 
     //Action points logic
-    private readonly Dictionary<Player, ActionPointsChanger> _actionPointsGivers;
+    private readonly Dictionary<Player, ActionPointsChanger> _actionPointsChangers;
     private readonly ChangeActionPointsApplier _changeActionPointsApplier;
     private readonly ChangeActionPointsSaver _changeActionPointsSaver;
 
@@ -85,10 +85,10 @@ public class Game
         _unitBranchesCutter = new UnitBranchesCutter(_board);
         _playerKicker = new PlayerKicker(_board);
 
-        _actionPointsGivers = new Dictionary<Player, ActionPointsChanger>();
+        _actionPointsChangers = new Dictionary<Player, ActionPointsChanger>();
         foreach (var player in _players)
         {
-            _actionPointsGivers.Add(player, new ActionPointsChanger(player));
+            _actionPointsChangers.Add(player, new ActionPointsChanger(player));
         }
 
         _changeActionPointsApplier = new ChangeActionPointsApplier();
@@ -121,10 +121,28 @@ public class Game
 
     public virtual void GiveActionPointsToPlayer(int playerId, int amount)
     {
+        if (amount < 0)
+        {
+            throw new ArgumentException("Can't give negative amount of action points! Use TakeActionPointsFromPlayer method instead!");
+        }
+        ChangePlayerActionPoints(playerId, amount);
+    }
+    
+    public virtual void TakeActionPointsFromPlayer(int playerId, int amount)
+    {
+        if (amount < 0)
+        {
+            throw new ArgumentException("Can't take negative amount of action points! Use GiveActionPointsToPlayer method instead!");
+        }
+        ChangePlayerActionPoints(playerId, -amount);
+    }
+
+    private void ChangePlayerActionPoints(int playerId, int changeAmount)
+    {
         var player = _players.FirstOrDefault(p => p.Id == playerId);
-        var giveActionPoints = _actionPointsGivers[player].ChangeActionPoints(amount);
-        _changeActionPointsApplier.ApplyAction(giveActionPoints);
-        _changeActionPointsSaver.SaveAction(giveActionPoints);
+        var changeActionPoints = _actionPointsChangers[player].ChangeActionPoints(changeAmount);
+        _changeActionPointsApplier.ApplyAction(changeActionPoints);
+        _changeActionPointsSaver.SaveAction(changeActionPoints);
     }
     
     private static Board InitializeBoard(BoardConfig config)
