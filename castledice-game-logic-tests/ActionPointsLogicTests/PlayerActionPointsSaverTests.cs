@@ -12,12 +12,12 @@ public class PlayerActionPointsSaverTests
         int playerId = 1;
         int amountToGive = 3;
         var player = GetPlayer(1, playerId);
-        var action = new GiveActionPointsAction(player, amountToGive);
+        var action = new ChangeActionPointsAction(player, amountToGive);
         var expectedSnapshot = action.GetSnapshot();
-        var saver = new GiveActionPointsSaver(history);
+        var saver = new ChangeActionPointsSaver(history);
 
         saver.SaveAction(action);
-        var actualSnapshot = history.GetHistory()[0] as GiveActionPointsSnapshot;
+        var actualSnapshot = history.GetHistory()[0] as ChangeActionPointsSnapshot;
         
         Assert.Equal(expectedSnapshot, actualSnapshot);
     }

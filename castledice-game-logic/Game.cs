@@ -43,9 +43,9 @@ public class Game
     private readonly ActionsHistory _actionsHistory;
 
     //Action points logic
-    private readonly Dictionary<Player, ActionPointsGiver> _actionPointsGivers;
-    private readonly GiveActionPointsApplier _giveActionPointsApplier;
-    private readonly GiveActionPointsSaver _giveActionPointsSaver;
+    private readonly Dictionary<Player, ActionPointsChanger> _actionPointsGivers;
+    private readonly ChangeActionPointsApplier _changeActionPointsApplier;
+    private readonly ChangeActionPointsSaver _changeActionPointsSaver;
 
     //Turns logic
     private readonly PlayersList _players;
@@ -85,14 +85,14 @@ public class Game
         _unitBranchesCutter = new UnitBranchesCutter(_board);
         _playerKicker = new PlayerKicker(_board);
 
-        _actionPointsGivers = new Dictionary<Player, ActionPointsGiver>();
+        _actionPointsGivers = new Dictionary<Player, ActionPointsChanger>();
         foreach (var player in _players)
         {
-            _actionPointsGivers.Add(player, new ActionPointsGiver(player));
+            _actionPointsGivers.Add(player, new ActionPointsChanger(player));
         }
 
-        _giveActionPointsApplier = new GiveActionPointsApplier();
-        _giveActionPointsSaver = new GiveActionPointsSaver(_actionsHistory);
+        _changeActionPointsApplier = new ChangeActionPointsApplier();
+        _changeActionPointsSaver = new ChangeActionPointsSaver(_actionsHistory);
         var knightFactory = new KnightsFactory(placeablesConfig.KnightConfig);
         _placeablesFactory  = new PlaceablesFactory(knightFactory);
         _moveApplier = new MoveApplier(_board);
@@ -122,9 +122,9 @@ public class Game
     public virtual void GiveActionPointsToPlayer(int playerId, int amount)
     {
         var player = _players.FirstOrDefault(p => p.Id == playerId);
-        var giveActionPoints = _actionPointsGivers[player].GiveActionPoints(amount);
-        _giveActionPointsApplier.ApplyAction(giveActionPoints);
-        _giveActionPointsSaver.SaveAction(giveActionPoints);
+        var giveActionPoints = _actionPointsGivers[player].ChangeActionPoints(amount);
+        _changeActionPointsApplier.ApplyAction(giveActionPoints);
+        _changeActionPointsSaver.SaveAction(giveActionPoints);
     }
     
     private static Board InitializeBoard(BoardConfig config)

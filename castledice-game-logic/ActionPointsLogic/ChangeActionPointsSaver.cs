@@ -1,15 +1,15 @@
 ﻿namespace castledice_game_logic.ActionPointsLogic;
 
-public class GiveActionPointsSaver
+public class ChangeActionPointsSaver
 {
     private readonly ActionsHistory _history;
 
-    public GiveActionPointsSaver(ActionsHistory history)
+    public ChangeActionPointsSaver(ActionsHistory history)
     {
         _history = history;
     }
 
-    public void SaveAction(GiveActionPointsAction action)
+    public void SaveAction(ChangeActionPointsAction action)
     {
         _history.AddActionSnapshot(action.GetSnapshot());
     }
