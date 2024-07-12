@@ -276,7 +276,6 @@ public class Game
         _turnsSwitcher.GetCurrentPlayer().ActionPoints.Amount = 0;
         _turnsSwitcher.SwitchTurn();
         _boardUpdater.UpdateBoard();
-        ApplyPenalties();
         TurnSwitched?.Invoke(this, this);
     }
 
@@ -299,6 +298,7 @@ public class Game
     private void OnTimeIsUp()
     {
         var currentPlayer = _turnsSwitcher.GetCurrentPlayer();
+        SwitchTurn();
         KickPlayer(currentPlayer);
         if (CheckGameOver())
         {
