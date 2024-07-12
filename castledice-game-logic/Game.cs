@@ -315,13 +315,8 @@ public class Game
 
     private void OnTimeIsUp()
     {
-        var currentPlayer = _turnsSwitcher.GetCurrentPlayer();
-        SwitchTurn();
-        KickPlayer(currentPlayer);
-        if (CheckGameOver())
-        {
-            ProcessGameOver();
-        }
+        var winner = _turnsSwitcher.GetPreviousPlayer();
+        OnWin(winner);
     }
     
     private void KickPlayer(Player player)
