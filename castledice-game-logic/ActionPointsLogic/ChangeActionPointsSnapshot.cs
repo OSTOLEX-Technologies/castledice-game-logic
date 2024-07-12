@@ -4,15 +4,15 @@ namespace castledice_game_logic.ActionPointsLogic;
 using Newtonsoft.Json;
 
 [Serializable]
-public sealed class GiveActionPointsSnapshot : IActionSnapshot
+public sealed class ChangeActionPointsSnapshot : IActionSnapshot
 {
     public int PlayerId { get; }
     public int Amount { get; }
 
     [JsonConverter(typeof(StringEnumConverter))] 
-    public ActionType ActionType { get; } = ActionType.GiveActionPoints;
+    public ActionType ActionType { get; } = ActionType.ChangeActionPoints;
     
-    public GiveActionPointsSnapshot(int playerId, int amount)
+    public ChangeActionPointsSnapshot(int playerId, int amount)
     {
         PlayerId = playerId;
         Amount = amount;
@@ -23,7 +23,7 @@ public sealed class GiveActionPointsSnapshot : IActionSnapshot
         return JsonConvert.SerializeObject(this);
     }
 
-    protected bool Equals(GiveActionPointsSnapshot other)
+    protected bool Equals(ChangeActionPointsSnapshot other)
     {
         return PlayerId == other.PlayerId && Amount == other.Amount && ActionType == other.ActionType;
     }
@@ -33,7 +33,7 @@ public sealed class GiveActionPointsSnapshot : IActionSnapshot
         if (ReferenceEquals(null, obj)) return false;
         if (ReferenceEquals(this, obj)) return true;
         if (obj.GetType() != this.GetType()) return false;
-        return Equals((GiveActionPointsSnapshot)obj);
+        return Equals((ChangeActionPointsSnapshot)obj);
     }
 
     public override int GetHashCode()

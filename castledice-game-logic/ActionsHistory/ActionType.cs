@@ -2,6 +2,6 @@
 
 public enum ActionType
 {
-    GiveActionPoints,
+    ChangeActionPoints,
     Move
 }

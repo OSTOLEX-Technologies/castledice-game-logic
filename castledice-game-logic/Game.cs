@@ -43,9 +43,9 @@ public class Game
     private readonly ActionsHistory _actionsHistory;
 
     //Action points logic
-    private readonly Dictionary<Player, ActionPointsGiver> _actionPointsGivers;
-    private readonly GiveActionPointsApplier _giveActionPointsApplier;
-    private readonly GiveActionPointsSaver _giveActionPointsSaver;
+    private readonly Dictionary<Player, ActionPointsChanger> _actionPointsChangers;
+    private readonly ChangeActionPointsApplier _changeActionPointsApplier;
+    private readonly ChangeActionPointsSaver _changeActionPointsSaver;
 
     //Turns logic
     private readonly PlayersList _players;
@@ -85,14 +85,14 @@ public class Game
         _unitBranchesCutter = new UnitBranchesCutter(_board);
         _playerKicker = new PlayerKicker(_board);
 
-        _actionPointsGivers = new Dictionary<Player, ActionPointsGiver>();
+        _actionPointsChangers = new Dictionary<Player, ActionPointsChanger>();
         foreach (var player in _players)
         {
-            _actionPointsGivers.Add(player, new ActionPointsGiver(player));
+            _actionPointsChangers.Add(player, new ActionPointsChanger(player));
         }
 
-        _giveActionPointsApplier = new GiveActionPointsApplier();
-        _giveActionPointsSaver = new GiveActionPointsSaver(_actionsHistory);
+        _changeActionPointsApplier = new ChangeActionPointsApplier();
+        _changeActionPointsSaver = new ChangeActionPointsSaver(_actionsHistory);
         var knightFactory = new KnightsFactory(placeablesConfig.KnightConfig);
         _placeablesFactory  = new PlaceablesFactory(knightFactory);
         _moveApplier = new MoveApplier(_board);
@@ -121,10 +121,28 @@ public class Game
 
     public virtual void GiveActionPointsToPlayer(int playerId, int amount)
     {
+        if (amount < 0)
+        {
+            throw new ArgumentException("Can't give negative amount of action points! Use TakeActionPointsFromPlayer method instead!");
+        }
+        ChangePlayerActionPoints(playerId, amount);
+    }
+    
+    public virtual void TakeActionPointsFromPlayer(int playerId, int amount)
+    {
+        if (amount < 0)
+        {
+            throw new ArgumentException("Can't take negative amount of action points! Use GiveActionPointsToPlayer method instead!");
+        }
+        ChangePlayerActionPoints(playerId, -amount);
+    }
+
+    private void ChangePlayerActionPoints(int playerId, int changeAmount)
+    {
         var player = _players.FirstOrDefault(p => p.Id == playerId);
-        var giveActionPoints = _actionPointsGivers[player].GiveActionPoints(amount);
-        _giveActionPointsApplier.ApplyAction(giveActionPoints);
-        _giveActionPointsSaver.SaveAction(giveActionPoints);
+        var changeActionPoints = _actionPointsChangers[player].ChangeActionPoints(changeAmount);
+        _changeActionPointsApplier.ApplyAction(changeActionPoints);
+        _changeActionPointsSaver.SaveAction(changeActionPoints);
     }
     
     private static Board InitializeBoard(BoardConfig config)

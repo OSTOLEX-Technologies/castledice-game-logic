@@ -1,17 +1,18 @@
-﻿using System.Diagnostics;
-using castledice_game_logic.ActionPointsLogic;
+﻿using castledice_game_logic.ActionPointsLogic;
 
-namespace castledice_game_logic_tests;
+namespace castledice_game_logic_tests.ActionPointsLogicTests;
 using static ObjectCreationUtility;
 
-public class GiveActionPointsActionTests
+public class ChangeActionPointsActionTests
 {
+    private readonly Random _rnd = new Random();
+    
     [Fact]
     public void PlayerProperty_ShouldReturnPlayer_GivenInConstructor()
     {
         var player = GetPlayer();
         int amount = 5;
-        var action = new GiveActionPointsAction(player, amount);
+        var action = new ChangeActionPointsAction(player, amount);
         
         Assert.Same(player, action.Player);
     }
@@ -20,31 +21,22 @@ public class GiveActionPointsActionTests
     public void AmountProperty_ShouldReturnNumber_GivenInConstructor()
     {
         var player = GetPlayer();
-        int amount = 5;
-        var action = new GiveActionPointsAction(player, amount);
+        int amount = _rnd.Next(0, 3) - _rnd.Next(0, 3);
+        var action = new ChangeActionPointsAction(player, amount);
         
         Assert.Equal(amount, action.Amount); 
-    }
-
-    [Fact]
-    public void Constructor_ShouldThrowArgumentException_IfNegativeAmountGiven()
-    {
-        var player = GetPlayer();
-        int amount = -1;
-        
-        Assert.Throws<ArgumentException>(() => new GiveActionPointsAction(player, amount));
     }
     
     [Fact]
     public void GetSnapshot_ShouldReturnGiveActionPointsSnapshot()
     {
         var player = GetPlayer();
-        var ap = 6;
-        var action = new GiveActionPointsAction(player, ap);
+        var amount = 6;
+        var action = new ChangeActionPointsAction(player, amount);
 
         var snapshot = action.GetSnapshot();
         
-        Assert.True(snapshot is GiveActionPointsSnapshot);
+        Assert.True(snapshot is ChangeActionPointsSnapshot);
     }
 
     [Fact]
@@ -52,17 +44,17 @@ public class GiveActionPointsActionTests
     {
         int playerActionPoints = 4;
         int id = 3;
-        int actionPointsToGive = 2;
+        int amount = _rnd.Next(0, 3) - _rnd.Next(0, 3);
         var player = GetPlayer(actionPoints: playerActionPoints, id: id);
-        var action = new GiveActionPointsAction(player, actionPointsToGive);
+        var action = new ChangeActionPointsAction(player, amount);
 
         var snapshot = action.GetSnapshot();
-        var giveApSnapshot = snapshot as GiveActionPointsSnapshot;
+        var giveApSnapshot = snapshot as ChangeActionPointsSnapshot;
         if (giveApSnapshot is null)
         {
             Assert.Fail("Snapshot is not GiveActionPointsSnapshot");
         }
-        Assert.Equal(actionPointsToGive, giveApSnapshot.Amount);
+        Assert.Equal(amount, giveApSnapshot.Amount);
         Assert.Equal(player.Id, giveApSnapshot.PlayerId);
     }
 }
